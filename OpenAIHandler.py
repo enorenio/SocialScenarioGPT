@@ -1,12 +1,12 @@
 # GPT4 things ########################################################################
-import openai
+from openai import OpenAI
 
 class OpenAIHandler:
     def __init__(self, api_key, model_id):
         self.conversation_log = []
         self._api_key = api_key
         self.model_id = model_id
-        openai.api_key = self._api_key
+        self.client = OpenAI(api_key=self._api_key)
 
     def get_model_response(self):
         # Update conversation log with new utterance from user
@@ -14,7 +14,7 @@ class OpenAIHandler:
         #self.conversation_log.append(new_user_turn_formatted)
 
         # Complete the conversation with OPENAI Model of choice (defined in constructor)
-        response = openai.ChatCompletion.create(
+        response = self.client.chat.completions.create(
             model=self.model_id,
             messages=self.conversation_log
         )
