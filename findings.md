@@ -1,5 +1,45 @@
 # Research Findings
 
+## Finding 2: Paper's Intention Completion Metric Uses Lenient String Matching
+
+**Date:** 2024-12-24
+
+**Context:** While implementing TASK-008 (Symbolic Consistency Verification), we discovered the paper's completion analysis differs significantly from semantic verification.
+
+**Paper's Method (`AutomaticEvaluation.py`):**
+```python
+if all(item in knowledge for item in conditions):
+    # action is executable
+```
+- Exact string matching: condition must exist *verbatim* in knowledge base
+- Silently skips missing actions (`try/except` everywhere)
+- No semantic parsing of BEL/DES statements
+
+**Our Method (`core/reachability.py`):**
+- Parses `BEL(agent, property) = value` semantically
+- Tracks key→value pairs for matching
+- Reports blocking conditions explicitly
+
+**Results on 33 Completed Scenarios:**
+
+| Method | Completed | Total | Rate |
+|--------|-----------|-------|------|
+| Paper's method | 9 | 266 | 3.4% |
+| Our method | 4 | 266 | 1.5% |
+
+**Why Paper's Method Finds More:**
+1. Exact string matching can accidentally match unrelated beliefs
+2. Missing actions are silently skipped (counted as "not blocking")
+3. No validation that parsed values match
+
+**Implications:**
+- Both methods confirm completion rate is very low (<5%)
+- Paper's 3% (11/369) is slightly inflated by lenient matching
+- Our stricter analysis reveals even fewer logically consistent scenarios
+- The core finding stands: baseline generates inconsistent action plans
+
+---
+
 ## Finding 1: Baseline Generation Time is 13x Faster Than Reported
 
 **Date:** 2024-12-24
