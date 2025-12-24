@@ -1,0 +1,95 @@
+{
+  "scenario_name": "test_logger",
+  "scenario_description": "A test scenario for logging.",
+  "feature_flags": {
+    "use_gpt4": false,
+    "full_context": false,
+    "verification_loop": false,
+    "cot_enhancement": false,
+    "dialogue_improvement": false,
+    "llm_judge": false,
+    "symbolic_verification": false
+  },
+  "model": "gpt-3.5-turbo",
+  "start_time": "2025-12-24T02:10:54.112998",
+  "end_time": "2025-12-24T02:10:54.113115",
+  "total_duration_seconds": 0.000117,
+  "total_api_calls": 2,
+  "total_prompt_tokens": 150,
+  "total_completion_tokens": 50,
+  "total_tokens": 200,
+  "steps": [
+    {
+      "step_name": "get_agents",
+      "start_time": "2025-12-24T02:10:54.113078",
+      "end_time": "2025-12-24T02:10:54.113089",
+      "duration_seconds": 9.775161743164062e-06,
+      "api_calls": 1,
+      "total_tokens": 70,
+      "artifacts_generated": {
+        "agents": 2
+      },
+      "success": true,
+      "error": null
+    },
+    {
+      "step_name": "get_beliefs",
+      "start_time": "2025-12-24T02:10:54.113093",
+      "end_time": "2025-12-24T02:10:54.113112",
+      "duration_seconds": 1.6927719116210938e-05,
+      "api_calls": 1,
+      "total_tokens": 130,
+      "artifacts_generated": {
+        "beliefs": 3
+      },
+      "success": true,
+      "error": null
+    }
+  ],
+  "api_calls": [
+    {
+      "timestamp": "2025-12-24T02:10:54.113082",
+      "step_name": "get_agents",
+      "model": "gpt-3.5-turbo",
+      "prompt_messages": [
+        {
+          "role": "user",
+          "content": "List agents..."
+        }
+      ],
+      "response_content": "[[Agent1]], [[Agent2]]",
+      "prompt_tokens": 50,
+      "completion_tokens": 20,
+      "total_tokens": 70,
+      "duration_seconds": 0.5,
+      "success": true,
+      "error": null
+    },
+    {
+      "timestamp": "2025-12-24T02:10:54.113101",
+      "step_name": "get_beliefs",
+      "model": "gpt-3.5-turbo",
+      "prompt_messages": [
+        {
+          "role": "user",
+          "content": "Get beliefs..."
+        }
+      ],
+      "response_content": "BEL(Agent1, knows_stuff) = True",
+      "prompt_tokens": 100,
+      "completion_tokens": 30,
+      "total_tokens": 130,
+      "duration_seconds": 0.8,
+      "success": true,
+      "error": null
+    }
+  ],
+  "final_state": {
+    "agents": [
+      "Agent1",
+      "Agent2"
+    ]
+  },
+  "success": true,
+  "error": null
+}

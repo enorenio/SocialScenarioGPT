@@ -76,22 +76,20 @@ Enhancement of the Antunes et al. (2023) "Prompting for Socially Intelligent Age
 
 ---
 
-### TASK-003: Comprehensive Logging and Metrics Collection System
+### TASK-003: Comprehensive Logging and Metrics Collection System ✅ DONE
 **Description:** Implement a structured logging system that captures all intermediate outputs, API calls, token usage, timing information, and quality metrics. Essential for debugging, ablation studies, and result analysis. Must log which features were active for each run.
 
-**Implementation Details:**
-- Log every API call with request/response
-- Track token usage per step
-- Record generation time per component
-- Store intermediate JSON states
-- Calculate and log metrics after each scenario
-- Log active feature configuration
-
 **Deliverables:**
-- `utils/logger.py` - Structured logging module
-- `utils/metrics.py` - Metrics calculation utilities
-- Log file format specification
-- Metrics dashboard or report generator script
+- `utils/logger.py` - Structured logging module ✅
+  - `ExperimentLogger` class with step context managers
+  - Logs API calls, tokens, timing, artifacts per step
+  - Saves JSON logs to `experiments/logs/`
+  - Tracks feature flags per run
+- `utils/metrics.py` - Metrics calculation utilities ✅
+  - `calculate_scenario_metrics()` - per-scenario metrics
+  - `calculate_aggregate_metrics()` - cross-scenario metrics
+  - `print_metrics_report()` - formatted output
+- Log file format: JSON with scenario, steps, api_calls, final_state ✅
 
 **Estimated Hours:** 8-10 hours
 **Difficulty:** ⭐⭐ Low-Medium
