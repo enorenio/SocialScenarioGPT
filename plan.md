@@ -564,23 +564,60 @@ export_to_csv(all_evals, "results.csv")
 
 ---
 
-### TASK-013: Automated Metrics Dashboard
+### TASK-013: Automated Metrics Dashboard ✅ DONE
 **Description:** Create a dashboard that automatically calculates and visualizes all relevant metrics across experiment runs. Should support comparison between ablation study conditions.
 
-**Metrics to Track:**
-- Artifact counts (all 10 categories from Table 1)
-- Intention completion rate
-- Immediately executable actions percentage
-- Dialogue coverage metrics
-- Generation time and cost
-- Verification retry rates (if enabled)
-- LLM-judge scores (if enabled)
-
 **Deliverables:**
-- `analysis/dashboard.py` - Metrics dashboard (Streamlit/Plotly)
-- `analysis/comparison.py` - Cross-condition comparison
-- Automated report generation
-- Visualization exports for paper
+- `analysis/` - Metrics analysis package ✅
+  - `metrics.py` - Metrics calculation classes and functions
+  - `comparison.py` - Cross-condition comparison utilities
+  - `dashboard.py` - Streamlit dashboard application
+- `tests/test_task013_metrics.py` - 43 tests ✅
+
+**Key Classes:**
+
+**ScenarioMetrics:**
+- Artifact counts (agents, beliefs, desires, intentions, actions, conditions, effects, emotions, dialogue, speak actions)
+- Completion rates (intention completion, executable actions)
+- Dialogue metrics (lines, branch points, unique paths, styles)
+- Quality flags (is_complete, has_dialogue, has_emotions)
+
+**ExperimentMetrics:**
+- Aggregated means across all scenarios
+- Total counts and completion rates
+- Per-scenario breakdowns
+
+**ConditionComparison:**
+- Absolute differences between conditions
+- Percentage improvements
+- Detailed metric-by-metric comparison
+
+**Functions:**
+- `calculate_scenario_metrics(scenario)` - Metrics for single scenario
+- `calculate_experiment_metrics(scenarios)` - Aggregated experiment metrics
+- `compare_conditions(baseline, treatment)` - Compare two conditions
+- `compare_multiple_conditions()` - Compare multiple treatments vs baseline
+- `generate_comparison_table()` - Markdown comparison table
+- `load_scenarios_from_directory()` - Load scenarios from JSON files
+
+**Usage:**
+```python
+from analysis import (
+    calculate_scenario_metrics, calculate_experiment_metrics,
+    compare_conditions, generate_comparison_table,
+)
+
+# Calculate metrics
+metrics = calculate_experiment_metrics(scenarios, "experiment_name")
+print(f"Intention completion: {metrics.intention_completion_rate:.1%}")
+
+# Compare conditions
+comparison = compare_conditions(baseline, treatment)
+print(f"Improvement: {comparison.intention_completion_improvement:+.1f}%")
+
+# Run dashboard
+# streamlit run analysis/dashboard.py
+```
 
 **Estimated Hours:** 8-10 hours
 **Difficulty:** ⭐⭐ Low-Medium
