@@ -14,6 +14,8 @@ from models import ModelFactory, get_model
 from prompts import get_prompt_manager
 from core.verification import verify_conditions_effects, VerificationResult
 from core.error_feedback import format_errors_for_llm, format_regeneration_prompt
+from core.scenario_state import ScenarioState
+from prompts.dialogue.dialogue_prompts import DIALOGUE_PROMPTS, DialogueContext
 
 NUM_TRIES = 3
 
@@ -29,6 +31,34 @@ def set_feature_flags(flags: FeatureFlags) -> None:
 def get_feature_flags() -> FeatureFlags:
     """Get the currently active feature flags."""
     return _active_flags
+
+# Global prompt manager instance - initialized per run based on feature flags
+_prompt_manager = None
+
+def get_active_prompt_manager():
+    """Get the currently active prompt manager."""
+    global _prompt_manager
+    if _prompt_manager is None:
+        flags = get_feature_flags()
+        _prompt_manager = get_prompt_manager(use_enhanced=flags.cot_enhancement)
+    return _prompt_manager
+
+def set_prompt_manager(pm):
+    """Set the prompt manager (used during scenario generation)."""
+    global _prompt_manager
+    _prompt_manager = pm
+
+# Global scenario state for full context mode
+_scenario_state: ScenarioState = None
+
+def get_scenario_state() -> ScenarioState:
+    """Get the current scenario state (for full_context mode)."""
+    return _scenario_state
+
+def set_scenario_state(state: ScenarioState):
+    """Set the scenario state."""
+    global _scenario_state
+    _scenario_state = state
 
 # This should be a variable asked to be inputed by the user but for now is a constant here
 scenario_description = "Social scenario of a bartender with two customers."
@@ -351,35 +381,106 @@ def get_action_events(model, agent, action, task_description):
     return events
 
 def get_agents(model, domain_knowledge):
-    agents = get_agents_task(model, AGENT_TRANSLATION_TASK)
+    flags = get_feature_flags()
+    pm = get_active_prompt_manager()
+
+    # Use enhanced prompt if CoT is enabled
+    if flags.cot_enhancement and pm.has_enhanced("agents"):
+        prompt = pm.get("agents")
+    else:
+        prompt = AGENT_TRANSLATION_TASK
+
+    agents = get_agents_task(model, prompt)
     # Add agents to domain knowledge
     domain_knowledge["agents"] = {agent: {} for agent in agents}
+
+    # Update scenario state for full_context mode
+    state = get_scenario_state()
+    if state and flags.full_context:
+        for agent in agents:
+            state.add_agent(agent)
+        state.set_stage("agents")
+
     print("Agents in the scenario: ", agents)
     return domain_knowledge
 
 def get_agents_knowledge(model, domain_knowledge):
+    flags = get_feature_flags()
+    pm = get_active_prompt_manager()
+    state = get_scenario_state()
+
     for agent in tqdm(domain_knowledge["agents"].keys()):
+        # Use enhanced prompt for beliefs/desires if CoT is enabled
+        if flags.cot_enhancement and pm.has_enhanced("beliefs_desires"):
+            bel_des_prompt = pm.get("beliefs_desires", agent_name=agent)
+        else:
+            bel_des_prompt = BELIEFS_DESIRES_TRANSLATION_TASK
+
+        # Add full context if enabled
+        if flags.full_context and state:
+            context = state.to_prompt_context()
+            bel_des_prompt = context + "\n\n" + bel_des_prompt
 
         # Extract Beliefs and Desires
-        bel_des_base = get_beliefs_desires(model, agent, BELIEFS_DESIRES_TRANSLATION_TASK)
+        bel_des_base = get_beliefs_desires(model, agent, bel_des_prompt)
         domain_knowledge["agents"][agent]["knowledge_base"] = bel_des_base
+
+        # Update scenario state
+        if state and flags.full_context:
+            for kb_item in bel_des_base:
+                if "BEL(" in kb_item:
+                    state.add_belief(agent, kb_item)
+                elif "DES(" in kb_item:
+                    state.add_desire(agent, kb_item)
 
         # Extract Intentions conditioned on the Beliefs and Desires
         knowledge_base = f'The agent {agent} beliefs and desires are: ' + "\n".join(
             domain_knowledge["agents"][agent]["knowledge_base"])
-        task_description = knowledge_base + "\n" + INTENTS_TRANSLATION_TASK
+
+        # Use enhanced prompt for intentions if CoT is enabled
+        if flags.cot_enhancement and pm.has_enhanced("intentions"):
+            intents_prompt = pm.get("intentions", agent_name=agent)
+        else:
+            intents_prompt = INTENTS_TRANSLATION_TASK
+
+        task_description = knowledge_base + "\n" + intents_prompt
+
+        # Add full context if enabled
+        if flags.full_context and state:
+            task_description = state.to_prompt_context() + "\n\n" + task_description
+
         intentions = get_intentions(model, agent, task_description)
         domain_knowledge["agents"][agent]["intentions"] = {intention : {} for intention in intentions}
+
+        # Update scenario state with intentions
+        if state and flags.full_context:
+            for intention in intentions:
+                state.add_intention(agent, intention, [])
+            state.set_stage("knowledge")
 
     return domain_knowledge
 
 def get_actions_plans(model, domain_knowledge):
+    flags = get_feature_flags()
+    pm = get_active_prompt_manager()
+    state = get_scenario_state()
+
     for agent in tqdm(domain_knowledge["agents"].keys()):
         print("Calculating action plan for agent ", agent)
 
         knowledge_base = f'The agent {agent} beliefs and desires are: ' + "\n".join(domain_knowledge["agents"][agent]["knowledge_base"])
 
-        task_description = knowledge_base + "\n" + ACTION_PLAN_TRANSLATION_TASK
+        # Use enhanced prompt for action_plan if CoT is enabled
+        if flags.cot_enhancement and pm.has_enhanced("action_plan"):
+            action_plan_prompt = pm.get("action_plan")
+        else:
+            action_plan_prompt = ACTION_PLAN_TRANSLATION_TASK
+
+        task_description = knowledge_base + "\n" + action_plan_prompt
+
+        # Add full context if enabled
+        if flags.full_context and state:
+            task_description = state.to_prompt_context() + "\n\n" + task_description
 
         for intention in tqdm(domain_knowledge["agents"][agent]["intentions"].keys()):
             # A plan is a sequence of action in the order they should occur
@@ -387,6 +488,13 @@ def get_actions_plans(model, domain_knowledge):
             action_plan = get_agent_action_plan(model, agent, intention, task_description)
             domain_knowledge["agents"][agent]["intentions"][intention]["action_plan"] = action_plan
             domain_knowledge["agents"][agent]["actions"] = {action: {} for action in action_plan}
+
+            # Update scenario state with action plan
+            if state and flags.full_context:
+                state.add_intention(agent, intention, action_plan)
+
+    if state and flags.full_context:
+        state.set_stage("actions_plans")
 
     return domain_knowledge
 
@@ -411,6 +519,9 @@ def get_agent_action_plan(model, agent, intention, task_description):
 
 def get_actions_conditions_and_effects(model, domain_knowledge):
     flags = get_feature_flags()
+    pm = get_active_prompt_manager()
+    state = get_scenario_state()
+
     for agent in tqdm(domain_knowledge["agents"].keys()):
         print("Calculating action conditions and effects for agent ", agent)
         for intention in tqdm(domain_knowledge["agents"][agent]["intentions"].keys()):
@@ -420,7 +531,17 @@ def get_actions_conditions_and_effects(model, domain_knowledge):
             action_plan = f'These are the action the agent {agent} plans to to in this order to achieve the intention {intention}:\n' \
                           + "\n".join(domain_knowledge["agents"][agent]["intentions"][intention]["action_plan"])
 
-            task_description = knowledge_base + "\n" + action_plan + "\n" + CONDITIONS_EFFECTS_TASK
+            # Use enhanced prompt for conditions_effects if CoT is enabled
+            if flags.cot_enhancement and pm.has_enhanced("conditions_effects"):
+                cond_eff_prompt = pm.get("conditions_effects")
+            else:
+                cond_eff_prompt = CONDITIONS_EFFECTS_TASK
+
+            task_description = knowledge_base + "\n" + action_plan + "\n" + cond_eff_prompt
+
+            # Add full context if enabled
+            if flags.full_context and state:
+                task_description = state.to_prompt_context() + "\n\n" + task_description
 
             for action in domain_knowledge["agents"][agent]["intentions"][intention]["action_plan"]:
                 # Pass domain_knowledge to enable verification loop (TASK-007)
@@ -429,6 +550,13 @@ def get_actions_conditions_and_effects(model, domain_knowledge):
                     domain_knowledge=domain_knowledge if flags.verification_loop else None
                 )
                 domain_knowledge["agents"][agent]["actions"][action] = {"conditions": conditions, "effects": effects}
+
+                # Update scenario state with action details
+                if state and flags.full_context:
+                    state.add_action(agent, action, conditions=conditions, effects=effects)
+
+    if state and flags.full_context:
+        state.set_stage("conditions_effects")
 
     return domain_knowledge
 
@@ -482,21 +610,93 @@ def get_initial_occ_emotion(model, agent, task_description):
     return plan
 
 def generate_dialogue_states(model, domain_knowledge):
-    dialogue_tree = get_dialogue_tree(model, domain_knowledge, DIALOGUE_TREE_TASK)
+    flags = get_feature_flags()
+    pm = get_active_prompt_manager()
+    state = get_scenario_state()
+
+    # Use improved dialogue prompt if dialogue_improvement is enabled
+    if flags.dialogue_improvement:
+        # Build context for improved dialogue prompt
+        agents = list(domain_knowledge.get("agents", {}).keys())
+        scenario_desc = domain_knowledge.get("scenario_description", "")
+
+        # Create dialogue context
+        context = DialogueContext(
+            scenario_description=scenario_desc,
+            agents=agents,
+            current_beliefs={
+                agent: domain_knowledge["agents"][agent].get("knowledge_base", [])
+                for agent in agents
+            },
+        )
+
+        dialogue_prompt = DIALOGUE_PROMPTS["dialogue_tree_improved"]["template"]
+        dialogue_prompt = dialogue_prompt.replace("{context}", context.to_prompt_context())
+        print("  Using improved dialogue prompts")
+    elif flags.cot_enhancement and pm.has_enhanced("dialogue_tree"):
+        dialogue_prompt = pm.get("dialogue_tree")
+    else:
+        dialogue_prompt = DIALOGUE_TREE_TASK
+
+    # Add full context if enabled
+    if flags.full_context and state:
+        dialogue_prompt = state.to_prompt_context() + "\n\n" + dialogue_prompt
+
+    dialogue_tree = get_dialogue_tree(model, domain_knowledge, dialogue_prompt)
     domain_knowledge["dialogue_tree"] = dialogue_tree
+
+    # Update scenario state
+    if state and flags.full_context:
+        for line in dialogue_tree:
+            state.add_dialogue_line(line)
+        state.set_stage("dialogues")
+
     return domain_knowledge
 
 def generate_speak_actions(model, domain_knowledge):
+    flags = get_feature_flags()
+    pm = get_active_prompt_manager()
+    state = get_scenario_state()
+
     dialogue_tree = f'The dialogue turns available are:\n' + "\n".join(domain_knowledge["dialogue_tree"])
 
     # Speak actions
     for agent in tqdm(domain_knowledge["agents"].keys()):
-        speak_actions = get_dialogue_turns(model, domain_knowledge, agent, SPEAK_ACTION_TASK)
+        # Use improved speak actions prompt if dialogue_improvement is enabled
+        if flags.dialogue_improvement:
+            speak_prompt = DIALOGUE_PROMPTS["speak_actions_improved"]["template"]
+            # Fill in context and dialogue lines
+            context_str = f"Scenario: {domain_knowledge.get('scenario_description', '')}"
+            dialogue_lines = "\n".join(domain_knowledge.get("dialogue_tree", []))
+            speak_prompt = speak_prompt.replace("[[CONTEXT]]", context_str)
+            speak_prompt = speak_prompt.replace("[[DIALOGUE_LINES]]", dialogue_lines)
+        elif flags.cot_enhancement and pm.has_enhanced("speak_actions"):
+            speak_prompt = pm.get("speak_actions")
+        else:
+            speak_prompt = SPEAK_ACTION_TASK
+
+        # Add full context if enabled
+        if flags.full_context and state:
+            speak_prompt = state.to_prompt_context() + "\n\n" + speak_prompt
+
+        speak_actions = get_dialogue_turns(model, domain_knowledge, agent, speak_prompt)
         domain_knowledge["agents"][agent]["speak_actions"] = {speak_action: {} for speak_action in speak_actions}
+
+        # Update scenario state
+        if state and flags.full_context:
+            for sa in speak_actions:
+                state.add_speak_action(agent, sa)
+
+    if state and flags.full_context:
+        state.set_stage("speak_actions")
 
     return domain_knowledge
 
 def get_speak_actions_conditions_and_effects(model, domain_knowledge):
+    flags = get_feature_flags()
+    pm = get_active_prompt_manager()
+    state = get_scenario_state()
+
     for agent in tqdm(domain_knowledge["agents"].keys()):
         print("Calculating speak action conditions and effects for agent ", agent)
 
@@ -506,11 +706,33 @@ def get_speak_actions_conditions_and_effects(model, domain_knowledge):
 
         dialogue_tree = f"The dialogue state machine of the scenario is: " + "\n".join(domain_knowledge["dialogue_tree"])
 
-        task_description = knowledge_base + dialogue_tree + SPEAK_CONDITIONS_EFFECTS
+        # Use improved or enhanced prompts based on flags
+        if flags.dialogue_improvement:
+            speak_cond_eff_prompt = DIALOGUE_PROMPTS["speak_conditions_effects_improved"]["template"]
+        elif flags.cot_enhancement and pm.has_enhanced("speak_conditions_effects"):
+            speak_cond_eff_prompt = pm.get("speak_conditions_effects")
+        else:
+            speak_cond_eff_prompt = SPEAK_CONDITIONS_EFFECTS
+
+        task_description = knowledge_base + dialogue_tree + speak_cond_eff_prompt
+
+        # Add full context if enabled
+        if flags.full_context and state:
+            task_description = state.to_prompt_context() + "\n\n" + task_description
 
         for speak_action in tqdm(domain_knowledge["agents"][agent]["speak_actions"].keys()):
                 conditions, effects = get_action_conditions_effects(model, agent, speak_action, task_description)
                 domain_knowledge["agents"][agent]["speak_actions"][speak_action] = {"conditions": conditions, "effects": effects}
+
+                # Update scenario state
+                if state and flags.full_context:
+                    # Update existing speak action with conditions/effects
+                    if agent in state.agents and speak_action in state.agents[agent].speak_actions:
+                        state.agents[agent].speak_actions[speak_action].conditions = conditions
+                        state.agents[agent].speak_actions[speak_action].effects = effects
+
+    if state and flags.full_context:
+        state.set_stage("speak_conditions_effects")
 
     return domain_knowledge
 
@@ -581,11 +803,24 @@ def generate_scenario(scenario_name, scenario_description):
 
     # Initialize prompt manager (TASK-009 integration)
     prompt_manager = get_prompt_manager(use_enhanced=flags.cot_enhancement)
+    set_prompt_manager(prompt_manager)
     if flags.cot_enhancement:
         print("  Using enhanced Chain-of-Thought prompts")
 
-    # Explain task to model
-    describe_task(model, TASK_DESCRIPTION)
+    # Initialize scenario state for full_context mode (TASK-006 integration)
+    if flags.full_context:
+        state = ScenarioState(scenario_name, scenario_description)
+        set_scenario_state(state)
+        print("  Using full context state management")
+    else:
+        set_scenario_state(None)
+
+    # Explain task to model - use enhanced prompt if available
+    if flags.cot_enhancement and prompt_manager.has_enhanced("task_description"):
+        task_desc = prompt_manager.get("task_description")
+    else:
+        task_desc = TASK_DESCRIPTION
+    describe_task(model, task_desc)
 
     print("Starting Scenario generation and translation ... ")
     # Use generative power of model to give more detail to the scenario, because the prompt is very short
