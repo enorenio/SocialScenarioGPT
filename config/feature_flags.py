@@ -64,38 +64,97 @@ class FeatureFlags:
         }
 
 
-# Pre-defined ablation profiles
+# Pre-defined ablation profiles for TASK-014
+# Condition IDs match plan.md ablation study design
 PROFILES = {
-    "baseline": FeatureFlags(),  # All off (original system)
+    # C00: Baseline (original system)
+    "C00": FeatureFlags(),
+    "baseline": FeatureFlags(),  # Alias for backwards compatibility
 
+    # C01: GPT-4 only
+    "C01": FeatureFlags(use_gpt4=True),
     "gpt4_only": FeatureFlags(use_gpt4=True),
 
+    # C02: Full context only
+    "C02": FeatureFlags(full_context=True),
     "full_context_only": FeatureFlags(full_context=True),
 
+    # C03: CoT enhancement only
+    "C03": FeatureFlags(cot_enhancement=True),
     "cot_only": FeatureFlags(cot_enhancement=True),
 
+    # C04: Dialogue improvement only
+    "C04": FeatureFlags(dialogue_improvement=True),
     "dialogue_only": FeatureFlags(dialogue_improvement=True),
 
+    # C05: GPT-4 + Full context
+    "C05": FeatureFlags(
+        use_gpt4=True,
+        full_context=True,
+    ),
     "gpt4_full_context": FeatureFlags(
         use_gpt4=True,
         full_context=True,
     ),
 
+    # C06: GPT-4 + Full context + Verification loop
+    "C06": FeatureFlags(
+        use_gpt4=True,
+        full_context=True,
+        verification_loop=True,
+    ),
     "gpt4_full_context_verification": FeatureFlags(
         use_gpt4=True,
         full_context=True,
         verification_loop=True,
     ),
 
+    # C07: GPT-4 + Full context + Verification + CoT
+    "C07": FeatureFlags(
+        use_gpt4=True,
+        full_context=True,
+        verification_loop=True,
+        cot_enhancement=True,
+    ),
+
+    # C08: Full system (all features)
+    "C08": FeatureFlags(
+        use_gpt4=True,
+        full_context=True,
+        verification_loop=True,
+        cot_enhancement=True,
+        dialogue_improvement=True,
+    ),
     "full_system": FeatureFlags(
         use_gpt4=True,
         full_context=True,
         verification_loop=True,
         cot_enhancement=True,
         dialogue_improvement=True,
-        llm_judge=True,
-        symbolic_verification=True,
     ),
+
+    # C09: Full minus verification (GPT-4 + Full context + CoT + Dialogue)
+    "C09": FeatureFlags(
+        use_gpt4=True,
+        full_context=True,
+        cot_enhancement=True,
+        dialogue_improvement=True,
+    ),
+
+    # C10: Full minus full_context (GPT-4 + CoT + Dialogue)
+    "C10": FeatureFlags(
+        use_gpt4=True,
+        cot_enhancement=True,
+        dialogue_improvement=True,
+    ),
+}
+
+# Ablation study condition groups for organized running
+CONDITION_GROUPS = {
+    "single_feature": ["C00", "C01", "C02", "C03", "C04"],  # Baseline + single features
+    "combined": ["C05", "C06", "C07", "C08"],  # Progressive combinations
+    "ablation": ["C08", "C09", "C10"],  # Full system minus one feature
+    "all": ["C00", "C01", "C02", "C03", "C04", "C05", "C06", "C07", "C08", "C09", "C10"],
 }
 
 

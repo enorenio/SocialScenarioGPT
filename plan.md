@@ -629,7 +629,7 @@ print(f"Improvement: {comparison.intention_completion_improvement:+.1f}%")
 
 ## Phase 4: Ablation Study
 
-### TASK-014: Ablation Study Execution
+### TASK-014: Ablation Study Execution ✅ DONE
 **Description:** Systematically evaluate each feature and feature combination to determine individual and combined contributions to performance improvements.
 
 **Study Design:**
@@ -653,11 +653,56 @@ print(f"Improvement: {comparison.intention_completion_improvement:+.1f}%")
 **Scenarios per Condition:** Minimum 20, ideally 43 (matching original)
 
 **Deliverables:**
-- `experiments/ablation_runner.py` - Automated ablation execution
-- `experiments/ablation_config.yaml` - All condition definitions
-- Results for all conditions
-- Statistical analysis (paired t-tests, effect sizes)
-- Feature contribution analysis
+- `experiments/ablation_runner.py` - Automated ablation execution ✅
+- `config/feature_flags.py` - Updated with all 11 conditions (C00-C10) and CONDITION_GROUPS ✅
+- `analysis/statistics.py` - Statistical analysis utilities ✅
+  - Paired and independent t-tests
+  - Cohen's d effect size calculations
+  - Confidence intervals
+  - Multiple comparison corrections (Bonferroni)
+- `SocialScenarioGPT.py` - Modified to use feature flags ✅
+  - Uses `set_feature_flags()` / `get_feature_flags()` for controlling behavior
+  - Integrates ModelFactory for GPT-4 selection (TASK-005)
+  - Integrates PromptManager for CoT enhancement (TASK-009)
+  - Integrates verification loop (TASK-007)
+  - Records feature flags and usage stats in generated scenarios
+- `tests/test_task014_ablation.py` - 56 tests ✅
+
+**Key Components:**
+
+**AblationRunner Class:**
+- Uses PROFILES from `config/feature_flags.py` (no external YAML)
+- Runs individual conditions or full studies
+- Supports dry-run mode for testing
+- Generates comprehensive reports with:
+  - Key metrics comparison table
+  - Statistical significance tests
+  - Effect size analysis
+  - Feature contribution breakdown
+
+**Statistical Analysis:**
+- Independent t-tests for condition comparisons
+- Cohen's d effect size with interpretation (negligible/small/medium/large)
+- Confidence interval calculations
+- Multiple comparison corrections
+
+**Usage:**
+```bash
+# List all conditions
+python experiments/ablation_runner.py --list-conditions
+
+# Run single condition (dry run)
+python experiments/ablation_runner.py --condition C00 --dry-run
+
+# Run condition group
+python experiments/ablation_runner.py --group single_feature --n-scenarios 20
+
+# Run full ablation study
+python experiments/ablation_runner.py --all --n-scenarios 20
+
+# Analyze existing data
+python experiments/ablation_runner.py --analyze-existing
+```
 
 **Estimated Hours:** 20-30 hours (including runtime)
 **Difficulty:** ⭐⭐⭐ Medium

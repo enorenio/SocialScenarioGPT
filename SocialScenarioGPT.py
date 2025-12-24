@@ -8,7 +8,27 @@ from Constants.api_contants import API_KEY
 from Constants.task_constants import *
 from OpenAIHandler import OpenAIHandler
 
+# Feature flag imports for ablation study (TASK-014)
+from config.feature_flags import FeatureFlags, get_profile, PROFILES
+from models import ModelFactory, get_model
+from prompts import get_prompt_manager
+from core.verification import verify_conditions_effects, VerificationResult
+from core.error_feedback import format_errors_for_llm, format_regeneration_prompt
+
 NUM_TRIES = 3
+
+# Global feature flags instance - controls which features are active
+# Default is baseline (all features off)
+_active_flags: FeatureFlags = FeatureFlags()
+
+def set_feature_flags(flags: FeatureFlags) -> None:
+    """Set the active feature flags for scenario generation."""
+    global _active_flags
+    _active_flags = flags
+
+def get_feature_flags() -> FeatureFlags:
+    """Get the currently active feature flags."""
+    return _active_flags
 
 # This should be a variable asked to be inputed by the user but for now is a constant here
 scenario_description = "Social scenario of a bartender with two customers."
@@ -116,31 +136,82 @@ def get_agent_actions(model, agent, task_description):
     return actions
 
 
-def get_action_conditions_effects(model, agent, action, task_description):
-    task_description = re.sub(re.escape("[[AGENT NAME]]"), agent, task_description)
-    task_description = re.sub(re.escape("[[ACTION]]"), action, task_description)
-    model.add_user_turn(task_description)
-    response = model.get_model_response()
-
-    # Remove turns to save input space
-    model.remove_turns(-1)
-    # model.add_model_turn(response)
-
-    # Parse conditions and effects
-    conditions_effects = response.choices[0].message.content.strip()
+def _parse_conditions_effects(response_text: str, agent: str, action: str):
+    """Parse conditions and effects from LLM response."""
     try:
-        conditions = re.findall("[\s\S]+?[Ee]ffects", conditions_effects)[0]
+        conditions = re.findall("[\s\S]+?[Ee]ffects", response_text)[0]
         conditions = re.findall("\[\[.*?\]\]", conditions)
         conditions = [re.sub(",[ ]+?\)]", "\)", elem) for elem in conditions if elem != action and elem != agent]
     except:
         conditions = []
     try:
-        effects = re.findall("[Ee]ffects[\s\S]+", conditions_effects)[0]
+        effects = re.findall("[Ee]ffects[\s\S]+", response_text)[0]
         effects = re.findall("\[\[.*?\]\]", effects)
         effects = [re.sub(",[ ]+?\)]", "\)", elem) for elem in effects if elem != action and elem != agent]
     except:
         effects = []
-    # print(response.choices[0].message.content.strip())
+    return conditions, effects
+
+
+def get_action_conditions_effects(model, agent, action, task_description,
+                                   domain_knowledge=None, max_retries=3):
+    """
+    Get conditions and effects for an action.
+
+    If verification_loop feature is enabled and domain_knowledge is provided,
+    will verify the output and request regeneration if errors are found.
+    """
+    flags = get_feature_flags()
+    task_description = re.sub(re.escape("[[AGENT NAME]]"), agent, task_description)
+    task_description = re.sub(re.escape("[[ACTION]]"), action, task_description)
+
+    for attempt in range(max_retries):
+        model.add_user_turn(task_description)
+        response = model.get_model_response()
+
+        # Remove turns to save input space
+        model.remove_turns(-1)
+
+        # Parse conditions and effects
+        conditions_effects = response.choices[0].message.content.strip()
+        conditions, effects = _parse_conditions_effects(conditions_effects, agent, action)
+
+        # Verification loop (TASK-007 integration)
+        if flags.verification_loop and domain_knowledge is not None:
+            # Build knowledge base from domain_knowledge for verification
+            known_agents = set(domain_knowledge.get("agents", {}).keys())
+            known_beliefs = set()
+            for ag_name, ag_data in domain_knowledge.get("agents", {}).items():
+                for kb_item in ag_data.get("knowledge_base", []):
+                    # Extract belief/desire names
+                    match = re.search(r'(BEL|DES)\([^,]+,\s*([^)]+)\)', kb_item)
+                    if match:
+                        known_beliefs.add(match.group(2).strip())
+
+            # Verify conditions and effects
+            result = verify_conditions_effects(
+                conditions=conditions,
+                effects=effects,
+                known_agents=known_agents,
+                known_beliefs=known_beliefs,
+                agent_name=agent,
+                action_name=action,
+            )
+
+            if not result.valid and attempt < max_retries - 1:
+                # Generate feedback and retry
+                feedback = format_errors_for_llm(result.errors)
+                retry_prompt = format_regeneration_prompt(
+                    original_prompt=task_description,
+                    errors=result.errors,
+                    original_response=conditions_effects,
+                )
+                task_description = retry_prompt
+                print(f"      Verification failed, retrying ({attempt + 1}/{max_retries})...")
+                continue
+
+        # Return on success or after all retries
+        return conditions, effects
 
     return conditions, effects
 
@@ -339,6 +410,7 @@ def get_agent_action_plan(model, agent, intention, task_description):
 
 
 def get_actions_conditions_and_effects(model, domain_knowledge):
+    flags = get_feature_flags()
     for agent in tqdm(domain_knowledge["agents"].keys()):
         print("Calculating action conditions and effects for agent ", agent)
         for intention in tqdm(domain_knowledge["agents"][agent]["intentions"].keys()):
@@ -351,7 +423,11 @@ def get_actions_conditions_and_effects(model, domain_knowledge):
             task_description = knowledge_base + "\n" + action_plan + "\n" + CONDITIONS_EFFECTS_TASK
 
             for action in domain_knowledge["agents"][agent]["intentions"][intention]["action_plan"]:
-                conditions, effects = get_action_conditions_effects(model, agent, action, task_description)
+                # Pass domain_knowledge to enable verification loop (TASK-007)
+                conditions, effects = get_action_conditions_effects(
+                    model, agent, action, task_description,
+                    domain_knowledge=domain_knowledge if flags.verification_loop else None
+                )
                 domain_knowledge["agents"][agent]["actions"][action] = {"conditions": conditions, "effects": effects}
 
     return domain_knowledge
@@ -487,7 +563,26 @@ def generate_scenario(scenario_name, scenario_description):
         continue_domain_knowledge = False
 
     print("Initializing model...")
-    model = OpenAIHandler(api_key=API_KEY, model_id='gpt-3.5-turbo')
+    # Use feature flags to determine model (TASK-005 integration)
+    flags = get_feature_flags()
+
+    # Record feature flags in domain_knowledge for experiment tracking
+    if not continue_domain_knowledge:
+        domain_knowledge["feature_flags"] = flags.to_dict()
+        domain_knowledge["model"] = "gpt-4o" if flags.use_gpt4 else "gpt-3.5-turbo"
+
+    if flags.use_gpt4:
+        model = get_model(use_gpt4=True)
+        print(f"  Using GPT-4 model: {model.model_id}")
+    else:
+        model = OpenAIHandler(api_key=API_KEY, model_id='gpt-3.5-turbo')
+        print(f"  Using baseline model: gpt-3.5-turbo")
+    print(f"  Active features: {flags.enabled_features() or 'None (baseline)'}")
+
+    # Initialize prompt manager (TASK-009 integration)
+    prompt_manager = get_prompt_manager(use_enhanced=flags.cot_enhancement)
+    if flags.cot_enhancement:
+        print("  Using enhanced Chain-of-Thought prompts")
 
     # Explain task to model
     describe_task(model, TASK_DESCRIPTION)
@@ -558,7 +653,13 @@ def generate_scenario(scenario_name, scenario_description):
         domain_knowledge["last_ended"] = "end"
         ##########################################################################################
 
+    # Record usage statistics if using ModelHandler (TASK-005)
+    if hasattr(model, 'get_usage_summary'):
+        domain_knowledge["usage_stats"] = model.get_usage_summary()
+
     domainknowledge_to_json(domain_knowledge, scenario_name)
+
+    return domain_knowledge
 
 
 if __name__ == "__main__":
