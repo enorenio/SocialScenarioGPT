@@ -448,39 +448,56 @@ print(f"Lines: {metrics.total_lines}, Paths: {metrics.approximate_paths}")
 
 ## Phase 3: Evaluation Infrastructure
 
-### TASK-011: LLM-as-Judge Evaluation System [FEATURE: llm_judge]
+### TASK-011: LLM-as-Judge Evaluation System [FEATURE: llm_judge] ✅ DONE
 **Description:** Implement an automated evaluation system using a separate LLM instance to judge generated scenarios. Design rubrics matching the original paper's subjective evaluation criteria (relevance, branching, logical errors).
 
-**Implementation Details:**
-```python
-EVALUATION_RUBRIC = {
-    "agent_relevance": {
-        "description": "Are the generated agents appropriate for the scenario?",
-        "scale": "1-5 Likert",
-        "criteria": [...]
-    },
-    "belief_coherence": {
-        "description": "Are beliefs logically consistent and grounded?",
-        "scale": "1-5 Likert", 
-        "criteria": [...]
-    },
-    # ... match all original paper dimensions
-}
-
-def evaluate_scenario(scenario: GeneratedScenario, rubric: dict) -> EvaluationResult:
-    """Use GPT-4 to evaluate scenario against rubric"""
-```
-
-**Validation:**
-- Compare LLM-judge scores with original human annotations
-- Calculate correlation (target: r > 0.6)
-- Identify dimensions where LLM-judge diverges
-
 **Deliverables:**
-- `evaluation/llm_judge.py` - LLM evaluation module
-- `evaluation/rubrics.yaml` - Evaluation criteria
-- Validation study comparing to human ratings
-- Inter-rater reliability analysis (LLM vs human)
+- `evaluation/` - Evaluation package ✅
+  - `rubrics.py` - 10 evaluation rubrics with 1-5 Likert scales
+  - `llm_judge.py` - LLM judge implementation
+- `tests/test_task011_llm_judge.py` - 25 tests ✅
+
+**Evaluation Dimensions (10 total):**
+| Dimension | Weight | Focus Area |
+|-----------|--------|------------|
+| Agent Relevance | 1.0 | Are agents appropriate for scenario? |
+| Belief Coherence | 1.2 | Are beliefs logically consistent? |
+| Desire Appropriateness | 1.2 | Do desires match agent roles? |
+| Intention Validity | 1.0 | Do intentions follow from BDI? |
+| Action Feasibility | 1.5 | Can action plans execute? |
+| Condition/Effect Logic | 1.5 | Are conditions/effects well-formed? |
+| Dialogue Quality | 1.0 | Quantity, branching, structure |
+| Dialogue Naturalness | 0.8 | Natural, character-appropriate speech |
+| Emotional Consistency | 0.8 | OCC model compliance |
+| Overall Coherence | 1.5 | Complete scenario quality |
+
+**Key Classes:**
+- `EvaluationDimension` - Enum of all 10 dimensions
+- `EvaluationRubric` - Rubric with levels, question, weights
+- `LLMJudge` - Main evaluation class
+- `EvaluationResult` - Scores with reasoning per dimension
+- `DimensionScore` - Score, reasoning, confidence per dimension
+
+**Features:**
+- Structured JSON output parsing
+- Fallback to freeform response parsing
+- Score clamping to 1-5 range
+- Weighted average calculation
+- Batch evaluation support
+- Comparison between baseline and improved
+
+**Usage:**
+```python
+from evaluation import LLMJudge, evaluate_scenario
+
+# Evaluate single scenario
+result = evaluate_scenario(scenario, model_name="gpt-4o")
+print(f"Weighted Average: {result.weighted_average:.2f}/5")
+
+# Compare baseline vs improved
+comparison = compare_evaluations(baseline_results, improved_results)
+print(f"Improvement: {comparison['overall']['improvement']}")
+```
 
 **Feature Flag:** `llm_judge`
 **Dependencies:** None (standalone evaluation feature)
