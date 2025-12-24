@@ -1,5 +1,32 @@
 # Research Findings
 
+## Finding 3: Baseline Dialogues Are Almost Entirely Linear
+
+**Date:** 2024-12-24
+
+**Context:** While implementing TASK-010 (Dialogue Generation Improvement), we analyzed the state machine structure of all 31 scenarios with dialogue.
+
+**Quantitative Analysis:**
+
+| Metric | Baseline | Target |
+|--------|----------|--------|
+| Avg dialogue lines | 7.16 | 15-20 |
+| Avg branch points | 0.26 | 2-3 |
+| Avg unique paths | 1.26 | 3-5 |
+
+**Distribution:**
+- 87% of scenarios have 4-9 dialogue lines
+- 0% reach the 13+ line target
+- Only 8/31 (26%) scenarios have any branching at all
+
+**Implications:**
+- The dialogue limitation is structural, not just quantitative
+- Generated dialogues are simple linear sequences, not true state machines
+- FAtiMA's branching capability is underutilized
+- Improved prompts must explicitly require branching paths
+
+---
+
 ## Finding 2: Paper's Intention Completion Metric Uses Lenient String Matching
 
 **Date:** 2024-12-24
