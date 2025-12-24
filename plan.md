@@ -123,21 +123,36 @@ Enhancement of the Antunes et al. (2023) "Prompting for Socially Intelligent Age
 
 ## Phase 2: Core Improvements
 
-### TASK-005: GPT-4 Model Integration [FEATURE: use_gpt4]
+### TASK-005: GPT-4 Model Integration [FEATURE: use_gpt4] ✅ DONE
 **Description:** Integrate GPT-4-turbo (or GPT-4o) as an alternative model option. This requires handling the larger context window (128K tokens), adjusting prompts if necessary, and managing the different API parameters. Implement behind feature flag.
 
-**Implementation Details:**
-- Abstract model selection in configuration
-- Handle different token limits
-- Adjust temperature/top_p if needed
-- Track cost differences (GPT-4 is more expensive)
-- Implement graceful fallback
-
 **Deliverables:**
-- `models/model_factory.py` - Model abstraction layer
-- Updated configuration for model selection
-- Cost tracking per scenario
-- Comparison documentation
+- `models/model_factory.py` - Model abstraction layer with cost tracking ✅
+- `models/__init__.py` - Package exports ✅
+- `ModelHandler` class - drop-in replacement for `OpenAIHandler` ✅
+- `ModelFactory.from_feature_flags()` - creates model from FeatureFlags ✅
+- Cost tracking per API call with `UsageStats` ✅
+
+**Supported Models:**
+| Model | Context | Input Cost | Output Cost |
+|-------|---------|------------|-------------|
+| gpt-3.5-turbo | 16K | $0.0005/1K | $0.0015/1K |
+| gpt-4-turbo | 128K | $0.01/1K | $0.03/1K |
+| gpt-4o | 128K | $0.0025/1K | $0.01/1K |
+| gpt-4o-mini | 128K | $0.00015/1K | $0.0006/1K |
+
+**Usage:**
+```python
+from models import get_model
+from config.feature_flags import FeatureFlags
+
+# Direct usage
+model = get_model(use_gpt4=True)  # Returns GPT-4o
+
+# From feature flags
+flags = FeatureFlags(use_gpt4=True)
+model = ModelFactory.from_feature_flags(flags)
+```
 
 **Feature Flag:** `use_gpt4`
 **Dependencies:** None (standalone feature)
