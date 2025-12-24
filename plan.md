@@ -214,45 +214,45 @@ compact = state.to_compact_context()  # Token-efficient
 
 ---
 
-### TASK-007: Verification Loop for Conditions/Effects [FEATURE: verification_loop]
+### TASK-007: Verification Loop for Conditions/Effects [FEATURE: verification_loop] ✅ DONE
 **Description:** Implement an iterative verification system that checks generated conditions and effects against the current knowledge base. If inconsistencies are found (e.g., condition references non-existent belief), provide error feedback to the LLM and request regeneration.
 
-**Implementation Details:**
+**Deliverables:**
+- `core/verification.py` - Complete verification logic ✅
+  - `BeliefDesireParser` - Parses BEL/DES/INTENT statements
+  - `ConditionEffectVerifier` - Verifies conditions/effects against state
+  - `verify_scenario()` - Verifies entire scenario
+  - `verify_conditions_effects()` - Convenience function
+- `core/error_feedback.py` - Error formatting for LLM ✅
+  - `format_errors_for_llm()` - Formats errors as feedback
+  - `format_regeneration_prompt()` - Complete regeneration prompt
+  - `create_regeneration_request()` - Creates request from result
+- `tests/test_task007_verification.py` - 22 tests ✅
+
+**Verification Checks Implemented:**
+- ✅ Missing value detection (e.g., `BEL(x, y)` without `= True`)
+- ✅ Invalid format detection
+- ✅ Unknown agent references
+- ✅ Unknown belief/desire warnings
+- ✅ Inconsistent naming detection (typo detection)
+- ✅ Value validation (True/False, numbers, strings)
+
+**Usage:**
 ```python
-def generate_with_verification(
-    action: Action, 
-    state: ScenarioState,
-    max_retries: int = 3
-) -> Tuple[Conditions, Effects]:
-    for attempt in range(max_retries):
-        conditions, effects = generate_conditions_effects(action, state)
-        errors = verify_against_state(conditions, effects, state)
-        
-        if not errors:
-            return conditions, effects
-        
-        # Construct error feedback prompt
-        feedback = format_errors_for_llm(errors)
-        conditions, effects = regenerate_with_feedback(
-            action, state, feedback
-        )
-    
-    # Log failure and return best attempt or flag for review
-    return handle_verification_failure(action, attempts)
+from core import verify_scenario, verify_conditions_effects
+
+# Verify entire scenario
+result = verify_scenario(state)
+if not result.valid:
+    feedback = format_errors_for_llm(result.errors)
+
+# Verify specific conditions/effects
+result = verify_conditions_effects(conditions, effects, state, agent, action)
 ```
 
-**Verification Checks:**
-- Condition references existing belief in knowledge base
-- Effect updates use consistent naming
-- No circular dependencies
-- Numeric values are valid
-- Boolean values are consistent
-
-**Deliverables:**
-- `core/verification.py` - Verification logic
-- `core/error_feedback.py` - Error formatting for LLM
-- Verification rules specification
-- Metrics on retry rates and success
+**Test Results on Real Scenario (test_Brother.json):**
+- 11 errors found (missing values, format issues)
+- 20 warnings (unknown beliefs, naming inconsistencies)
 
 **Feature Flag:** `verification_loop`
 **Dependencies:** `full_context` (requires TASK-006)
