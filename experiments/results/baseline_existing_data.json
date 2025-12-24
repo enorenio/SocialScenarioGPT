@@ -1,0 +1,46 @@
+{
+  "description": "Baseline metrics from existing 33 completed scenarios in Data/ directory",
+  "date": "2024-12-24",
+  "source": "Original repository scenarios (GPT-3.5-turbo)",
+  "scenarios_analyzed": 33,
+  "key_metrics": {
+    "intention_completion_rate": 0.038,
+    "intention_completion_count": "10/266",
+    "immediately_executable_rate": 0.370,
+    "immediately_executable_count": "716/1937",
+    "avg_dialogue_lines": 6.70
+  },
+  "paper_baseline_comparison": {
+    "intention_completion_rate": {
+      "paper": 0.03,
+      "ours": 0.038,
+      "note": "Close match - 3% vs 3.8%"
+    },
+    "immediately_executable_rate": {
+      "paper": 0.259,
+      "ours": 0.370,
+      "note": "Higher than paper - 25.9% vs 37.0%"
+    },
+    "avg_dialogue_lines": {
+      "paper": 5.30,
+      "ours": 6.70,
+      "note": "Slightly higher - 5.30 vs 6.70"
+    }
+  },
+  "artifact_counts_mean": {
+    "total": 564.36,
+    "agents": 2.52,
+    "beliefs": 8.58,
+    "desires": 5.70,
+    "intentions": 8.06,
+    "actions": 58.70,
+    "conditions": 146.00,
+    "effects": 121.30,
+    "emotion_before": 61.48,
+    "emotion_after": 59.94,
+    "dialogue_lines": 6.70,
+    "speak_actions": 12.36,
+    "speak_actions_conditions": 45.70,
+    "speak_actions_effects": 27.33
+  }
+}

@@ -21,44 +21,14 @@ Enhancement of the Antunes et al. (2023) "Prompting for Socially Intelligent Age
 
 ## Architecture Design
 
-### TASK-000: Feature Flag System Design
-**Description:** Design and implement a configuration system that allows enabling/disabling individual features and feature combinations. This is CRITICAL and must be completed before implementing any other features. The system should support:
-- Boolean flags for each feature
-- Dependency declarations (feature A requires feature B)
-- Configuration profiles for ablation study combinations
-- Runtime validation of feature compatibility
-- Logging of active feature configuration per run
-
-**Implementation Details:**
-```python
-# Example configuration structure
-CONFIG = {
-    "features": {
-        "use_gpt4": {"enabled": True, "depends_on": []},
-        "full_context": {"enabled": True, "depends_on": []},
-        "verification_loop": {"enabled": True, "depends_on": ["full_context"]},
-        "cot_enhancement": {"enabled": True, "depends_on": []},
-        "dialogue_improvement": {"enabled": True, "depends_on": []},
-        "llm_judge": {"enabled": True, "depends_on": []},
-        "symbolic_verification": {"enabled": True, "depends_on": ["full_context"]},
-    },
-    "ablation_profiles": {
-        "baseline": {...},
-        "gpt4_only": {...},
-        "full_system": {...},
-        # ... all 2^n combinations
-    }
-}
-```
+### TASK-000: Feature Flag System Design ✅ DONE
+**Description:** Simple configuration system for enabling/disabling features. Keep it minimal - a single Python file with a dataclass or dict.
 
 **Deliverables:**
-- `config/feature_flags.py` - Feature flag management module
-- `config/ablation_profiles.yaml` - Pre-defined ablation study configurations
-- `utils/dependency_validator.py` - Validates feature dependencies before run
-- Documentation of all feature dependencies
+- `config/feature_flags.py` - Feature flags with dependency validation ✅
 
-**Estimated Hours:** 8-12 hours
-**Difficulty:** ⭐⭐⭐ Medium
+**Estimated Hours:** 2-3 hours
+**Difficulty:** ⭐⭐ Low
 **Impact:** ⭐⭐⭐⭐⭐ Critical (blocks all other tasks)
 **Dependencies:** None
 **Blocks:** All other implementation tasks
@@ -67,35 +37,34 @@ CONFIG = {
 
 ## Phase 1: Infrastructure & Baseline
 
-### TASK-001: Repository Setup and Original Implementation Analysis
-**Description:** Clone the original repository (https://github.com/ana3A/SocialScenarioGPT.git), analyze the codebase structure, understand the prompting pipeline, and set up development environment. Document the current architecture and identify modification points for each planned feature.
+### TASK-001: Repository Setup ✅ DONE
+**Description:** Clone the original repository and set up development environment.
 
 **Deliverables:**
-- Forked repository with development environment
-- Architecture documentation (markdown)
-- Identified modification points for each feature
-- Requirements.txt with all dependencies
-- .env.example for API keys
+- Cloned repository ✅
+- `requirements.txt` with dependencies ✅
+- `venv/` virtual environment created ✅
+- `.env` file with `OPENAI_API_KEY` (user creates locally, not committed)
 
-**Estimated Hours:** 6-8 hours
-**Difficulty:** ⭐⭐ Low-Medium
+**Estimated Hours:** 1 hour
+**Difficulty:** ⭐ Low
 **Impact:** ⭐⭐⭐⭐⭐ Critical (foundational)
 **Dependencies:** None
 **Blocks:** All subsequent tasks
 
 ---
 
-### TASK-002: Baseline Reproduction
+### TASK-002: Baseline Reproduction ✅ DONE
 **Description:** Reproduce the original paper's results using the same RocStories scenarios and GPT-3.5-turbo. This establishes our own baseline for comparison and validates our understanding of the system. Must use the feature flag system with all enhancements disabled.
 
 **Deliverables:**
-- Script to run baseline experiments
-- Generated scenarios for comparison (minimum 20, ideally 43 as original)
-- Metrics matching or explaining deviations from original paper:
-  - Artifact counts per category
-  - Intention completion rate
-  - Immediately executable actions percentage
-- Baseline results JSON file
+- `experiments/baseline_runner.py` - Script to run baseline experiments ✅
+- 33 completed scenarios from original repo (in `Data/`) ✅
+- Metrics close to original paper ✅:
+  - Intention completion: 3.8% (paper: 3%)
+  - Immediately executable: 37.0% (paper: 25.9%)
+  - Avg dialogue lines: 6.70 (paper: 5.30)
+- `experiments/results/baseline_existing_data.json` - Baseline results ✅
 
 **Estimated Hours:** 10-15 hours
 **Difficulty:** ⭐⭐ Low-Medium
@@ -606,8 +575,8 @@ feature_dependencies:
 
 | Task ID | Task Name | Hours | Difficulty | Impact | Phase |
 |---------|-----------|-------|------------|--------|-------|
-| TASK-000 | Feature Flag System | 8-12 | ⭐⭐⭐ | ⭐⭐⭐⭐⭐ | 0 |
-| TASK-001 | Repo Setup | 6-8 | ⭐⭐ | ⭐⭐⭐⭐⭐ | 1 |
+| TASK-000 | Feature Flag System | 2-3 | ⭐⭐ | ⭐⭐⭐⭐⭐ | 0 |
+| TASK-001 | Repo Setup | 1 | ⭐ | ⭐⭐⭐⭐⭐ | 1 |
 | TASK-002 | Baseline Reproduction | 10-15 | ⭐⭐ | ⭐⭐⭐⭐⭐ | 1 |
 | TASK-003 | Logging System | 8-10 | ⭐⭐ | ⭐⭐⭐⭐ | 1 |
 | TASK-004 | Data Preparation | 4-6 | ⭐ | ⭐⭐⭐⭐ | 1 |
