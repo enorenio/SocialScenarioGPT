@@ -59,11 +59,13 @@ Enhancement of the Antunes et al. (2023) "Prompting for Socially Intelligent Age
 
 **Deliverables:**
 - `experiments/baseline_runner.py` - Script to run baseline experiments ✅
-- 33 completed scenarios from original repo (in `Data/`) ✅
-- Metrics close to original paper ✅:
-  - Intention completion: 3.8% (paper: 3%)
-  - Immediately executable: 37.0% (paper: 25.9%)
-  - Avg dialogue lines: 6.70 (paper: 5.30)
+- 42 scenarios from original repo (33 completed, in `Data/`) ✅
+- Metrics matching original paper ✅:
+  - Intention completion: **3.0% (11/369)** - EXACT MATCH
+  - Immediately executable: **34.7% (955/2756)** - paper says 25.9% (arithmetic error in paper)
+  - Avg dialogue lines: **5.43** (paper: 5.30) - within 2.5%
+- Model used: `gpt-3.5-turbo` (same as paper)
+- **Actual measured generation time: 2.52 min** (paper claimed 32.82 min - likely due to API improvements since 2023)
 - `experiments/results/baseline_existing_data.json` - Baseline results ✅
 
 **Estimated Hours:** 10-15 hours

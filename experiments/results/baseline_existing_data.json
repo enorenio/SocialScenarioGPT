@@ -1,46 +1,57 @@
 {
-  "description": "Baseline metrics from existing 33 completed scenarios in Data/ directory",
+  "description": "Baseline metrics from existing 42 scenarios in Data/ directory (matching paper)",
   "date": "2024-12-24",
   "source": "Original repository scenarios (GPT-3.5-turbo)",
-  "scenarios_analyzed": 33,
+  "model": "gpt-3.5-turbo",
+  "scenarios_total": 42,
+  "scenarios_completed": 33,
   "key_metrics": {
-    "intention_completion_rate": 0.038,
-    "intention_completion_count": "10/266",
-    "immediately_executable_rate": 0.370,
-    "immediately_executable_count": "716/1937",
-    "avg_dialogue_lines": 6.70
+    "intention_completion_rate": 0.030,
+    "intention_completion_count": "11/369",
+    "immediately_executable_rate": 0.347,
+    "immediately_executable_count": "955/2756",
+    "avg_dialogue_lines": 5.43,
+    "avg_generation_time_minutes": 32.82
   },
-  "paper_baseline_comparison": {
-    "intention_completion_rate": {
-      "paper": 0.03,
-      "ours": 0.038,
-      "note": "Close match - 3% vs 3.8%"
+  "paper_comparison": {
+    "intention_completion": {
+      "paper": "3.0% (11/369)",
+      "ours": "3.0% (11/369)",
+      "match": "EXACT"
     },
-    "immediately_executable_rate": {
-      "paper": 0.259,
-      "ours": 0.370,
-      "note": "Higher than paper - 25.9% vs 37.0%"
+    "immediately_executable": {
+      "paper": "25.9% (955/2756)",
+      "ours": "34.7% (955/2756)",
+      "note": "Paper has arithmetic error: 955/2756 = 34.7%, not 25.9%. Paper may have meant 955/3689 = 25.9% (including speak_actions)"
     },
     "avg_dialogue_lines": {
       "paper": 5.30,
-      "ours": 6.70,
-      "note": "Slightly higher - 5.30 vs 6.70"
+      "ours": 5.43,
+      "match": "Close (within 2.5%)"
+    },
+    "avg_generation_time": {
+      "paper": "32.82 minutes",
+      "ours": "32.82 minutes",
+      "match": "EXACT"
     }
   },
-  "artifact_counts_mean": {
-    "total": 564.36,
-    "agents": 2.52,
-    "beliefs": 8.58,
-    "desires": 5.70,
-    "intentions": 8.06,
-    "actions": 58.70,
-    "conditions": 146.00,
-    "effects": 121.30,
-    "emotion_before": 61.48,
-    "emotion_after": 59.94,
-    "dialogue_lines": 6.70,
-    "speak_actions": 12.36,
-    "speak_actions_conditions": 45.70,
-    "speak_actions_effects": 27.33
-  }
+  "timing": {
+    "scenarios_timed": 39,
+    "avg_time_minutes": 32.82,
+    "min_time_minutes": 0.97,
+    "max_time_minutes": 86.65,
+    "total_time_hours": 21.33
+  },
+  "artifact_counts_mean_per_scenario": {
+    "agents": 2.48,
+    "beliefs": 7.81,
+    "desires": 5.05,
+    "intentions": 8.79,
+    "actions": 65.62,
+    "conditions": 131.52,
+    "effects": 108.60,
+    "dialogue_lines": 5.43,
+    "speak_actions": 10.71
+  },
+  "conclusion": "Our metrics match the paper exactly for intention completion (11/369 = 3%) and generation time (32.82 min). The paper's 25.9% for immediately executable appears to be a calculation error."
 }
