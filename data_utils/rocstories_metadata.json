@@ -1,0 +1,45 @@
+{
+  "dataset_info": {
+    "name": "ROCStories",
+    "full_name": "ROC Stories Corpus",
+    "version": "Spring 2016 + Winter 2017",
+    "source_paper": "Mostafazadeh, N., et al. (2016). A Corpus and Cloze Evaluation for Deeper Understanding of Commonsense Stories",
+    "source_venue": "NAACL-HLT 2016",
+    "total_stories": 98160,
+    "files": {
+      "ROCStories__spring2016.csv": 45495,
+      "ROCStories_winter2017.csv": 52664
+    }
+  },
+  "curated_subset": {
+    "description": "Scenarios used in Antunes et al. (2023) 'Prompting for Socially Intelligent Agents with ChatGPT'",
+    "total_scenarios": 40,
+    "selection_criteria": [
+      "Stories featuring clear social interactions between characters",
+      "Scenarios with identifiable agents (named or role-based)",
+      "Stories with causal/temporal commonsense structure",
+      "Suitable for FAtiMA Toolkit BDI agent modeling"
+    ],
+    "characteristics": {
+      "avg_sentences_per_story": 5,
+      "avg_characters_per_story": 2.3,
+      "story_types": [
+        "interpersonal_conflict",
+        "cooperation",
+        "everyday_events",
+        "emotional_situations"
+      ]
+    }
+  },
+  "usage_instructions": {
+    "load_all_rocstories": "from data_utils.scenario_loader import RocStoriesLoader; loader = RocStoriesLoader(); scenarios = loader.load_all()",
+    "load_curated": "from data_utils.scenario_loader import load_curated_scenarios; scenarios = load_curated_scenarios('data_utils/rocstories_scenarios.json')",
+    "sample_n_random": "from data_utils.scenario_loader import RocStoriesLoader; loader = RocStoriesLoader(); scenarios = loader.sample(n=20, seed=42)"
+  },
+  "experiment_notes": {
+    "baseline_paper": "Antunes et al. (2023)",
+    "generation_model": "gpt-3.5-turbo",
+    "avg_generation_time_seconds": 151.2,
+    "completion_rate": "33/43 (76.7%)"
+  }
+}

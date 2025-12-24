@@ -99,14 +99,19 @@ Enhancement of the Antunes et al. (2023) "Prompting for Socially Intelligent Age
 
 ---
 
-### TASK-004: RocStories Dataset Preparation
+### TASK-004: RocStories Dataset Preparation ✅ DONE
 **Description:** Prepare the RocStories dataset subset used in the original paper. If the exact subset is not available, create a comparable subset with similar characteristics (causal/temporal commonsense, everyday events). Ensure reproducibility.
 
 **Deliverables:**
-- `data/rocstories_scenarios.json` - Curated scenario descriptions
-- `data/rocstories_metadata.json` - Metadata about each scenario
-- Script to load and iterate scenarios
-- Documentation of selection criteria
+- `data_utils/rocstories_scenarios.json` - Curated 40 scenarios (matched with original paper) ✅
+- `data_utils/rocstories_metadata.json` - Metadata and selection criteria ✅
+- `data_utils/scenario_loader.py` - RocStoriesLoader class with sampling, iteration ✅
+- Dataset found in `Dataset/` folder (98,161 total stories)
+
+**Key Findings:**
+- RocStories dataset was already in the repository (`Dataset/ROCStories__spring2016.csv`, `Dataset/ROCStories_winter2017.csv`)
+- All 40 scenarios from original experiments matched with RocStories titles
+- Created reusable loader with `sample()`, `get_by_title()`, `load_curated_scenarios()` methods
 
 **Estimated Hours:** 4-6 hours
 **Difficulty:** ⭐ Low
