@@ -318,38 +318,51 @@ print_analysis_report(analysis)
 
 ---
 
-### TASK-009: Enhanced Chain-of-Thought Prompting [FEATURE: cot_enhancement]
+### TASK-009: Enhanced Chain-of-Thought Prompting [FEATURE: cot_enhancement] ✅ DONE
 **Description:** Improve the Chain-of-Thought prompting strategy by adding explicit reasoning steps, self-consistency checks within prompts, and structured output formats. Based on advances in CoT since the original paper (2023).
 
-**Implementation Details:**
-- Add "Let's think step by step" variants
-- Include self-consistency checks in prompts
-- Request explicit reasoning before output
-- Use structured JSON output format
-- Add examples (few-shot) where beneficial
-
-**Prompt Improvements:**
-```
-Original: "Generate beliefs for agent {agent_name}..."
-
-Enhanced: "Let's generate beliefs for {agent_name} step by step:
-1. First, identify what {agent_name} knows based on the scenario
-2. Consider what {agent_name} might infer from the situation
-3. Think about {agent_name}'s relationships and knowledge of others
-4. Now, list each belief in the format BEL(...)=Value
-
-Before finalizing, verify:
-- Each belief is grounded in the scenario
-- No contradictory beliefs exist
-- Beliefs use consistent naming
-
-Output as JSON: {\"beliefs\": [...], \"reasoning\": \"...\"}"
-```
-
 **Deliverables:**
-- `prompts/enhanced/` - Directory with improved prompts
-- A/B comparison data with original prompts
-- Documentation of prompt engineering decisions
+- `prompts/` - Prompt management package ✅
+  - `prompts/prompt_manager.py` - PromptManager class with style switching
+  - `prompts/enhanced/cot_prompts.py` - 13 enhanced CoT prompts
+- `tests/test_task009_cot_prompts.py` - 21 tests ✅
+
+**Key Improvements in Enhanced Prompts:**
+1. **Step-by-step reasoning**: "STEP 1:", "STEP 2:", etc.
+2. **Self-consistency checks**: "SELF-CHECK before output:" sections
+3. **Format guidance**: Explicit FORMAT sections with examples
+4. **Strict rules**: ABSOLUTE RULES for critical prompts (conditions_effects)
+5. **Error prevention**: Examples of CORRECT and WRONG output
+
+**Enhanced Prompts Created:**
+| Prompt | Enhancement Focus |
+|--------|------------------|
+| agents | Step-by-step extraction, naming rules |
+| beliefs_desires | Format validation, = Value requirement |
+| intentions | Derivation from beliefs/desires |
+| action_plan | Dependency checking, ordering |
+| conditions_effects | **Strict validation**, explicit value requirement |
+| dialogue_tree | Branching guidance, state machine design |
+| speak_actions | Character assignment |
+| speak_conditions_effects | Dialogue effect tracking |
+| initial_emotion | OCC model guidance |
+| initial_mood | Scale explanation |
+| action_emotion | Post-action appraisal |
+| emotion_condition | Pre-action requirement |
+| action_mood | Mood threshold guidance |
+
+**Usage:**
+```python
+from prompts import get_prompt_manager
+
+# Original prompts
+pm = get_prompt_manager(use_enhanced=False)
+prompt = pm.get("beliefs_desires", agent_name="Alice")
+
+# Enhanced CoT prompts
+pm_enh = get_prompt_manager(use_enhanced=True)
+prompt = pm_enh.get("conditions_effects", action="Help(A,B)", agent_name="A")
+```
 
 **Feature Flag:** `cot_enhancement`
 **Dependencies:** None (standalone feature)
