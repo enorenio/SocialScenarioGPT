@@ -1,0 +1,600 @@
+{
+  "metadata": {
+    "created_at": "2025-01-03T00:00:00",
+    "source": "Original author artifacts in Data/ (commit da7ba89a0c4615d500036a7f865cd17f082122d2)",
+    "total_scenarios": 43,
+    "includes": [
+      "test_BEST_FRIENDS.json",
+      "test_Bead_Art.json",
+      "test_Blindfolded.json",
+      "test_Bride.json",
+      "test_Brother.json",
+      "test_Business_Conference.json",
+      "test_Close_Robbery.json",
+      "test_Couch.json",
+      "test_Dishes.json",
+      "test_Drink_in_line..json",
+      "test_Early_Bird.json",
+      "test_English.json",
+      "test_Film_Studies.json",
+      "test_Food_poisoning.json",
+      "test_Growing_a_Beard.json",
+      "test_Guitar.json",
+      "test_Happy_Birthday.json",
+      "test_Healthy_Breakfast.json",
+      "test_I_used_to_love_volkswagen..json",
+      "test_Kayaking_trip.json",
+      "test_Lost_Change.json",
+      "test_Mike.json",
+      "test_Mummies.json",
+      "test_New_Song.json",
+      "test_Olympics.json",
+      "test_Phone.json",
+      "test_Puzzle.json",
+      "test_Rides.json",
+      "test_Searching.json",
+      "test_Sick.json",
+      "test_Sold_Out..json",
+      "test_Taste_Testing.json",
+      "test_The_Fall.json",
+      "test_The_Library_Book.json",
+      "test_The_Lost_Job.json",
+      "test_The_Trapeze.json",
+      "test_The_dock.json",
+      "test_Tim_Learns_to_Share.json",
+      "test_Trying_fruit_bars.json",
+      "test_Weight_Loss.json",
+      "test_c01_scenario.json",
+      "Tina.json",
+      "Tina_and_Boyfriend.json"
+    ],
+    "notes": "Scenario descriptions sourced from original generated artifacts; use for paper-2023 reproduction."
+  },
+  "scenarios": [
+    {
+      "story_id": "test_BEST_FRIENDS",
+      "title": "BEST FRIENDS",
+      "description": "Me and Shelby have been best friends since the 1st grade. We attended elementary, middle school and high school together. I was so mad when we were accepted to different colleges. I thought that would break up our friendship, but it didn't. We kept in touch daily and after graduate we became roommates.",
+      "sentences": [
+        "Me and Shelby have been best friends since the 1st grade",
+        "We attended elementary, middle school and high school together",
+        "I was so mad when we were accepted to different colleges",
+        "I thought that would break up our friendship, but it didn't",
+        "We kept in touch daily and after graduate we became roommates."
+      ],
+      "source": "paper_2023_artifacts"
+    },
+    {
+      "story_id": "test_Bead_Art",
+      "title": "Bead Art",
+      "description": "I'm a big fan of pixel art. I express my fandom by making bead art of sprites. I melt the beads together so they fuse forever. It is a time-consuming but fun process. Now my walls are covered in bead-based pixel art.",
+      "sentences": [
+        "I'm a big fan of pixel art",
+        "I express my fandom by making bead art of sprites",
+        "I melt the beads together so they fuse forever",
+        "It is a time-consuming but fun process",
+        "Now my walls are covered in bead-based pixel art."
+      ],
+      "source": "paper_2023_artifacts"
+    },
+    {
+      "story_id": "test_Blindfolded",
+      "title": "Blindfolded",
+      "description": "Al wore a blindfold to see what it was like being blind. He bumped into his stove and stubbed his toe. Al tried to get an ice pack but he couldn't find the freezer. Al took off his blindfold and gave up the experiment. He ran to his freezer for an ice pack.",
+      "sentences": [
+        "Al wore a blindfold to see what it was like being blind",
+        "He bumped into his stove and stubbed his toe",
+        "Al tried to get an ice pack but he couldn't find the freezer",
+        "Al took off his blindfold and gave up the experiment",
+        "He ran to his freezer for an ice pack."
+      ],
+      "source": "paper_2023_artifacts"
+    },
+    {
+      "story_id": "test_Bride",
+      "title": "Bride",
+      "description": "The bride smiled at the groom. She was missing a tooth. The groom thought that was cute. He remembered that moment. He shared it at her funeral.",
+      "sentences": [
+        "The bride smiled at the groom",
+        "She was missing a tooth",
+        "The groom thought that was cute",
+        "He remembered that moment",
+        "He shared it at her funeral."
+      ],
+      "source": "paper_2023_artifacts"
+    },
+    {
+      "story_id": "test_Brother",
+      "title": "Brother",
+      "description": "My brother had been feeling sick all day. My mom called the school and told them he wouldn't be able to come in. The teacher gave him all the work he needed. My brother began to do the homework but fell asleep. It is a good thing that he did not have school the next day.",
+      "sentences": [
+        "My brother had been feeling sick all day",
+        "My mom called the school and told them he wouldn't be able to come in",
+        "The teacher gave him all the work he needed",
+        "My brother began to do the homework but fell asleep",
+        "It is a good thing that he did not have school the next day."
+      ],
+      "source": "paper_2023_artifacts"
+    },
+    {
+      "story_id": "test_Business_Conference",
+      "title": "Business Conference",
+      "description": "Jonathan dressed up in a formal attire before leaving the house. When he came into the building, the leader showed him where to go. He came into the conference room. The organization was discussing new ideas for an upcoming project. The conference became successful when we developed an agenda.",
+      "sentences": [
+        "Jonathan dressed up in a formal attire before leaving the house",
+        "When he came into the building, the leader showed him where to go",
+        "He came into the conference room",
+        "The organization was discussing new ideas for an upcoming project",
+        "The conference became successful when we developed an agenda."
+      ],
+      "source": "paper_2023_artifacts"
+    },
+    {
+      "story_id": "test_Close_Robbery",
+      "title": "Close Robbery",
+      "description": "When I was driving during the night, a man was on the road. He stood in the middle and didn't bother to move. I stopped on the side of the road and got out of my car. When I came close to him, he tried to steal my car keys. He fell down when I kicked him.",
+      "sentences": [
+        "When I was driving during the night, a man was on the road",
+        "He stood in the middle and didn't bother to move",
+        "I stopped on the side of the road and got out of my car",
+        "When I came close to him, he tried to steal my car keys",
+        "He fell down when I kicked him."
+      ],
+      "source": "paper_2023_artifacts"
+    },
+    {
+      "story_id": "test_Couch",
+      "title": "Couch",
+      "description": "Kate and her friends were sharing a suite in Vegas. There were four girls. And only one bed. Kate didn't feel like fighting. So she decided to simply sleep on a couch.",
+      "sentences": [
+        "Kate and her friends were sharing a suite in Vegas",
+        "There were four girls",
+        "And only one bed",
+        "Kate didn't feel like fighting",
+        "So she decided to simply sleep on a couch."
+      ],
+      "source": "paper_2023_artifacts"
+    },
+    {
+      "story_id": "test_Dishes",
+      "title": "Dishes",
+      "description": "A couple of weeks ago I got sick. At the same time my husband started working 6-day weeks. The dishes just piled up and piled up. Now I'm feeling better and his hours are fewer. But the kitchen is so scary we don't have the will to catch up.",
+      "sentences": [
+        "A couple of weeks ago I got sick",
+        "At the same time my husband started working 6-day weeks",
+        "The dishes just piled up and piled up",
+        "Now I'm feeling better and his hours are fewer",
+        "But the kitchen is so scary we don't have the will to catch up."
+      ],
+      "source": "paper_2023_artifacts"
+    },
+    {
+      "story_id": "test_Drink_in_line.",
+      "title": "Drink in line.",
+      "description": "Jacob works at a convenience store. He has a long line. Jacob thought the line would never end. He finally made it to the last customer. The customer paid for their drink and left.",
+      "sentences": [
+        "Jacob works at a convenience store",
+        "He has a long line",
+        "Jacob thought the line would never end",
+        "He finally made it to the last customer",
+        "The customer paid for their drink and left."
+      ],
+      "source": "paper_2023_artifacts"
+    },
+    {
+      "story_id": "test_Early_Bird",
+      "title": "Early Bird",
+      "description": "I woke up early for work. I took the dog outside for a while. I made a large pot of coffee. I took a long, hot shower. I got dressed and started my day.",
+      "sentences": [
+        "I woke up early for work",
+        "I took the dog outside for a while",
+        "I made a large pot of coffee",
+        "I took a long, hot shower",
+        "I got dressed and started my day."
+      ],
+      "source": "paper_2023_artifacts"
+    },
+    {
+      "story_id": "test_English",
+      "title": "English",
+      "description": "Minh was failing English class. He knew he had to better his grade. He started studying every night for an hour or more. In a few months, Minh's grade had risen to a B! Minh was very proud of his perseverance.",
+      "sentences": [
+        "Minh was failing English class",
+        "He knew he had to better his grade",
+        "He started studying every night for an hour or more",
+        "In a few months, Minh's grade had risen to a B! Minh was very proud of his perseverance."
+      ],
+      "source": "paper_2023_artifacts"
+    },
+    {
+      "story_id": "test_Film_Studies",
+      "title": "Film Studies",
+      "description": "Luke was in his third year of college. He was ecstatic and curious when he heard about a film studies course. He thought it had to be too good to be true. He was aw realizing all they did was sit around studying movies. He got an A in the course and changed his major to film studies.",
+      "sentences": [
+        "Luke was in his third year of college",
+        "He was ecstatic and curious when he heard about a film studies course",
+        "He thought it had to be too good to be true",
+        "He was aw realizing all they did was sit around studying movies",
+        "He got an A in the course and changed his major to film studies."
+      ],
+      "source": "paper_2023_artifacts"
+    },
+    {
+      "story_id": "test_Food_poisoning",
+      "title": "Food poisoning",
+      "description": "Kelly went to the local Mexican restaurant yesterday. She bought the food was amazing. Yet unfortunately when she got home she felt sick. She threw up. Kelly realized she had food poisoning.",
+      "sentences": [
+        "Kelly went to the local Mexican restaurant yesterday",
+        "She bought the food was amazing",
+        "Yet unfortunately when she got home she felt sick",
+        "She threw up",
+        "Kelly realized she had food poisoning."
+      ],
+      "source": "paper_2023_artifacts"
+    },
+    {
+      "story_id": "test_Growing_a_Beard",
+      "title": "Growing a Beard",
+      "description": "Jim decided to grow a beard. At first he liked how it looked. After a while it was too itchy and scraggly. Jim tried clinging on to it for a bit longer. After a while he gave up and shaved.",
+      "sentences": [
+        "Jim decided to grow a beard",
+        "At first he liked how it looked",
+        "After a while it was too itchy and scraggly",
+        "Jim tried clinging on to it for a bit longer",
+        "After a while he gave up and shaved."
+      ],
+      "source": "paper_2023_artifacts"
+    },
+    {
+      "story_id": "test_Guitar",
+      "title": "Guitar",
+      "description": "The man practiced guitar. He wanted to play rock and roll. His acoustic guitar was not loud enough. He traded it in for an electric guitar. His practice sessions were louder from then on.",
+      "sentences": [
+        "The man practiced guitar",
+        "He wanted to play rock and roll",
+        "His acoustic guitar was not loud enough",
+        "He traded it in for an electric guitar",
+        "His practice sessions were louder from then on."
+      ],
+      "source": "paper_2023_artifacts"
+    },
+    {
+      "story_id": "test_Happy_Birthday",
+      "title": "Happy Birthday",
+      "description": "Sophie's birthday is coming up. She asks her mom if she can have a party. Her mom says no. On her birthday she decides to go shopping with a friend. When she gets home she walks into a surprise party!",
+      "sentences": [
+        "Sophie's birthday is coming up",
+        "She asks her mom if she can have a party",
+        "Her mom says no",
+        "On her birthday she decides to go shopping with a friend",
+        "When she gets home she walks into a surprise party!"
+      ],
+      "source": "paper_2023_artifacts"
+    },
+    {
+      "story_id": "test_Healthy_Breakfast",
+      "title": "Healthy Breakfast",
+      "description": "John felt lethargic and out of it throughout the day. His doctor said it was due to his poor breakfast eating habits. John decided to eat a healthier breakfast. After only a few days John noticed a big difference. He kept eating properly for as long as he could.",
+      "sentences": [
+        "John felt lethargic and out of it throughout the day",
+        "His doctor said it was due to his poor breakfast eating habits",
+        "John decided to eat a healthier breakfast",
+        "After only a few days John noticed a big difference",
+        "He kept eating properly for as long as he could."
+      ],
+      "source": "paper_2023_artifacts"
+    },
+    {
+      "story_id": "test_I_used_to_love_volkswagen.",
+      "title": "I used to love volkswagen.",
+      "description": "I was always a big fan of Volkswagen. I needed a new car and knew I would buy a Volkswagen. I bought myself a diesel Volkswagen Golf. I found out that my car didn't pass government emissions standards. I was angry at Volkswagen for cheating me.",
+      "sentences": [
+        "I was always a big fan of Volkswagen",
+        "I needed a new car and knew I would buy a Volkswagen",
+        "I bought myself a diesel Volkswagen Golf",
+        "I found out that my car didn't pass government emissions standards",
+        "I was angry at Volkswagen for cheating me."
+      ],
+      "source": "paper_2023_artifacts"
+    },
+    {
+      "story_id": "test_Kayaking_trip",
+      "title": "Kayaking trip",
+      "description": "Allie was about to go kayaking. When she got to the lake they needed her ID. Unfortunately she forgot hers. So she couldn't go kayaking. She then had to walk home.",
+      "sentences": [
+        "Allie was about to go kayaking",
+        "When she got to the lake they needed her ID",
+        "Unfortunately she forgot hers",
+        "So she couldn't go kayaking",
+        "She then had to walk home."
+      ],
+      "source": "paper_2023_artifacts"
+    },
+    {
+      "story_id": "test_Lost_Change",
+      "title": "Lost Change",
+      "description": "Tim was doing laundry. He accidentally dropped his quarters. Too many went down a drain. Tim had to get more quarters. He wound up having to go to the store to get change.",
+      "sentences": [
+        "Tim was doing laundry",
+        "He accidentally dropped his quarters",
+        "Too many went down a drain",
+        "Tim had to get more quarters",
+        "He wound up having to go to the store to get change."
+      ],
+      "source": "paper_2023_artifacts"
+    },
+    {
+      "story_id": "test_Mike",
+      "title": "Mike",
+      "description": "Mike is always taking care of everyone. He carries a first aid kit in his bag and always has snacks. Once, I cut my finger when I was climbing a tree. Mike just pulled out peroxide and a bandage! It's good to have Mike around.",
+      "sentences": [
+        "Mike is always taking care of everyone",
+        "He carries a first aid kit in his bag and always has snacks",
+        "Once, I cut my finger when I was climbing a tree",
+        "Mike just pulled out peroxide and a bandage! It's good to have Mike around."
+      ],
+      "source": "paper_2023_artifacts"
+    },
+    {
+      "story_id": "test_Mummies",
+      "title": "Mummies",
+      "description": "We went to the museum to see the new Mummy exhibit. It was amazing to see all these dead artifacts. They have been maintained for all these years. They showed the different processes of mummification. I was amazed and was glad to have gone.",
+      "sentences": [
+        "We went to the museum to see the new Mummy exhibit",
+        "It was amazing to see all these dead artifacts",
+        "They have been maintained for all these years",
+        "They showed the different processes of mummification",
+        "I was amazed and was glad to have gone."
+      ],
+      "source": "paper_2023_artifacts"
+    },
+    {
+      "story_id": "test_New_Song",
+      "title": "New Song",
+      "description": "Sara was in a good mood so she sang her favorite song. She forgot some of the words so she made them up. Sara liked her new version so she made up more words. She wrote down the words to remember them. Sara posted this song on her facebook to show her friends.",
+      "sentences": [
+        "Sara was in a good mood so she sang her favorite song",
+        "She forgot some of the words so she made them up",
+        "Sara liked her new version so she made up more words",
+        "She wrote down the words to remember them",
+        "Sara posted this song on her facebook to show her friends."
+      ],
+      "source": "paper_2023_artifacts"
+    },
+    {
+      "story_id": "test_Olympics",
+      "title": "Olympics",
+      "description": "I look forward to watching the Olympics every four years. I plan my day around my favorite events. I try not to miss any action. Watching the countries compete is exciting. I've been watching the games all week.",
+      "sentences": [
+        "I look forward to watching the Olympics every four years",
+        "I plan my day around my favorite events",
+        "I try not to miss any action",
+        "Watching the countries compete is exciting",
+        "I've been watching the games all week."
+      ],
+      "source": "paper_2023_artifacts"
+    },
+    {
+      "story_id": "test_Phone",
+      "title": "Phone",
+      "description": "Ben is a very clumsy boy. He always dropped things. One day Ben was getting out of his dad's truck. He slid across the seat to get out. Forgetting his phone was in his lap, so it fell and broke.",
+      "sentences": [
+        "Ben is a very clumsy boy",
+        "He always dropped things",
+        "One day Ben was getting out of his dad's truck",
+        "He slid across the seat to get out",
+        "Forgetting his phone was in his lap, so it fell and broke."
+      ],
+      "source": "paper_2023_artifacts"
+    },
+    {
+      "story_id": "test_Puzzle",
+      "title": "Puzzle",
+      "description": "Lucas was working a puzzle. When he was almost done, he searched in vain for the final pieces. He got on ebay to try to buy the missing pieces. They weren't available. Lucas tore apart the puzzle in despair.",
+      "sentences": [
+        "Lucas was working a puzzle",
+        "When he was almost done, he searched in vain for the final pieces",
+        "He got on ebay to try to buy the missing pieces",
+        "They weren't available",
+        "Lucas tore apart the puzzle in despair."
+      ],
+      "source": "paper_2023_artifacts"
+    },
+    {
+      "story_id": "test_Rides",
+      "title": "Rides",
+      "description": "Paul likes theme park rides. Paul went to a theme park to ride rides. Paul decided to ride the largest roller coaster in the park. Paul was amazed by the ride. From that day forward, Paul only went to that theme park.",
+      "sentences": [
+        "Paul likes theme park rides",
+        "Paul went to a theme park to ride rides",
+        "Paul decided to ride the largest roller coaster in the park",
+        "Paul was amazed by the ride",
+        "From that day forward, Paul only went to that theme park."
+      ],
+      "source": "paper_2023_artifacts"
+    },
+    {
+      "story_id": "test_Searching",
+      "title": "Searching",
+      "description": "Dan searched his son's room. He found pornography. He approached his son about the magazines. His son denied owning them. Dan let his son off easy.",
+      "sentences": [
+        "Dan searched his son's room",
+        "He found pornography",
+        "He approached his son about the magazines",
+        "His son denied owning them",
+        "Dan let his son off easy."
+      ],
+      "source": "paper_2023_artifacts"
+    },
+    {
+      "story_id": "test_Sick",
+      "title": "Sick",
+      "description": "Sandy felt weak after working out. She told her coach she was dizzy. As she was walking off the court, she fainted. Sandy was rushed to the ER. Sandy had an aneurysm.",
+      "sentences": [
+        "Sandy felt weak after working out",
+        "She told her coach she was dizzy",
+        "As she was walking off the court, she fainted",
+        "Sandy was rushed to the ER",
+        "Sandy had an aneurysm."
+      ],
+      "source": "paper_2023_artifacts"
+    },
+    {
+      "story_id": "test_Sold_Out.",
+      "title": "Sold Out.",
+      "description": "Michael was a sneaker head. He's been trying to get a pair of Adidas 350 for almost a year. They are limited sales, and go out within minutes. Michael has registered for ten different sites to try and get a pair. He's staying up all night in hopes to be the first.",
+      "sentences": [
+        "Michael was a sneaker head",
+        "He's been trying to get a pair of Adidas 350 for almost a year",
+        "They are limited sales, and go out within minutes",
+        "Michael has registered for ten different sites to try and get a pair",
+        "He's staying up all night in hopes to be the first."
+      ],
+      "source": "paper_2023_artifacts"
+    },
+    {
+      "story_id": "test_Taste_Testing",
+      "title": "Taste Testing",
+      "description": "I once got a job as a taste tester. The first tasting was wine. I really couldn't figure out the differences between the wines. I eventually gave up trying to distinguish the flavors. I ended up getting fired because i was unqualified for this work.",
+      "sentences": [
+        "I once got a job as a taste tester",
+        "The first tasting was wine",
+        "I really couldn't figure out the differences between the wines",
+        "I eventually gave up trying to distinguish the flavors",
+        "I ended up getting fired because i was unqualified for this work."
+      ],
+      "source": "paper_2023_artifacts"
+    },
+    {
+      "story_id": "test_The_Fall",
+      "title": "The Fall",
+      "description": "It was a beautiful November day in Minnesota. Amy was at her mothers and decided to go for a walk. Her niece and nephew asked to go with. At an intersection her nephew almost ran in front of a car. Amy taught the kids how to look both ways before crossing the street.",
+      "sentences": [
+        "It was a beautiful November day in Minnesota",
+        "Amy was at her mothers and decided to go for a walk",
+        "Her niece and nephew asked to go with",
+        "At an intersection her nephew almost ran in front of a car",
+        "Amy taught the kids how to look both ways before crossing the street."
+      ],
+      "source": "paper_2023_artifacts"
+    },
+    {
+      "story_id": "test_The_Library_Book",
+      "title": "The Library Book",
+      "description": "Thomas always returned his library books on time. One day, he was going to a doctor's appointment. Thomas decided to bring a book to pass time. Thomas put the book on the roof of his car, and accidently drove away. Thomas had to pay a library fine.",
+      "sentences": [
+        "Thomas always returned his library books on time",
+        "One day, he was going to a doctor's appointment",
+        "Thomas decided to bring a book to pass time",
+        "Thomas put the book on the roof of his car, and accidently drove away",
+        "Thomas had to pay a library fine."
+      ],
+      "source": "paper_2023_artifacts"
+    },
+    {
+      "story_id": "test_The_Lost_Job",
+      "title": "The Lost Job",
+      "description": "Joan hated her boss. She made nasty remarks about her boss on her social media account. Joan's co-worker showed the remarks to Joan's boss. Joan got fired from her job. Joan started to be more careful using social media.",
+      "sentences": [
+        "Joan hated her boss",
+        "She made nasty remarks about her boss on her social media account",
+        "Joan's co-worker showed the remarks to Joan's boss",
+        "Joan got fired from her job",
+        "Joan started to be more careful using social media."
+      ],
+      "source": "paper_2023_artifacts"
+    },
+    {
+      "story_id": "test_The_Trapeze",
+      "title": "The Trapeze",
+      "description": "Jon was learning a new act. He was going to do the trapeze in the circus. He practiced hard and perfected his moves. When it was time to perform, he was very nervous. He performed the routine flawlessly!",
+      "sentences": [
+        "Jon was learning a new act",
+        "He was going to do the trapeze in the circus",
+        "He practiced hard and perfected his moves",
+        "When it was time to perform, he was very nervous",
+        "He performed the routine flawlessly!"
+      ],
+      "source": "paper_2023_artifacts"
+    },
+    {
+      "story_id": "test_The_dock",
+      "title": "The dock",
+      "description": "Harry went to the sock every day to relax and watch the sunset. He always enjoyed watching the sun disappear over the horizon. one day someone was sitting on his bench and he was a little upset. When he went to confront the person, he discovered it was a woman. He talked with her instead and made a good friend.",
+      "sentences": [
+        "Harry went to the sock every day to relax and watch the sunset",
+        "He always enjoyed watching the sun disappear over the horizon",
+        "one day someone was sitting on his bench and he was a little upset",
+        "When he went to confront the person, he discovered it was a woman",
+        "He talked with her instead and made a good friend."
+      ],
+      "source": "paper_2023_artifacts"
+    },
+    {
+      "story_id": "test_Tim_Learns_to_Share",
+      "title": "Tim Learns to Share",
+      "description": "Tim had an apple tree. Every year, the tree produced lots of apples. Tim was selfish and didn't share the apples with anyone. His friends began to leave him out of their fun. Tim felt bad and decided to share his apples.",
+      "sentences": [
+        "Tim had an apple tree",
+        "Every year, the tree produced lots of apples",
+        "Tim was selfish and didn't share the apples with anyone",
+        "His friends began to leave him out of their fun",
+        "Tim felt bad and decided to share his apples."
+      ],
+      "source": "paper_2023_artifacts"
+    },
+    {
+      "story_id": "test_Trying_fruit_bars",
+      "title": "Trying fruit bars",
+      "description": "Kelly decided she wanted to try something different. She always had the same meal for breakfast. She decided to try some fruit bars. She put some in her mouth. The taste was delicious.",
+      "sentences": [
+        "Kelly decided she wanted to try something different",
+        "She always had the same meal for breakfast",
+        "She decided to try some fruit bars",
+        "She put some in her mouth",
+        "The taste was delicious."
+      ],
+      "source": "paper_2023_artifacts"
+    },
+    {
+      "story_id": "test_Weight_Loss",
+      "title": "Weight Loss",
+      "description": "Sara looked in the mirror and she was unhappy. The doctor told her today that she needed to lose 100 pounds. Sara decided to lose weight to make herself more confident. Sara worked out and watched what she ate. A year later Sarah was happy and the doctor said her weight was good.",
+      "sentences": [
+        "Sara looked in the mirror and she was unhappy",
+        "The doctor told her today that she needed to lose 100 pounds",
+        "Sara decided to lose weight to make herself more confident",
+        "Sara worked out and watched what she ate",
+        "A year later Sarah was happy and the doctor said her weight was good."
+      ],
+      "source": "paper_2023_artifacts"
+    },
+    {
+      "story_id": "test_c01_scenario",
+      "title": "c01 scenario",
+      "description": "A bartender serves drinks to two customers",
+      "sentences": [
+        "A bartender serves drinks to two customers"
+      ],
+      "source": "paper_2023_artifacts"
+    },
+    {
+      "story_id": "Tina",
+      "title": "Tina",
+      "description": "Tina baked a cake for her boyfriend because he likes cakes.",
+      "sentences": [
+        "Tina baked a cake for her boyfriend because he likes cakes."
+      ],
+      "source": "paper_2023_artifacts"
+    },
+    {
+      "story_id": "Tina_and_Boyfriend",
+      "title": "Tina and Boyfriend",
+      "description": "Tina and her boyfriend talk about her cake",
+      "sentences": [
+        "Tina and her boyfriend talk about her cake"
+      ],
+      "source": "paper_2023_artifacts"
+    }
+  ]
+}

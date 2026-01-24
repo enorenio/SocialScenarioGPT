@@ -1,0 +1,21 @@
+{
+    "scenario_name": "ablation_C00_The Surprise Party",
+    "scenario_description": "Serena was planning a surprise for her husband's birthday. She wanted to throw him a party, but his schedule was tough. He would always arrive home at widely different times. To get around it, she worked with his co-workers. Together they were able to surprise him perfectly.",
+    "feature_flags": {
+        "use_gpt4": false,
+        "full_context": false,
+        "verification_loop": false,
+        "cot_enhancement": false,
+        "dialogue_improvement": false,
+        "llm_judge": false,
+        "symbolic_verification": false
+    },
+    "model": "gpt-3.5-turbo",
+    "last_ended": "end",
+    "agents": {},
+    "dialogue_tree": [
+        "<Start, State1, Introduction, Neutral, \"Serena: Hey, did you get the decorations for the party?\">",
+        "<State1, State2, Planning, Neutral, \"Co-worker: Yes, everything is set up according to the plan.\">",
+        "<State2, End, Success, Happy, \"Husband: Wow, this is amazing! Thank you, everyone!\">"
+    ]
+}

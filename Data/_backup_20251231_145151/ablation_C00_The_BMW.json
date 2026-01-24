@@ -1,0 +1,17 @@
+{
+    "scenario_name": "ablation_C00_The BMW",
+    "scenario_description": "Evan had been saving for years. He went to the dealership and bought a really fancy BMW. Evan was so proud of his new car. He showed it off around town. Evan knew he looked cool in the new car.",
+    "feature_flags": {
+        "use_gpt4": false,
+        "full_context": false,
+        "verification_loop": false,
+        "cot_enhancement": false,
+        "dialogue_improvement": false,
+        "llm_judge": false,
+        "symbolic_verification": false
+    },
+    "model": "gpt-3.5-turbo",
+    "last_ended": "end",
+    "agents": {},
+    "dialogue_tree": []
+}

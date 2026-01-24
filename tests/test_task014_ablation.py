@@ -407,19 +407,19 @@ class TestAblationCondition:
         )
         flags = condition.get_feature_flags()
         assert isinstance(flags, FeatureFlags)
-        assert not flags.use_gpt4
+        assert not flags.use_upgraded_model
 
     def test_condition_get_feature_flags_from_features(self):
         """Test getting feature flags from features dict."""
         condition = AblationCondition(
             condition_id="C01",
-            name="gpt4_only",
-            description="GPT-4 only",
-            features={"use_gpt4": True},
+            name="upgraded_model_only",
+            description="Upgraded model only",
+            features={"use_upgraded_model": True},
             profile=None,
         )
         flags = condition.get_feature_flags()
-        assert flags.use_gpt4
+        assert flags.use_upgraded_model
 
     def test_condition_to_dict(self):
         """Test condition serialization."""
@@ -427,7 +427,7 @@ class TestAblationCondition:
             condition_id="C00",
             name="baseline",
             description="Baseline test",
-            features={"use_gpt4": False},
+            features={"use_upgraded_model": False},
             notes="Test notes",
         )
         data = condition.to_dict()
@@ -564,12 +564,12 @@ class TestFeatureFlagIntegration:
         """Test that all expected profiles are defined."""
         expected_profiles = [
             "baseline",
-            "gpt4_only",
+            "upgraded_model_only",
             "full_context_only",
             "cot_only",
             "dialogue_only",
-            "gpt4_full_context",
-            "gpt4_full_context_verification",
+            "upgraded_full_context",
+            "upgraded_full_context_verification",
             "full_system",
         ]
         for profile in expected_profiles:
@@ -578,7 +578,7 @@ class TestFeatureFlagIntegration:
     def test_baseline_profile_all_disabled(self):
         """Test baseline profile has all features disabled."""
         flags = get_profile("baseline")
-        assert not flags.use_gpt4
+        assert not flags.use_upgraded_model
         assert not flags.full_context
         assert not flags.verification_loop
         assert not flags.cot_enhancement
@@ -587,7 +587,7 @@ class TestFeatureFlagIntegration:
     def test_full_system_profile_all_enabled(self):
         """Test full_system profile has core features enabled."""
         flags = get_profile("full_system")
-        assert flags.use_gpt4
+        assert flags.use_upgraded_model
         assert flags.full_context
         assert flags.verification_loop
         assert flags.cot_enhancement
@@ -603,12 +603,12 @@ class TestFeatureFlagIntegration:
         """Test that ablation conditions match expected feature profiles."""
         c00 = ablation_runner.get_condition("C00")
         flags = c00.get_feature_flags()
-        assert not flags.use_gpt4
+        assert not flags.use_upgraded_model
         assert not flags.full_context
 
         c01 = ablation_runner.get_condition("C01")
         flags = c01.get_feature_flags()
-        assert flags.use_gpt4
+        assert flags.use_upgraded_model
         assert not flags.full_context
 
 

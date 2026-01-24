@@ -1,0 +1,615 @@
+{
+    "scenario_name": "ablation_C00_Slap",
+    "scenario_description": "Fred slapped another man's butt. He thought he knew the man. The man turned around. It was not the man he knew. Fred apologized to the man.",
+    "feature_flags": {
+        "use_gpt4": false,
+        "full_context": false,
+        "verification_loop": false,
+        "cot_enhancement": false,
+        "dialogue_improvement": false,
+        "llm_judge": false,
+        "symbolic_verification": false
+    },
+    "model": "gpt-3.5-turbo",
+    "last_ended": "end",
+    "agents": {
+        "Fred": {
+            "knowledge_base": [
+                "BEL(Fred_slapped_Man1_butt) = True",
+                "BEL(Knows_Mans, Fred, Man_1) = True",
+                "BEL(Knows_Mans, Fred, Man_2) = False",
+                "DES(Apologize_to_Man2) = True"
+            ],
+            "intentions": {
+                "INTENT(Fred, Apologize_to_Man2) = True": {
+                    "action_plan": [
+                        "Man_2",
+                        "Check_Identity(Fred, Man_1)",
+                        "Realize_Mistake(Fred)",
+                        "Apologize(Fred, Man_2)"
+                    ]
+                }
+            },
+            "actions": {
+                "Man_2": {
+                    "conditions": [
+                        "BEL(Knows_Mans, Fred, Man_2) = False"
+                    ],
+                    "effects": [
+                        "BEL(Knows_Mans, Fred, Man_2) = True"
+                    ],
+                    "occ_emotion": [
+                        "Shame"
+                    ],
+                    "emotion_condition": [
+                        "Shame",
+                        "Shame"
+                    ]
+                },
+                "Check_Identity(Fred, Man_1)": {
+                    "conditions": [
+                        "BEL(Knows_Mans, Fred, Man_1) = True",
+                        "BEL(Knows_Mans, Fred, Man_2) = False"
+                    ],
+                    "effects": [
+                        "BEL(Knows_Mans, Fred, Man_1) = True",
+                        "BEL(Knows_Mans, Fred, Man_2) = False"
+                    ],
+                    "occ_emotion": [
+                        "Shame"
+                    ],
+                    "emotion_condition": [
+                        "Fear"
+                    ]
+                },
+                "Realize_Mistake(Fred)": {
+                    "conditions": [
+                        "BEL(Knows_Mans, Fred, Man_1) = True"
+                    ],
+                    "effects": [
+                        "BEL(Knows_Mans, Fred, Man_2) = True"
+                    ],
+                    "occ_emotion": [
+                        "Shame"
+                    ],
+                    "emotion_condition": [
+                        "Shame"
+                    ]
+                },
+                "Apologize(Fred, Man_2)": {
+                    "conditions": [
+                        "BEL(Fred_slapped_Man1_butt) = True",
+                        "BEL(Knows_Mans, Fred, Man_1) = True",
+                        "BEL(Knows_Mans, Fred, Man_2) = False",
+                        "DES(Apologize_to_Man2) = True"
+                    ],
+                    "effects": [
+                        "BEL(Knows_Mans, Fred, Man_2) = True",
+                        "DES(Apologize_to_Man2) = False"
+                    ],
+                    "occ_emotion": [
+                        "Remorse"
+                    ],
+                    "emotion_condition": [
+                        "Shame"
+                    ]
+                }
+            },
+            "initial_occ_emotion": [
+                "Embarrassment"
+            ],
+            "speak_actions": {
+                "Speak(Start, Fred_Apologize, Regret, Apologetic)": {
+                    "conditions": [
+                        "BEL(Fred_slapped_Man1_butt) = True",
+                        "BEL(Knows_Mans, Fred, Man_1) = True",
+                        "BEL(Knows_Mans, Fred, Man_2) = False",
+                        "DES(Apologize_to_Man2) = True",
+                        "INTENT(Fred, Apologize_to_Man2) = True"
+                    ],
+                    "effects": [
+                        "BEL(Fred_slapped_Man1_butt) = True",
+                        "BEL(Knows_Mans, Fred, Man_1) = True",
+                        "BEL(Knows_Mans, Fred, Man_2) = False",
+                        "DES(Apologize_to_Man2) = True",
+                        "INTENT(Fred, Apologize_to_Man2) = True",
+                        "BEL(Apologized_to_Man2) = True"
+                    ],
+                    "occ_emotion": [
+                        "Resentment"
+                    ],
+                    "emotion_condition": [
+                        "Regret"
+                    ]
+                },
+                "Speak(Fred_Apologize, End, Regret, Sincere)": {
+                    "conditions": [
+                        "BEL(Fred_slapped_Man1_butt) = True",
+                        "BEL(Knows_Mans, Fred, Man_1) = True",
+                        "BEL(Knows_Mans, Fred, Man_2) = False",
+                        "DES(Apologize_to_Man2) = True"
+                    ],
+                    "effects": [
+                        "BEL(Fred_slapped_Man1_butt) = True",
+                        "BEL(Knows_Mans, Fred, Man_1) = True",
+                        "BEL(Knows_Mans, Fred, Man_2) = False",
+                        "DES(Apologize_to_Man2) = True",
+                        "INTENT(Fred, Apologize_to_Man2) = True"
+                    ],
+                    "occ_emotion": [
+                        "Fears-confirmed"
+                    ],
+                    "emotion_condition": [
+                        "[Regret"
+                    ]
+                }
+            }
+        },
+        "Man_1": {
+            "knowledge_base": [
+                "BEL(Man_1_knows_Fred) = True",
+                "BEL(Man_1_encounter) = Man_2",
+                "DES(Man_1_receive_apology) = True"
+            ],
+            "intentions": {
+                "INTENT(Man_1_interaction_with_Fred, slap) = False": {
+                    "action_plan": [
+                        "VerifyIdentity(Man_1, Man_2)",
+                        "ExpressSurprise(Man_1, Man_2)",
+                        "ReceiveApology(Man_1, Fred)",
+                        "AcceptApology(Man_1, Fred)"
+                    ]
+                },
+                "INTENT(Man_1_interaction_with_Fred, apologize) = False": {
+                    "action_plan": [
+                        "Perceive(Man_1, Fred)",
+                        "Recognize(Man_1, Fred)",
+                        "Update(Man_1, BEL(Man_1_knows_Fred)=False)",
+                        "Update(Man_1, BEL(Man_1_interaction_with_Fred)=True)",
+                        "Plan(Man_1, INTENT(Man_1_interaction_with_Fred, apologize))",
+                        "Act(Man_1, Apologize, Man_2)"
+                    ]
+                },
+                "INTENT(Man_1_interaction_with_Man_2, receive_apology) = True": {
+                    "action_plan": [
+                        "Move(Man_1, Man_2)",
+                        "Turn(Man_2, Man_1)",
+                        "Confront(Man_2, Man_1)",
+                        "Apologize(Man_1, Man_2)",
+                        "Accept_Apology(Man_2, Man_1)",
+                        "End_Confrontation(Man_2, Man_1)"
+                    ]
+                }
+            },
+            "actions": {
+                "Move(Man_1, Man_2)": {
+                    "conditions": [
+                        "BEL(Man_1_encounter) = Man_2"
+                    ],
+                    "effects": [
+                        "BEL(Man_1_at, Man_2) = True"
+                    ],
+                    "occ_emotion": [
+                        "Admiration"
+                    ],
+                    "emotion_condition": [
+                        "Surprise"
+                    ]
+                },
+                "Turn(Man_2, Man_1)": {
+                    "conditions": [
+                        "BEL(Man_2_facing_away_from_Man_1) = True",
+                        "BEL(Man_1_encounter) = Man_2"
+                    ],
+                    "effects": [
+                        "BEL(Man_1_face_to_face_with_Man_2) = True",
+                        "BEL(Man_2_face_to_face_with_Man_1) = True"
+                    ],
+                    "occ_emotion": [
+                        "Disappointment"
+                    ],
+                    "emotion_condition": [
+                        "Surprise"
+                    ]
+                },
+                "Confront(Man_2, Man_1)": {
+                    "conditions": [
+                        "BEL(Man_2_seen_fred) = False"
+                    ],
+                    "effects": [
+                        "BEL(Man_2_seen_fred) = True"
+                    ],
+                    "occ_emotion": [
+                        "Anger"
+                    ],
+                    "emotion_condition": [
+                        "Anger"
+                    ]
+                },
+                "Apologize(Man_1, Man_2)": {
+                    "conditions": [
+                        "BEL(Man_1_knows_Fred) = True",
+                        "BEL(Man_1_encounter) = Man_2"
+                    ],
+                    "effects": [
+                        "DES(Man_1_receive_apology) = True"
+                    ],
+                    "occ_emotion": [
+                        "Reproach"
+                    ],
+                    "emotion_condition": [
+                        "Embarrassment",
+                        "Embarrassment",
+                        "Man_2"
+                    ]
+                },
+                "Accept_Apology(Man_2, Man_1)": {
+                    "conditions": [
+                        "BEL(Man_1_encounter) = Man_2",
+                        "DES(Man_1_receive_apology) = True"
+                    ],
+                    "effects": [
+                        "BEL(Man_1_apology_accepted) = True",
+                        "DES(Man_1_feel_relief) = True"
+                    ],
+                    "occ_emotion": [
+                        "Gratitude"
+                    ],
+                    "emotion_condition": [
+                        "Shame"
+                    ]
+                },
+                "End_Confrontation(Man_2, Man_1)": {
+                    "conditions": [
+                        "BEL(Man_1_encounter) = Man_2",
+                        "BEL(Man_1_interaction_with_Man_2, receive_apology) = True",
+                        "BEL(Man_1_interaction_with_Man_2, confrontation) = True"
+                    ],
+                    "effects": [
+                        "DES(Man_1_interaction_with_Man_2, receive_apology) = False",
+                        "DES(Man_1_interaction_with_Man_2, confrontation) = False",
+                        "BEL(Man_1_interaction_with_Man_2, interaction_ended) = True"
+                    ],
+                    "occ_emotion": [
+                        "Relief"
+                    ],
+                    "emotion_condition": [
+                        "Anger"
+                    ]
+                },
+                "VerifyIdentity(Man_1, Man_2)": {
+                    "conditions": [
+                        "BEL(Man_1_knows_Fred) = True",
+                        "BEL(Man_1_encounter) = Man_2"
+                    ],
+                    "effects": [
+                        "BEL(Man_1_recognize_MistakenIdentity) = True"
+                    ],
+                    "occ_emotion": [
+                        "Joy"
+                    ],
+                    "emotion_condition": [
+                        "Annoyance"
+                    ]
+                },
+                "ExpressSurprise(Man_1, Man_2)": {
+                    "conditions": [
+                        "BEL(Man_1_encounter) = Man_2"
+                    ],
+                    "effects": [
+                        "BEL(Man_1_interaction_with_Fred) = surprise"
+                    ],
+                    "occ_emotion": [
+                        "Surprise"
+                    ],
+                    "emotion_condition": [
+                        "Surprise"
+                    ]
+                },
+                "ReceiveApology(Man_1, Fred)": {
+                    "conditions": [
+                        "BEL(Man_1_has_received_apology_from_Fred) = False"
+                    ],
+                    "effects": [
+                        "BEL(Man_1_has_received_apology_from_Fred) = True"
+                    ],
+                    "occ_emotion": [
+                        "Gratitude"
+                    ],
+                    "emotion_condition": [
+                        "Shame"
+                    ]
+                },
+                "AcceptApology(Man_1, Fred)": {
+                    "conditions": [
+                        "BEL(Man_1_knows_Fred) = True",
+                        "BEL(Man_1_encounter) = Man_2",
+                        "DES(Man_1_receive_apology) = True"
+                    ],
+                    "effects": [
+                        "DES(Man_1_receive_apology) = False",
+                        "BEL(Man_1_forgive_Fred) = True"
+                    ],
+                    "occ_emotion": [
+                        "Gratitude"
+                    ],
+                    "emotion_condition": [
+                        "Disappointment"
+                    ]
+                },
+                "Perceive(Man_1, Fred)": {
+                    "conditions": [
+                        "BEL(Man_1_interaction_with_Fred)=False"
+                    ],
+                    "effects": [
+                        "BEL(Man_1_interaction_with_Fred)=True"
+                    ],
+                    "occ_emotion": [
+                        "Surprise"
+                    ],
+                    "emotion_condition": [
+                        "Surprise"
+                    ]
+                },
+                "Recognize(Man_1, Fred)": {
+                    "conditions": [
+                        "BEL(Man_1_knows_Fred) = True"
+                    ],
+                    "effects": [
+                        "BEL(Man_1_knows_Fred) = False",
+                        "BEL(Man_1_interaction_with_Fred) = True"
+                    ],
+                    "occ_emotion": [
+                        "Surprise"
+                    ],
+                    "emotion_condition": [
+                        "Surprise"
+                    ]
+                },
+                "Update(Man_1, BEL(Man_1_knows_Fred)=False)": {
+                    "conditions": [
+                        "BEL(Man_1_knows_Fred) = True"
+                    ],
+                    "effects": [
+                        "BEL(Man_1_knows_Fred) = False"
+                    ],
+                    "occ_emotion": [
+                        "Disappointment"
+                    ],
+                    "emotion_condition": [
+                        "Fears-confirmed"
+                    ]
+                },
+                "Update(Man_1, BEL(Man_1_interaction_with_Fred)=True)": {
+                    "conditions": [
+                        "BEL(Man_1_knows_Fred) = True",
+                        "BEL(Man_1_encounter) = Man_2"
+                    ],
+                    "effects": [
+                        "BEL(Man_1_interaction_with_Fred) = True"
+                    ],
+                    "occ_emotion": [
+                        "Surprise"
+                    ],
+                    "emotion_condition": [
+                        "Anger"
+                    ]
+                },
+                "Plan(Man_1, INTENT(Man_1_interaction_with_Fred, apologize))": {
+                    "conditions": [
+                        "BEL(Man_1_knows_Fred) = True",
+                        "BEL(Man_1_interaction_with_Fred) = False"
+                    ],
+                    "effects": [
+                        "BEL(Man_1_knows_Fred) = False",
+                        "BEL(Man_1_interaction_with_Fred) = True"
+                    ],
+                    "occ_emotion": [
+                        "Shame"
+                    ],
+                    "emotion_condition": [
+                        "Surprise"
+                    ]
+                },
+                "Act(Man_1, Apologize, Man_2)": {
+                    "conditions": [
+                        "BEL(Man_1_interaction_with_Fred) = False",
+                        "BEL(Man_1_knows_Fred) = False",
+                        "BEL(Man_1_encounter) = Man_2"
+                    ],
+                    "effects": [
+                        "BEL(Man_1_interaction_with_Fred) = True",
+                        "DES(Man_1_receive_apology) = True"
+                    ],
+                    "occ_emotion": [
+                        "Remorse"
+                    ],
+                    "emotion_condition": [
+                        "Surprise"
+                    ]
+                }
+            },
+            "initial_occ_emotion": [
+                "Anger"
+            ],
+            "speak_actions": {
+                "Speak(Start, Man_1_Turn1, Confused, Direct)": {
+                    "conditions": [
+                        "BEL(Man_1_knows_Fred) = True",
+                        "DES(Man_1_receive_apology) = True"
+                    ],
+                    "effects": [
+                        "BEL(Man_1_knows_Fred) = True",
+                        "BEL(Man_1_encounter) = Man_2",
+                        "DES(Man_1_receive_apology) = True",
+                        "INTENT(Man_1_interaction_with_Fred, slap) = False",
+                        "INTENT(Man_1_interaction_with_Fred, apologize) = False",
+                        "INTENT(Man_1_interaction_with_Man_2, receive_apology) = True"
+                    ],
+                    "occ_emotion": [
+                        "Resentment"
+                    ],
+                    "emotion_condition": [
+                        "Hope"
+                    ]
+                },
+                "Speak(Man_1_Turn1, End, Questioning, Concerned)": {
+                    "conditions": [
+                        "BEL(Man_1_knows_Fred) = True",
+                        "DES(Man_1_receive_apology) = True"
+                    ],
+                    "effects": [
+                        "BEL(Man_1_encounter) = Man_2"
+                    ],
+                    "occ_emotion": [
+                        "Fear"
+                    ],
+                    "emotion_condition": [
+                        "Distress"
+                    ]
+                }
+            }
+        },
+        "Man_2": {
+            "knowledge_base": [
+                "BEL(Man_2_knows_Fred) = False",
+                "BEL(Man_2_did_not_expect_butt_slap) = True",
+                "DES(Man_2_receive_apology) = True"
+            ],
+            "intentions": {
+                "INTENT(Man_2_receive_apology) = True": {
+                    "action_plan": [
+                        "Move(Man_2, Fred)",
+                        "Confront(Man_2, Fred)",
+                        "Listen(Fred, Man_2')",
+                        "Accept_Apology(Man_2, Fred)",
+                        "BEL(Man_2_receive_apology) = True"
+                    ]
+                }
+            },
+            "actions": {
+                "Move(Man_2, Fred)": {
+                    "conditions": [
+                        "BEL(Man_2_knows_Fred) = False",
+                        "BEL(Man_2_did_not_expect_butt_slap) = True"
+                    ],
+                    "effects": [
+                        "BEL(Man_2_position, Fred) = True"
+                    ],
+                    "occ_emotion": [
+                        "Anger"
+                    ],
+                    "emotion_condition": [
+                        "Distress"
+                    ]
+                },
+                "Confront(Man_2, Fred)": {
+                    "conditions": [
+                        "BEL(Man_2_knows_Fred) = False",
+                        "BEL(Man_2_did_not_expect_butt_slap) = True"
+                    ],
+                    "effects": [
+                        "DES(Man_2_receive_apology) = True"
+                    ],
+                    "occ_emotion": [
+                        "Anger"
+                    ],
+                    "emotion_condition": [
+                        "Anger"
+                    ]
+                },
+                "Listen(Fred, Man_2')": {
+                    "conditions": [
+                        "BEL(Fred_is_talking, [Man_2']) = True"
+                    ],
+                    "effects": [
+                        "Bel(Fred, Man_2') = True"
+                    ],
+                    "occ_emotion": [
+                        "Pity"
+                    ],
+                    "emotion_condition": [
+                        "Shame"
+                    ]
+                },
+                "Accept_Apology(Man_2, Fred)": {
+                    "conditions": [
+                        "BEL(Man_2_knows_Fred) = False",
+                        "BEL(Man_2_did_not_expect_butt_slap) = True"
+                    ],
+                    "effects": [
+                        "DES(Man_2_receive_apology) = True",
+                        "BEL(Man_2_receive_apology) = True"
+                    ],
+                    "occ_emotion": [
+                        "Remorse"
+                    ],
+                    "emotion_condition": [
+                        "Shame"
+                    ]
+                },
+                "BEL(Man_2_receive_apology) = True": {
+                    "conditions": [
+                        "BEL(Man_2_knows_Fred) = False",
+                        "BEL(Man_2_did_not_expect_butt_slap) = True"
+                    ],
+                    "effects": [],
+                    "occ_emotion": [
+                        "Relief"
+                    ],
+                    "emotion_condition": [
+                        "Pity"
+                    ]
+                }
+            },
+            "initial_occ_emotion": [
+                "Resentment"
+            ],
+            "speak_actions": {
+                "Speak(Start, Respond, Confusion, Direct)": {
+                    "conditions": [
+                        "BEL(Man_2_knows_Fred) = False",
+                        "BEL(Man_2_did_not_expect_butt_slap) = True",
+                        "DES(Man_2_receive_apology) = True",
+                        "INTENT(Man_2_receive_apology) = True"
+                    ],
+                    "effects": [
+                        "BEL(Man_2_knows_Fred) = False",
+                        "BEL(Man_2_did_not_expect_butt_slap) = True",
+                        "DES(Man_2_receive_apology) = True",
+                        "INTENT(Man_2_receive_apology) = True"
+                    ],
+                    "occ_emotion": [
+                        "Fear"
+                    ],
+                    "emotion_condition": [
+                        "Resentment"
+                    ]
+                },
+                "Speak(Respond, End, Explanation, Stern)": {
+                    "conditions": [
+                        "BEL(Man_2_knows_Fred) = False",
+                        "BEL(Man_2_did_not_expect_butt_slap) = True",
+                        "DES(Man_2_receive_apology) = True"
+                    ],
+                    "effects": [
+                        "BEL(Man_2_knows_Fred) = False",
+                        "BEL(Man_2_did_not_expect_butt_slap) = True",
+                        "DES(Man_2_receive_apology) = True",
+                        "BEL(Man_2_forgives_Fred) = True"
+                    ],
+                    "occ_emotion": [
+                        "Anger"
+                    ],
+                    "emotion_condition": [
+                        "Disappointment"
+                    ]
+                }
+            }
+        }
+    },
+    "dialogue_tree": [
+        "<Start, Fred_Apologize, Normal, Polite, \"Fred: I'm sorry, I thought you were someone else.\">",
+        "<Fred_Apologize, End, Acceptance, Gracious, \"Man_2: That's okay, just be more careful next time.\">"
+    ]
+}

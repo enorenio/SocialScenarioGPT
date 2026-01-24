@@ -791,11 +791,11 @@ def generate_scenario(scenario_name, scenario_description):
     # Record feature flags in domain_knowledge for experiment tracking
     if not continue_domain_knowledge:
         domain_knowledge["feature_flags"] = flags.to_dict()
-        domain_knowledge["model"] = "gpt-4o" if flags.use_gpt4 else "gpt-3.5-turbo"
+        domain_knowledge["model"] = "gpt-5-nano" if flags.use_upgraded_model else "gpt-3.5-turbo"
 
-    if flags.use_gpt4:
-        model = get_model(use_gpt4=True)
-        print(f"  Using GPT-4 model: {model.model_id}")
+    if flags.use_upgraded_model:
+        model = get_model(use_upgraded_model=True)
+        print(f"  Using upgraded model (GPT-5 Nano): {model.model_id}")
     else:
         model = OpenAIHandler(api_key=API_KEY, model_id='gpt-3.5-turbo')
         print(f"  Using baseline model: gpt-3.5-turbo")

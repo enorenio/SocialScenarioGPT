@@ -210,7 +210,7 @@ def test_evaluation_result_init():
         scenario_name="test_scenario",
         scores=scores,
         weighted_average=3.5,
-        model_used="gpt-4o",
+        model_used="gpt-5-nano-2025-08-07",
     )
 
     assert result.scenario_name == "test_scenario"
@@ -234,7 +234,7 @@ def test_evaluation_result_to_dict():
         scenario_name="test",
         scores=scores,
         weighted_average=4.0,
-        model_used="gpt-4o",
+        model_used="gpt-5-nano-2025-08-07",
     )
 
     d = result.to_dict()
@@ -283,9 +283,9 @@ def test_evaluation_result_get_summary():
 
 def test_llm_judge_init():
     """Test LLMJudge initialization."""
-    judge = LLMJudge(model_name="gpt-4o")
+    judge = LLMJudge(model_name="gpt-5-nano-2025-08-07")
 
-    assert judge.model_name == "gpt-4o"
+    assert judge.model_name == "gpt-5-nano-2025-08-07"
     assert len(judge.dimensions) == 10  # All dimensions
 
     print("✓ LLMJudge initializes correctly")
@@ -571,7 +571,7 @@ def test_evaluation_workflow():
 
     # Create judge
     judge = LLMJudge(
-        model_name="gpt-4o",
+        model_name="gpt-5-nano-2025-08-07",
         dimensions=[EvaluationDimension.AGENT_RELEVANCE],
     )
 

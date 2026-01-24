@@ -1,0 +1,32 @@
+{
+  "condition": {
+    "condition_id": "C01",
+    "name": "Upgraded Model Only",
+    "description": "Only upgraded model (GPT-5 Nano) enabled",
+    "features": {
+      "use_upgraded_model": true,
+      "full_context": false,
+      "verification_loop": false,
+      "cot_enhancement": false,
+      "dialogue_improvement": false,
+      "llm_judge": false,
+      "symbolic_verification": false
+    },
+    "profile": "C01",
+    "notes": ""
+  },
+  "feature_flags": {
+    "use_upgraded_model": true,
+    "full_context": false,
+    "verification_loop": false,
+    "cot_enhancement": false,
+    "dialogue_improvement": false,
+    "llm_judge": false,
+    "symbolic_verification": false
+  },
+  "n_scenarios": 5,
+  "random_state": 42,
+  "max_retries": 3,
+  "timestamp": "20251225_080030",
+  "dry_run": false
+}

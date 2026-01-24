@@ -13,7 +13,7 @@
   },
   "curated_subset": {
     "description": "Scenarios used in Antunes et al. (2023) 'Prompting for Socially Intelligent Agents with ChatGPT'",
-    "total_scenarios": 40,
+    "total_scenarios": 43,
     "selection_criteria": [
       "Stories featuring clear social interactions between characters",
       "Scenarios with identifiable agents (named or role-based)",
@@ -29,7 +29,12 @@
         "everyday_events",
         "emotional_situations"
       ]
-    }
+    },
+    "added_titles": [
+      "Beach",
+      "The bad customer.",
+      "Being Patient"
+    ]
   },
   "usage_instructions": {
     "load_all_rocstories": "from data_utils.scenario_loader import RocStoriesLoader; loader = RocStoriesLoader(); scenarios = loader.load_all()",
@@ -40,6 +45,12 @@
     "baseline_paper": "Antunes et al. (2023)",
     "generation_model": "gpt-3.5-turbo",
     "avg_generation_time_seconds": 151.2,
-    "completion_rate": "33/43 (76.7%)"
+    "completion_rate": "33/43 (76.7%)",
+    "curated_subset_expanded_to_43": true,
+    "curated_subset_added_titles": [
+      "Beach",
+      "The bad customer.",
+      "Being Patient"
+    ]
   }
 }

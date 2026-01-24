@@ -1,0 +1,38 @@
+{
+  "name": "SIA-LLM Ablation Study",
+  "version": "1.0",
+  "random_seed": 42,
+  "max_retries": 3,
+  "curated_scenarios_path": "data_utils/rocstories_scenarios.json",
+  "total_curated_scenarios": 40,
+  "condition_order": [
+    "C00",
+    "C01",
+    "C02",
+    "C03",
+    "C04",
+    "C05",
+    "C06",
+    "C07",
+    "C08",
+    "C09",
+    "C10"
+  ],
+  "quick_conditions": [
+    "C00",
+    "C01",
+    "C03",
+    "C08"
+  ],
+  "quick_n_scenarios": 5,
+  "conditions": [
+    "C01"
+  ],
+  "n_scenarios": 1,
+  "is_full_study": false,
+  "dry_run": false,
+  "started_at": "2025-12-25T08:39:47.978823",
+  "scenarios_used": [
+    "BEST FRIENDS"
+  ]
+}

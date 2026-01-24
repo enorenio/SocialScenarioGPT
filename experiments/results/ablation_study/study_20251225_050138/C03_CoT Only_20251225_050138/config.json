@@ -1,0 +1,32 @@
+{
+  "condition": {
+    "condition_id": "C03",
+    "name": "CoT Only",
+    "description": "Only enhanced Chain-of-Thought prompts",
+    "features": {
+      "use_gpt4": false,
+      "full_context": false,
+      "verification_loop": false,
+      "cot_enhancement": true,
+      "dialogue_improvement": false,
+      "llm_judge": false,
+      "symbolic_verification": false
+    },
+    "profile": "C03",
+    "notes": ""
+  },
+  "feature_flags": {
+    "use_gpt4": false,
+    "full_context": false,
+    "verification_loop": false,
+    "cot_enhancement": true,
+    "dialogue_improvement": false,
+    "llm_judge": false,
+    "symbolic_verification": false
+  },
+  "n_scenarios": 5,
+  "random_state": 42,
+  "max_retries": 3,
+  "timestamp": "20251225_050138",
+  "dry_run": true
+}

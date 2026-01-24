@@ -7,9 +7,22 @@
       "Scenarios that completed generation pipeline",
       "Stories featuring social interactions between 2+ characters"
     ],
-    "total_scenarios": 40,
-    "matched_with_rocstories": 40,
-    "from_original_experiments": 0
+    "total_scenarios": 43,
+    "matched_with_rocstories": 43,
+    "from_original_experiments": 0,
+    "expanded_to_match_paper": {
+      "added_titles": [
+        "Beach",
+        "The bad customer.",
+        "Being Patient"
+      ],
+      "added_story_ids": [
+        "79b0da1f-e460-4173-ba58-8c9e2553c53a",
+        "d173b7de-4611-4cdf-934c-912834755e41",
+        "af0fd5a4-de36-47ba-8aa2-e99d10986d7a"
+      ],
+      "added_source": "spring2016"
+    }
   },
   "scenarios": [
     {
@@ -529,6 +542,45 @@
         "Sara decided to lose weight to make herself more confident.",
         "Sara worked out and watched what she ate.",
         "A year later Sarah was happy and the doctor said her weight was good."
+      ],
+      "source": "spring2016"
+    },
+    {
+      "story_id": "79b0da1f-e460-4173-ba58-8c9e2553c53a",
+      "title": "Beach",
+      "description": "Morgan enjoyed long walks on the beach. She and her boyfriend decided to go for a long walk. After walking for over a mile, something happened. Morgan decided to propose to her boyfriend. Her boyfriend was upset he didn't propose to her first.",
+      "sentences": [
+        "Morgan enjoyed long walks on the beach.",
+        "She and her boyfriend decided to go for a long walk.",
+        "After walking for over a mile, something happened.",
+        "Morgan decided to propose to her boyfriend.",
+        "Her boyfriend was upset he didn't propose to her first."
+      ],
+      "source": "spring2016"
+    },
+    {
+      "story_id": "d173b7de-4611-4cdf-934c-912834755e41",
+      "title": "The bad customer.",
+      "description": "Jane was working at a diner. Suddenly, a customer barged up to the counter. He began yelling about how long his food was taking. Jane didn't know how to react. Luckily, her coworker intervened and calmed the man down.",
+      "sentences": [
+        "Jane was working at a diner.",
+        "Suddenly, a customer barged up to the counter.",
+        "He began yelling about how long his food was taking.",
+        "Jane didn't know how to react.",
+        "Luckily, her coworker intervened and calmed the man down."
+      ],
+      "source": "spring2016"
+    },
+    {
+      "story_id": "af0fd5a4-de36-47ba-8aa2-e99d10986d7a",
+      "title": "Being Patient",
+      "description": "I was talking to my crush today. She continued to complain about guys flirting with her. I decided to agree with what she says and listened to her patiently. After I got home, I got a text from her. She asked if we can hang out tomorrow.",
+      "sentences": [
+        "I was talking to my crush today.",
+        "She continued to complain about guys flirting with her.",
+        "I decided to agree with what she says and listened to her patiently.",
+        "After I got home, I got a text from her.",
+        "She asked if we can hang out tomorrow."
       ],
       "source": "spring2016"
     }

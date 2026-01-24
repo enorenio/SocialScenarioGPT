@@ -1,0 +1,41 @@
+{
+  "experiment_name": "Baseline",
+  "timestamp": "2025-12-31T15:05:22.927768",
+  "condition_id": "C00",
+  "summary": {
+    "total_scenarios": 5,
+    "complete_scenarios": 4,
+    "scenarios_with_dialogue": 5
+  },
+  "key_metrics": {
+    "intention_completion_rate": 0.037,
+    "executable_actions_rate": 0.6725,
+    "mean_dialogue_lines": 6.0,
+    "mean_dialogue_branch_points": 0.2
+  },
+  "artifact_counts_mean": {
+    "agents": 2.0,
+    "beliefs": 7.0,
+    "desires": 4.6,
+    "intentions": 5.4,
+    "actions": 34.2,
+    "conditions": 67.4,
+    "effects": 66.4,
+    "dialogue_lines": 6.0,
+    "speak_actions": 6.6,
+    "total": 271.0
+  },
+  "totals": {
+    "intentions": 27,
+    "completed_intentions": 1,
+    "actions": 171,
+    "executable_actions": 115
+  },
+  "timing": {
+    "total_time_seconds": 800.1405439376831,
+    "total_time_minutes": 13.33567573229472,
+    "avg_time_per_scenario_seconds": 160.02705478668213,
+    "avg_time_per_scenario_minutes": 2.6671175797780355
+  },
+  "failed_scenarios": []
+}

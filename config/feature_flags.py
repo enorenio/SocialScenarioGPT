@@ -11,7 +11,7 @@ from typing import Dict, List, Set
 class FeatureFlags:
     """Configuration for which features are enabled."""
 
-    use_gpt4: bool = False
+    use_upgraded_model: bool = False  # Uses GPT-5 Nano (smarter & cheaper than GPT-4o)
     full_context: bool = False
     verification_loop: bool = False
     cot_enhancement: bool = False
@@ -44,7 +44,7 @@ class FeatureFlags:
         """Return set of enabled feature names."""
         return {
             name for name in [
-                "use_gpt4", "full_context", "verification_loop",
+                "use_upgraded_model", "full_context", "verification_loop",
                 "cot_enhancement", "dialogue_improvement", "llm_judge",
                 "symbolic_verification"
             ]
@@ -54,7 +54,7 @@ class FeatureFlags:
     def to_dict(self) -> Dict[str, bool]:
         """Return dict of all feature flags."""
         return {
-            "use_gpt4": self.use_gpt4,
+            "use_upgraded_model": self.use_upgraded_model,
             "full_context": self.full_context,
             "verification_loop": self.verification_loop,
             "cot_enhancement": self.cot_enhancement,
@@ -71,9 +71,9 @@ PROFILES = {
     "C00": FeatureFlags(),
     "baseline": FeatureFlags(),  # Alias for backwards compatibility
 
-    # C01: GPT-4 only
-    "C01": FeatureFlags(use_gpt4=True),
-    "gpt4_only": FeatureFlags(use_gpt4=True),
+    # C01: Upgraded model only (GPT-5 Nano)
+    "C01": FeatureFlags(use_upgraded_model=True),
+    "upgraded_model_only": FeatureFlags(use_upgraded_model=True),
 
     # C02: Full context only
     "C02": FeatureFlags(full_context=True),
@@ -87,31 +87,31 @@ PROFILES = {
     "C04": FeatureFlags(dialogue_improvement=True),
     "dialogue_only": FeatureFlags(dialogue_improvement=True),
 
-    # C05: GPT-4 + Full context
+    # C05: Upgraded model + Full context
     "C05": FeatureFlags(
-        use_gpt4=True,
+        use_upgraded_model=True,
         full_context=True,
     ),
-    "gpt4_full_context": FeatureFlags(
-        use_gpt4=True,
+    "upgraded_full_context": FeatureFlags(
+        use_upgraded_model=True,
         full_context=True,
     ),
 
-    # C06: GPT-4 + Full context + Verification loop
+    # C06: Upgraded model + Full context + Verification loop
     "C06": FeatureFlags(
-        use_gpt4=True,
+        use_upgraded_model=True,
         full_context=True,
         verification_loop=True,
     ),
-    "gpt4_full_context_verification": FeatureFlags(
-        use_gpt4=True,
+    "upgraded_full_context_verification": FeatureFlags(
+        use_upgraded_model=True,
         full_context=True,
         verification_loop=True,
     ),
 
-    # C07: GPT-4 + Full context + Verification + CoT
+    # C07: Upgraded model + Full context + Verification + CoT
     "C07": FeatureFlags(
-        use_gpt4=True,
+        use_upgraded_model=True,
         full_context=True,
         verification_loop=True,
         cot_enhancement=True,
@@ -119,31 +119,31 @@ PROFILES = {
 
     # C08: Full system (all features)
     "C08": FeatureFlags(
-        use_gpt4=True,
+        use_upgraded_model=True,
         full_context=True,
         verification_loop=True,
         cot_enhancement=True,
         dialogue_improvement=True,
     ),
     "full_system": FeatureFlags(
-        use_gpt4=True,
+        use_upgraded_model=True,
         full_context=True,
         verification_loop=True,
         cot_enhancement=True,
         dialogue_improvement=True,
     ),
 
-    # C09: Full minus verification (GPT-4 + Full context + CoT + Dialogue)
+    # C09: Full minus verification (Upgraded model + Full context + CoT + Dialogue)
     "C09": FeatureFlags(
-        use_gpt4=True,
+        use_upgraded_model=True,
         full_context=True,
         cot_enhancement=True,
         dialogue_improvement=True,
     ),
 
-    # C10: Full minus full_context (GPT-4 + CoT + Dialogue)
+    # C10: Full minus full_context (Upgraded model + CoT + Dialogue)
     "C10": FeatureFlags(
-        use_gpt4=True,
+        use_upgraded_model=True,
         cot_enhancement=True,
         dialogue_improvement=True,
     ),

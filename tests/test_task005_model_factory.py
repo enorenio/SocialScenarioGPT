@@ -1,5 +1,5 @@
 """
-Tests for TASK-005: GPT-4 Model Integration
+Tests for TASK-005: Upgraded Model Integration
 Tests the model factory and model handler with cost tracking.
 """
 
@@ -20,7 +20,7 @@ from models.model_factory import (
     get_model_config,
     list_models,
     DEFAULT_MODEL,
-    GPT4_MODEL,
+    UPGRADED_MODEL,
 )
 from config.feature_flags import FeatureFlags
 
@@ -53,7 +53,7 @@ def test_model_config_properties():
 
 def test_get_model_default():
     """Test get_model with default settings."""
-    model = get_model(use_gpt4=False)
+    model = get_model(use_upgraded_model=False)
 
     assert model.model_id == DEFAULT_MODEL
     assert model.model_id == "gpt-3.5-turbo"
@@ -62,20 +62,20 @@ def test_get_model_default():
     print(f"✓ Default model: {model.model_id}")
 
 
-def test_get_model_gpt4():
-    """Test get_model with use_gpt4=True."""
-    model = get_model(use_gpt4=True)
+def test_get_model_upgraded():
+    """Test get_model with use_upgraded_model=True (uses GPT-5 Nano)."""
+    model = get_model(use_upgraded_model=True)
 
-    assert model.model_id == GPT4_MODEL
-    assert model.model_id == "gpt-4o"
-    assert model.config.max_context_tokens == 128000
+    assert model.model_id == UPGRADED_MODEL
+    assert model.model_id == "gpt-5-nano-2025-08-07"
+    assert model.config.max_context_tokens == 1000000  # 1M context
 
-    print(f"✓ GPT-4 model: {model.model_id}")
+    print(f"✓ Upgraded model: {model.model_id}")
 
 
 def test_model_override():
     """Test model override parameter."""
-    model = get_model(use_gpt4=False, model_override="gpt-4o-mini")
+    model = get_model(use_upgraded_model=False, model_override="gpt-4o-mini")
 
     assert model.model_id == "gpt-4o-mini"
 
@@ -84,15 +84,15 @@ def test_model_override():
 
 def test_model_factory_from_feature_flags():
     """Test ModelFactory.from_feature_flags()."""
-    # Baseline flags (use_gpt4=False)
+    # Baseline flags (use_upgraded_model=False)
     flags_baseline = FeatureFlags()
     model_baseline = ModelFactory.from_feature_flags(flags_baseline)
     assert model_baseline.model_id == "gpt-3.5-turbo"
 
-    # GPT-4 flags
-    flags_gpt4 = FeatureFlags(use_gpt4=True)
-    model_gpt4 = ModelFactory.from_feature_flags(flags_gpt4)
-    assert model_gpt4.model_id == "gpt-4o"
+    # Upgraded model flags (use_upgraded_model=True -> uses GPT-5 Nano)
+    flags_upgraded = FeatureFlags(use_upgraded_model=True)
+    model_upgraded = ModelFactory.from_feature_flags(flags_upgraded)
+    assert model_upgraded.model_id == "gpt-5-nano-2025-08-07"
 
     print("✓ ModelFactory.from_feature_flags() works")
 
@@ -153,7 +153,7 @@ def test_usage_stats_to_dict():
 
 def test_model_handler_conversation_log():
     """Test ModelHandler conversation management."""
-    model = get_model(use_gpt4=False)
+    model = get_model(use_upgraded_model=False)
 
     assert len(model.conversation_log) == 0
 
@@ -203,7 +203,7 @@ def test_api_call_live():
         print("⚠ Skipping live API test: OPENAI_API_KEY not set")
         return
 
-    model = get_model(use_gpt4=False)
+    model = get_model(use_upgraded_model=False)
     model.add_user_turn("Say 'test ok' and nothing else.")
 
     response = model.get_model_response()
@@ -223,13 +223,13 @@ def test_api_call_live():
 def run_all_tests():
     """Run all tests."""
     print("=" * 60)
-    print("TASK-005: GPT-4 Model Integration Tests")
+    print("TASK-005: Upgraded Model Integration Tests")
     print("=" * 60)
 
     test_models_defined()
     test_model_config_properties()
     test_get_model_default()
-    test_get_model_gpt4()
+    test_get_model_upgraded()
     test_model_override()
     test_model_factory_from_feature_flags()
     test_usage_stats()

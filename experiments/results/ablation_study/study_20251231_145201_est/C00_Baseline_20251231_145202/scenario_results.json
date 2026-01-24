@@ -1,0 +1,37 @@
+[
+  {
+    "name": "ablation_C00_The BMW",
+    "description": "Evan had been saving for years. He went to the dealership and bought a really fancy BMW. Evan was so proud of his new car. He showed it off around town. Evan knew he looked cool in the new car.",
+    "time_seconds": 6.410444021224976,
+    "success": true,
+    "skipped": false
+  },
+  {
+    "name": "ablation_C00_The Surprise Party",
+    "description": "Serena was planning a surprise for her husband's birthday. She wanted to throw him a party, but his schedule was tough. He would always arrive home at widely different times. To get around it, she worked with his co-workers. Together they were able to surprise him perfectly.",
+    "time_seconds": 216.27006793022156,
+    "success": true,
+    "skipped": false
+  },
+  {
+    "name": "ablation_C00_Slap",
+    "description": "Fred slapped another man's butt. He thought he knew the man. The man turned around. It was not the man he knew. Fred apologized to the man.",
+    "time_seconds": 137.6361198425293,
+    "success": true,
+    "skipped": false
+  },
+  {
+    "name": "ablation_C00_My Favorite Actor",
+    "description": "I used to lived in Phoenix Arizona. On my way home from work, i met my favorite actor. I was shocked by surprise when he actually spoke to me. We had lunch at the Olive Garden. Talking with him not only made my day it made my week.",
+    "time_seconds": 280.59068298339844,
+    "success": true,
+    "skipped": false
+  },
+  {
+    "name": "ablation_C00_Arm Wrestling",
+    "description": "Tom thought he was really strong. He challenged all his friends to arm wrestle. Tom was able to beat them all. He would brag about it often. Tom's friends thought it was annoying.",
+    "time_seconds": 159.22795915603638,
+    "success": true,
+    "skipped": false
+  }
+]

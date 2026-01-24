@@ -1,0 +1,1125 @@
+{
+    "scenario_name": "ablation_C00_My Favorite Actor",
+    "scenario_description": "I used to lived in Phoenix Arizona. On my way home from work, i met my favorite actor. I was shocked by surprise when he actually spoke to me. We had lunch at the Olive Garden. Talking with him not only made my day it made my week.",
+    "feature_flags": {
+        "use_gpt4": false,
+        "full_context": false,
+        "verification_loop": false,
+        "cot_enhancement": false,
+        "dialogue_improvement": false,
+        "llm_judge": false,
+        "symbolic_verification": false
+    },
+    "model": "gpt-3.5-turbo",
+    "last_ended": "end",
+    "agents": {
+        "Me": {
+            "knowledge_base": [
+                "BEL(Me, lived_in_Phoenix_Arizona) = True",
+                "BEL(Me, met_favorite_actor) = True",
+                "BEL(Me, favorite_actor_spoke_to_me) = True",
+                "BEL(Me, had_lunch_with_favorite_actor_at_Olive_Garden) = True",
+                "BEL(Me, enjoyed_talking_with_favorite_actor) = True",
+                "DES(Me, make_day) = True",
+                "DES(Me, make_week) = True"
+            ],
+            "intentions": {
+                "INTENT(Me, meet_favorite_actor) = True": {
+                    "action_plan": [
+                        "Move(Me, Phoenix_Arizona)",
+                        "Encounter(Me, Favorite_actor)",
+                        "Greet(Me, Favorite_actor)",
+                        "Accept(Me, Lunch_at_Olive_Garden_with_Favorite_actor)",
+                        "Engage(Me, Talking_with_Favorite_actor)",
+                        "Enjoy(Me, Conversation_with_Favorite_actor)"
+                    ]
+                },
+                "INTENT(Me, have_lunch_with_favorite_actor) = True": {
+                    "action_plan": [
+                        "Favorite_actor",
+                        "Olive_Garden",
+                        "Move(Me, Olive_Garden)",
+                        "Arrive(Me, Olive_Garden)",
+                        "See(Favorite_actor, Me)",
+                        "Approach(Me, Favorite_actor)",
+                        "Greet(Favorite_actor, Me)",
+                        "Ask(Favorite_actor, Me, Have lunch with me?)",
+                        "Accept(Favorite_actor, Me)",
+                        "Sit(Me, Favorite_actor)",
+                        "Order_Food(Me, Favorite_actor)",
+                        "Eat(Me, Favorite_actor)"
+                    ]
+                },
+                "INTENT(Me, enjoy_talking_with_favorite_actor) = True": {
+                    "action_plan": [
+                        "Go_to_work(Me)",
+                        "Meet_favorite_actor(Me, Favorite_actor)",
+                        "Have_lunch_at_Olive_Garden(Me, Favorite_actor)",
+                        "Talk_with_favorite_actor(Me, Favorite_actor)",
+                        "Enjoy_conversation(Me, Favorite_actor)"
+                    ]
+                }
+            },
+            "actions": {
+                "Go_to_work(Me)": {
+                    "conditions": [
+                        "BEL(Me, lived_in_Phoenix_Arizona) = True"
+                    ],
+                    "effects": [],
+                    "occ_emotion": [
+                        "Joy"
+                    ],
+                    "emotion_condition": [
+                        "Hope",
+                        "Hope"
+                    ]
+                },
+                "Meet_favorite_actor(Me, Favorite_actor)": {
+                    "conditions": [
+                        "BEL(Me, met_favorite_actor) = False"
+                    ],
+                    "effects": [
+                        "BEL(Me, met_favorite_actor) = True"
+                    ],
+                    "occ_emotion": [
+                        "Joy"
+                    ],
+                    "emotion_condition": [
+                        "Hope",
+                        "Hope"
+                    ]
+                },
+                "Have_lunch_at_Olive_Garden(Me, Favorite_actor)": {
+                    "conditions": [
+                        "BEL(Me, met_favorite_actor) = True",
+                        "BEL(Me, favorite_actor_spoke_to_me) = True"
+                    ],
+                    "effects": [
+                        "BEL(Me, had_lunch_with_favorite_actor_at_Olive_Garden) = True"
+                    ],
+                    "occ_emotion": [
+                        "Joy"
+                    ],
+                    "emotion_condition": [
+                        "Joy"
+                    ]
+                },
+                "Talk_with_favorite_actor(Me, Favorite_actor)": {
+                    "conditions": [
+                        "BEL(Me, talked_with_favorite_actor(Favorite_actor)) = False"
+                    ],
+                    "effects": [
+                        "BEL(Me, talked_with_favorite_actor(Favorite_actor)) = True"
+                    ],
+                    "occ_emotion": [
+                        "Joy"
+                    ],
+                    "emotion_condition": [
+                        "Joy"
+                    ]
+                },
+                "Enjoy_conversation(Me, Favorite_actor)": {
+                    "conditions": [
+                        "BEL(Me, talked_with_Favorite_actor) = True",
+                        "DES(Me, enjoy_talking_with_favorite_actor) = True"
+                    ],
+                    "effects": [
+                        "DES(Me, make_day) = True",
+                        "DES(Me, make_week) = True"
+                    ],
+                    "occ_emotion": [
+                        "Joy"
+                    ],
+                    "emotion_condition": [
+                        "Joy"
+                    ]
+                },
+                "Move(Me, Phoenix_Arizona)": {
+                    "conditions": [
+                        "BEL(Me, lived_in_Phoenix_Arizona) = True"
+                    ],
+                    "effects": [
+                        "BEL(Me, lived_in_Phoenix_Arizona) = False",
+                        "BEL(Me, met_favorite_actor) = False"
+                    ],
+                    "occ_emotion": [
+                        "Joy"
+                    ],
+                    "emotion_condition": [
+                        "Hope"
+                    ]
+                },
+                "Encounter(Me, Favorite_actor)": {
+                    "conditions": [
+                        "BEL(Me, lived_in_Phoenix_Arizona) = True"
+                    ],
+                    "effects": [
+                        "BEL(Me, met_favorite_actor) = True"
+                    ],
+                    "occ_emotion": [
+                        "Joy"
+                    ],
+                    "emotion_condition": [
+                        "Joy"
+                    ]
+                },
+                "Greet(Me, Favorite_actor)": {
+                    "conditions": [
+                        "BEL(Me, met_favorite_actor) = True"
+                    ],
+                    "effects": [
+                        "BEL(Me, greeted_favorite_actor) = True"
+                    ],
+                    "occ_emotion": [
+                        "Joy"
+                    ],
+                    "emotion_condition": [
+                        "Hope"
+                    ]
+                },
+                "Accept(Me, Lunch_at_Olive_Garden_with_Favorite_actor)": {
+                    "conditions": [
+                        "BEL(Me, met_favorite_actor) = True",
+                        "DES(Me, make_day) = True"
+                    ],
+                    "effects": [
+                        "BEL(Me, had_lunch_with_favorite_actor_at_Olive_Garden) = True",
+                        "BEL(Me, enjoying_lunch_with_favorite_actor) = True"
+                    ],
+                    "occ_emotion": [
+                        "Joy"
+                    ],
+                    "emotion_condition": [
+                        " joy "
+                    ]
+                },
+                "Engage(Me, Talking_with_Favorite_actor)": {
+                    "conditions": [
+                        "BEL(Me, had_lunch_with_favorite_actor_at_Olive_Garden) = True"
+                    ],
+                    "effects": [
+                        "BEL(Me, enjoyed_talking_with_favorite_actor) = True"
+                    ],
+                    "occ_emotion": [
+                        "Joy"
+                    ],
+                    "emotion_condition": [
+                        "Joy"
+                    ]
+                },
+                "Enjoy(Me, Conversation_with_Favorite_actor)": {
+                    "conditions": [
+                        "BEL(Me, enjoyed_talking_with_favorite_actor) = True"
+                    ],
+                    "effects": [
+                        "DES(Me, make_day) = True",
+                        "DES(Me, make_week) = True"
+                    ],
+                    "occ_emotion": [
+                        "Joy"
+                    ],
+                    "emotion_condition": [
+                        "Joy"
+                    ]
+                },
+                "Favorite_actor": {
+                    "conditions": [
+                        "BEL(Me, met_favorite_actor) = True"
+                    ],
+                    "effects": [
+                        "BEL(Me, favorite_actor_spoke_to_me) = True"
+                    ],
+                    "occ_emotion": [
+                        "Joy"
+                    ],
+                    "emotion_condition": [
+                        "Joy",
+                        "Joy"
+                    ]
+                },
+                "Olive_Garden": {
+                    "conditions": [
+                        "BEL(Me, move_to_Olive_Garden) = True"
+                    ],
+                    "effects": [
+                        "BEL(Me, at_Olive_Garden) = True"
+                    ],
+                    "occ_emotion": [
+                        "Joy"
+                    ],
+                    "emotion_condition": [
+                        "Surprise"
+                    ]
+                },
+                "Move(Me, Olive_Garden)": {
+                    "conditions": [
+                        "BEL(Me, lived_in_Phoenix_Arizona) = True"
+                    ],
+                    "effects": [
+                        "BEL(Me, at_Olive_Garden) = True"
+                    ],
+                    "occ_emotion": [
+                        "Hope"
+                    ],
+                    "emotion_condition": [
+                        "Joy"
+                    ]
+                },
+                "Arrive(Me, Olive_Garden)": {
+                    "conditions": [
+                        "BEL(Me, lived_in_Phoenix_Arizona) = True",
+                        "ARRIVED(Me, Olive_Garden) = False"
+                    ],
+                    "effects": [
+                        "ARRIVED(Me, Olive_Garden) = True"
+                    ],
+                    "occ_emotion": [
+                        "Joy"
+                    ],
+                    "emotion_condition": [
+                        "Joy"
+                    ]
+                },
+                "See(Favorite_actor, Me)": {
+                    "conditions": [
+                        "BEL(Me, lived_in_Phoenix_Arizona) = True"
+                    ],
+                    "effects": [
+                        "BEL(Me, met_favorite_actor) = True"
+                    ],
+                    "occ_emotion": [
+                        "Joy"
+                    ],
+                    "emotion_condition": [
+                        "Joy"
+                    ]
+                },
+                "Approach(Me, Favorite_actor)": {
+                    "conditions": [
+                        "BEL(Me, met_favorite_actor) = True",
+                        "DES(Me, make_day) = True"
+                    ],
+                    "effects": [
+                        "BEL(Me, approach_favorite_actor) = True"
+                    ],
+                    "occ_emotion": [
+                        "Happy-for"
+                    ],
+                    "emotion_condition": [
+                        "Hope"
+                    ]
+                },
+                "Greet(Favorite_actor, Me)": {
+                    "conditions": [
+                        "BEL(Favorite_actor, in_Phoenix_Arizona) = True",
+                        "BEL(Me, is_surprised) = True"
+                    ],
+                    "effects": [
+                        "BEL(Me, feeling_shocked) = True",
+                        "DES(Me, make_day) = True",
+                        "DES(Me, make_week) = True"
+                    ],
+                    "occ_emotion": [
+                        "\"Admiration\""
+                    ],
+                    "emotion_condition": [
+                        "Hope"
+                    ]
+                },
+                "Ask(Favorite_actor, Me, Have lunch with me?)": {
+                    "conditions": [
+                        "BEL(Favorite_actor, have_lunch_with_Me) = False"
+                    ],
+                    "effects": [
+                        "BEL(Favorite_actor, have_lunch_with_Me) = True",
+                        "DES(Me, enjoyed_talking_with_favorite_actor) = True"
+                    ],
+                    "occ_emotion": [
+                        "Joy"
+                    ],
+                    "emotion_condition": [
+                        "Hope",
+                        "Hope"
+                    ]
+                },
+                "Accept(Favorite_actor, Me)": {
+                    "conditions": [
+                        "BEL(Favorite_actor, met_with(Me)) = True"
+                    ],
+                    "effects": [
+                        "BEL(Me, enjoyed_talking_with_favorite_actor) = True",
+                        "DES(Me, make_day) = True",
+                        "BEL(Me, had_lunch_with_favorite_actor_at_Olive_Garden) = True"
+                    ],
+                    "occ_emotion": [
+                        "Joy"
+                    ],
+                    "emotion_condition": [
+                        "Joy"
+                    ]
+                },
+                "Sit(Me, Favorite_actor)": {
+                    "conditions": [
+                        "BEL(Me, had_lunch_with_favorite_actor_at_Olive_Garden) = True"
+                    ],
+                    "effects": [
+                        "BEL(Me, enjoyed_talking_with_favorite_actor) = True"
+                    ],
+                    "occ_emotion": [
+                        "Gratification"
+                    ],
+                    "emotion_condition": [
+                        "Joy"
+                    ]
+                },
+                "Order_Food(Me, Favorite_actor)": {
+                    "conditions": [
+                        "BEL(Me, sit_with_Favorite_actor) = True"
+                    ],
+                    "effects": [
+                        "DES(Me, eat_with_Favorite_actor) = True"
+                    ],
+                    "occ_emotion": [
+                        "Enjoy(Me, Order_Food(Me, Favorite_actor)"
+                    ],
+                    "emotion_condition": [
+                        "Joy",
+                        "Joy"
+                    ]
+                },
+                "Eat(Me, Favorite_actor)": {
+                    "conditions": [
+                        "BEL(Me, had_lunch_with_favorite_actor_at_Olive_Garden) = True",
+                        "DES(Me, make_day) = True",
+                        "DES(Me, make_week) = True"
+                    ],
+                    "effects": [
+                        "BEL(Me, enjoyed_talking_with_favorite_actor) = True",
+                        "BEL(Me, had_lunch_with_favorite_actor_at_Olive_Garden) = True",
+                        "DES(Me, make_day) = True",
+                        "DES(Me, make_week) = True"
+                    ],
+                    "occ_emotion": [
+                        "Joy"
+                    ],
+                    "emotion_condition": [
+                        "Joy"
+                    ]
+                }
+            },
+            "initial_occ_emotion": [
+                "Joy"
+            ],
+            "speak_actions": {
+                "Speak(Greeting, Introduction1, Curiosity, Polite)": {
+                    "conditions": [
+                        "BEL(Me, lived_in_Phoenix_Arizona) = True",
+                        "BEL(Me, met_favorite_actor) = True",
+                        "BEL(Me, favorite_actor_spoke_to_me) = True",
+                        "BEL(Me, had_lunch_with_favorite_actor_at_Olive_Garden) = True",
+                        "BEL(Me, enjoyed_talking_with_favorite_actor) = True",
+                        "DES(Me, make_day) = True",
+                        "DES(Me, make_week) = True"
+                    ],
+                    "effects": [
+                        "BEL(Me, had_conversation_with_favorite_actor) = True",
+                        "DES(Me, feel_happy) = True"
+                    ],
+                    "occ_emotion": [
+                        "Hope"
+                    ],
+                    "emotion_condition": [
+                        "Fear"
+                    ]
+                },
+                "Speak(Introduction1, LunchInvite, Excitement, Eager)": {
+                    "conditions": [
+                        "BEL(Me, lived_in_Phoenix_Arizona) = True",
+                        "BEL(Me, met_favorite_actor) = True",
+                        "BEL(Me, favorite_actor_spoke_to_me) = True",
+                        "DES(Me, make_day) = True",
+                        "DES(Me, make_week) = True"
+                    ],
+                    "effects": [
+                        "BEL(Me, had_lunch_with_favorite_actor_at_Olive_Garden) = True",
+                        "BEL(Me, enjoyed_talking_with_favorite_actor) = True",
+                        "INTENT(Me, meet_favorite_actor) = True",
+                        "INTENT(Me, have_lunch_with_favorite_actor) = True",
+                        "INTENT(Me, enjoy_talking_with_favorite_actor) = True"
+                    ],
+                    "occ_emotion": [
+                        "Joy"
+                    ],
+                    "emotion_condition": [
+                        "Joy"
+                    ]
+                },
+                "Speak(LunchInvite, Acceptance, Gratitude, Relieved)": {
+                    "conditions": [
+                        "BEL(Me, met_favorite_actor) = True",
+                        "DES(Me, make_week) = True"
+                    ],
+                    "effects": [
+                        "BEL(Me, had_lunch_with_favorite_actor_at_Olive_Garden) = True",
+                        "DES(Me, make_week) = True"
+                    ],
+                    "occ_emotion": [
+                        "Relieved"
+                    ],
+                    "emotion_condition": [
+                        "Joy"
+                    ]
+                },
+                "Speak(Acceptance, End, Gratitude, Happy)": {
+                    "conditions": [
+                        "BEL(Me, lived_in_Phoenix_Arizona) = True",
+                        "BEL(Me, met_favorite_actor) = True",
+                        "BEL(Me, favorite_actor_spoke_to_me) = True",
+                        "BEL(Me, had_lunch_with_favorite_actor_at_Olive_Garden) = True",
+                        "BEL(Me, enjoyed_talking_with_favorite_actor) = True",
+                        "DES(Me, make_day) = True",
+                        "DES(Me, make_week) = True",
+                        "INTENT(Me, meet_favorite_actor) = True",
+                        "INTENT(Me, have_lunch_with_favorite_actor) = True",
+                        "INTENT(Me, enjoy_talking_with_favorite_actor) = True"
+                    ],
+                    "effects": [
+                        "BEL(Me, enjoyed_talking_with_favorite_actor) = True",
+                        "DES(Me, make_day) = False",
+                        "DES(Me, make_week) = True"
+                    ],
+                    "occ_emotion": [
+                        "Joy"
+                    ],
+                    "emotion_condition": [
+                        "Joy"
+                    ]
+                }
+            }
+        },
+        "Favorite_actor": {
+            "knowledge_base": [
+                "BEL(Favorite_actor, Felt_Shocked = True)",
+                "BEL(Favorite_actor, Felt_Surprised = True)",
+                "BEL(Favorite_actor, Interest_in_Conversing = True)",
+                "DES(Favorite_actor, Make_My_Day = True)",
+                "DES(Favorite_actor, Make_My_Week = True)"
+            ],
+            "intentions": {
+                "INTENT(Favorite_actor, Start_Conversation) = True": {
+                    "action_plan": [
+                        "Me",
+                        "Move(Favorite_actor, Olive_Garden)",
+                        "Engage_Conversation(Favorite_actor, Me)",
+                        "Me",
+                        "Listen( Favorite_actor, Me)",
+                        "Me",
+                        "Make_Comments(Favorite_actor, Me, Positive_Comments)",
+                        "Me",
+                        "Ask(Question, Favorite_actor, Me)",
+                        "Me",
+                        "End_Conversation(Favorite_actor, Me)",
+                        "Me"
+                    ]
+                },
+                "INTENT(Favorite_actor, Have_Lunch_At_Olive_Garden) = True": {
+                    "action_plan": [
+                        "Go_To_Work(Favorite_actor)",
+                        "Encounter(Me, Favorite_actor)",
+                        "Speak(Me, Favorite_actor)",
+                        "Invite(Me, Favorite_actor, Have_Lunch_At_Olive_Garden)",
+                        "Agree(Favorite_actor, Have_Lunch_At_Olive_Garden)",
+                        "Go_To_Olive_Garden(Favorite_actor)",
+                        "Have_Lunch(Favorite_actor, Me)"
+                    ]
+                }
+            },
+            "actions": {
+                "Go_To_Work(Favorite_actor)": {
+                    "conditions": [
+                        "BEL(Favorite_actor, At_Home = False)",
+                        "DES(Favorite_actor, Go_To_Work = True)"
+                    ],
+                    "effects": [
+                        "BEL(Favorite_actor, At_Work = True)",
+                        "BEL(Favorite_actor, At_Home = False)"
+                    ],
+                    "occ_emotion": [
+                        "Hope"
+                    ],
+                    "emotion_condition": [
+                        "Joy",
+                        "Joy"
+                    ]
+                },
+                "Encounter(Me, Favorite_actor)": {
+                    "conditions": [
+                        "BEL(Me, In_Phoenix_Arizona) = True",
+                        "BEL(Favorite_actor, In_Phoenix_Arizona) = True"
+                    ],
+                    "effects": [
+                        "BEL(Me, Felt_Shocked = True)",
+                        "BEL(Me, Felt_Surprised = True)",
+                        "BEL(Favorite_actor, Felt_Shocked = True)",
+                        "BEL(Favorite_actor, Felt_Surprised = True)",
+                        "DES(Me, Make_My_Day = True)",
+                        "DES(Me, Make_My_Week = True)"
+                    ],
+                    "occ_emotion": [
+                        "Joy"
+                    ],
+                    "emotion_condition": [
+                        "Hope"
+                    ]
+                },
+                "Speak(Me, Favorite_actor)": {
+                    "conditions": [
+                        "BEL(Me, Met_Favorite_actor = False)",
+                        "DES(Me, Interest_in_Conversing = True)"
+                    ],
+                    "effects": [
+                        "BEL(Me, Met_Favorite_actor = True)",
+                        "DES(Me, Make_My_Day = True)",
+                        "BEL(Favorite_actor, Interest_in_Conversing = True)"
+                    ],
+                    "occ_emotion": [
+                        "Joy"
+                    ],
+                    "emotion_condition": [
+                        "Joy"
+                    ]
+                },
+                "Invite(Me, Favorite_actor, Have_Lunch_At_Olive_Garden)": {
+                    "conditions": [
+                        "BEL(Favorite_actor, Interest_in_Conversing) = True",
+                        "DES(Favorite_actor, Make_My_Day) = True"
+                    ],
+                    "effects": [
+                        "BEL(Favorite_actor, Invited(Me, Have_Lunch_At_Olive_Garden) = True)"
+                    ],
+                    "occ_emotion": [
+                        "Joy"
+                    ],
+                    "emotion_condition": [
+                        "Joy"
+                    ]
+                },
+                "Agree(Favorite_actor, Have_Lunch_At_Olive_Garden)": {
+                    "conditions": [
+                        "BEL(Favorite_actor, Invite(Me, Favorite_actor, Have_Lunch_At_Olive_Garden)) = True"
+                    ],
+                    "effects": [
+                        "BEL(Favorite_actor, Have_Lunch_At_Olive_Garden) = True",
+                        "DES(Favorite_actor, Make_My_Week) = True"
+                    ],
+                    "occ_emotion": [
+                        "Joy"
+                    ],
+                    "emotion_condition": [
+                        "Hope"
+                    ]
+                },
+                "Go_To_Olive_Garden(Favorite_actor)": {
+                    "conditions": [
+                        "BEL(Favorite_actor, At_Work = True)"
+                    ],
+                    "effects": [
+                        "BEL(Favorite_actor, At_Olive_Garden = True)"
+                    ],
+                    "occ_emotion": [
+                        "Joy"
+                    ],
+                    "emotion_condition": [
+                        "Joy"
+                    ]
+                },
+                "Have_Lunch(Favorite_actor, Me)": {
+                    "conditions": [
+                        "BEL(Favorite_actor, At_Olive_Garden) = True"
+                    ],
+                    "effects": [
+                        "DES(Favorite_actor, Make_My_Day = False)",
+                        "DES(Favorite_actor, Make_My_Week = True)",
+                        "BEL(Favorite_actor, Had_Lunch_With_Me = True)"
+                    ],
+                    "occ_emotion": [
+                        "Joy"
+                    ],
+                    "emotion_condition": [
+                        "Joy"
+                    ]
+                },
+                "Me": {
+                    "conditions": [
+                        "BEL(Me, Engaged_in_Conversation(Favorite_actor) = True)",
+                        "DES(Me, Feel_Shocked = True)",
+                        "DES(Me, Feel_Surprised = True)"
+                    ],
+                    "effects": [
+                        "BEL(Me, Enjoyed_Conversation_with_Favorite_actor = True)",
+                        "DES(Me, Feel_Happy = True)"
+                    ],
+                    "occ_emotion": [
+                        "Joy"
+                    ],
+                    "emotion_condition": [
+                        "Joy",
+                        "Joy"
+                    ]
+                },
+                "Move(Favorite_actor, Olive_Garden)": {
+                    "conditions": [
+                        "BEL(Favorite_actor, Felt_Shocked = True)",
+                        "BEL(Favorite_actor, Felt_Surprised = True)",
+                        "BEL(Favorite_actor, Interest_in_Conversing = True)"
+                    ],
+                    "effects": [
+                        "BEL(Favorite_actor, At(Olive_Garden) = True)"
+                    ],
+                    "occ_emotion": [
+                        "Joy"
+                    ],
+                    "emotion_condition": [
+                        "Joy"
+                    ]
+                },
+                "Engage_Conversation(Favorite_actor, Me)": {
+                    "conditions": [
+                        "BEL(Favorite_actor, Interest_in_Conversing = True)"
+                    ],
+                    "effects": [
+                        "BEL(Favorite_actor, Felt_Shocked = True)",
+                        "BEL(Favorite_actor, Felt_Surprised = True)",
+                        "DES(Favorite_actor, Make_My_Day = True)",
+                        "DES(Favorite_actor, Make_My_Week = True)",
+                        "INTENT(Favorite_actor, Start_Conversation) = True"
+                    ],
+                    "occ_emotion": [
+                        "Joy"
+                    ],
+                    "emotion_condition": [
+                        "Joy"
+                    ]
+                },
+                "Listen( Favorite_actor, Me)": {
+                    "conditions": [
+                        "BEL(Me, Present_at_Olive_Garden) = True",
+                        "BEL(Olive_Garden, Suitable_for_Conversation) = True"
+                    ],
+                    "effects": [
+                        "BEL(Favorite_actor, Interest_in_Conversation) = True"
+                    ],
+                    "occ_emotion": [
+                        "Joy"
+                    ],
+                    "emotion_condition": [
+                        "Joy"
+                    ]
+                },
+                "Make_Comments(Favorite_actor, Me, Positive_Comments)": {
+                    "conditions": [
+                        "BEL(Me, Had_Lunch_at_Olive_Garden = True)",
+                        "BEL(Favorite_actor, Took_Action_Meet_Me = True)"
+                    ],
+                    "effects": [
+                        "BEL(Me, Received_Positive_Comments = True)"
+                    ],
+                    "occ_emotion": [
+                        "Joy"
+                    ],
+                    "emotion_condition": [
+                        "Joy"
+                    ]
+                },
+                "Ask(Question, Favorite_actor, Me)": {
+                    "conditions": [
+                        "BEL(Favorite_actor, Interest_in_Conversing = True)"
+                    ],
+                    "effects": [
+                        "BEL(Me, Felt_Happy = True)"
+                    ],
+                    "occ_emotion": [
+                        "Admiration"
+                    ],
+                    "emotion_condition": [
+                        "Hope"
+                    ]
+                },
+                "End_Conversation(Favorite_actor, Me)": {
+                    "conditions": [
+                        "BEL(Favorite_actor, Interest_in_Conversing = True)",
+                        "BEL(Me, Interested_in_Conversation = True)"
+                    ],
+                    "effects": [
+                        "DECREASE(DES(Favorite_actor, Make_My_Day = True), by_1)",
+                        "INCREASE(DES(Favorite_actor, Make_My_Week = True), by_1)",
+                        "DECREASE(DES(Me, Make_My_Day = True), by_1)",
+                        "INCREASE(DES(Me, Make_My_Week = True), by_1)"
+                    ],
+                    "occ_emotion": [
+                        "Joy"
+                    ],
+                    "emotion_condition": [
+                        "Joy"
+                    ]
+                }
+            },
+            "initial_occ_emotion": [
+                "Joy"
+            ],
+            "speak_actions": {
+                "Speak(Start, Introduction1, Curiosity, Polite)": {
+                    "conditions": [
+                        "BEL(Favorite_actor, Felt_Shocked = True)",
+                        "BEL(Favorite_actor, Felt_Surprised = True)",
+                        "BEL(Favorite_actor, Interest_in_Conversing = True)"
+                    ],
+                    "effects": [
+                        "DES(Favorite_actor, Make_My_Day = True)",
+                        "DES(Favorite_actor, Make_My_Week = True)"
+                    ],
+                    "occ_emotion": [
+                        "Happy-for"
+                    ],
+                    "emotion_condition": [
+                        "Distress"
+                    ]
+                },
+                "Speak(Introduction1, LunchInvite, Excitement, Polite)": {
+                    "conditions": [
+                        "BEL(Favorite_actor, Felt_Shocked) = True",
+                        "BEL(Favorite_actor, Felt_Surprised) = True",
+                        "BEL(Favorite_actor, Interest_in_Conversing) = True",
+                        "DES(Favorite_actor, Make_My_Day) = True",
+                        "DES(Favorite_actor, Make_My_Week) = True",
+                        "INTENT(Favorite_actor, Start_Conversation) = True",
+                        "INTENT(Favorite_actor, Have_Lunch_At_Olive_Garden) = True"
+                    ],
+                    "effects": [
+                        "BEL(Favorite_actor, Had_Conversation = True)",
+                        "BEL(Favorite_actor, Ate_Lunch_At_Olive_Garden = True)",
+                        "DES(Favorite_actor, Make_My_Day) = False",
+                        "DES(Favorite_actor, Make_My_Week) = False"
+                    ],
+                    "occ_emotion": [
+                        "Joy"
+                    ],
+                    "emotion_condition": [
+                        "Fear"
+                    ]
+                }
+            }
+        },
+        "Olive_Garden": {
+            "knowledge_base": [
+                "BEL(Olive_Garden_has_lunch_specials) = True",
+                "BEL(Olive_Garden_has_cozy_ambiance) = True",
+                "DES(Olive_Garden_increase_customer_satisfaction) = True",
+                "DES(Olive_Garden_offer_delicious_menu_options) = True"
+            ],
+            "intentions": {
+                "INTENT(Olive_Garden_increase_customer_satisfaction) = True": {
+                    "action_plan": [
+                        "GoTo(Me, Olive_Garden)",
+                        "Offer(Me, Favorite_actor, Lunch)",
+                        "Engage_In_Conversation(Me, Favorite_actor)",
+                        "Order_Food(Me, Olive_Garden, Lunch_Menu)",
+                        "Enjoy(Both(Me, Favorite_actor), Delicious_Food)",
+                        "Thank(Favorite_actor, Olive_Garden, Increased_Customer_Satisfaction)"
+                    ]
+                },
+                "INTENT(Olive_Garden_offer_delicious_menu_options) = True": {
+                    "action_plan": [
+                        "Check_Menu(Olive_Garden, null)",
+                        "Analyze_Customer_Feedback(Olive_Garden, null)",
+                        "Consult_Chef(Olive_Garden, Chef)",
+                        "Revise_Menu(Olive_Garden, null, New_Menu_Items)",
+                        "Advertise_New_Menu(Olive_Garden, null)",
+                        "Monitor_Customer_Reactions(Olive_Garden, null)"
+                    ]
+                }
+            },
+            "actions": {
+                "Check_Menu(Olive_Garden, null)": {
+                    "conditions": [
+                        "BEL(Olive_Garden_has_lunch_specials) = True"
+                    ],
+                    "effects": [
+                        "BEL(Olive_Garden_has_lunch_specials) = True",
+                        "DES(Olive_Garden_increase_customer_satisfaction) = True",
+                        "DES(Olive_Garden_offer_delicious_menu_options) = True"
+                    ],
+                    "occ_emotion": [
+                        "Relief"
+                    ],
+                    "emotion_condition": [
+                        "Hope"
+                    ]
+                },
+                "Analyze_Customer_Feedback(Olive_Garden, null)": {
+                    "conditions": [
+                        "BEL(Olive_Garden_has_cozy_ambiance) = True",
+                        "DES(Olive_Garden_increase_customer_satisfaction) = True"
+                    ],
+                    "effects": [
+                        "BEL(Olive_Garden_know_customer_feedback) = True",
+                        "BEL(Olive_Garden_improve_menu_options) = True"
+                    ],
+                    "occ_emotion": [
+                        "Gratification"
+                    ],
+                    "emotion_condition": [
+                        "Hope"
+                    ]
+                },
+                "Consult_Chef(Olive_Garden, Chef)": {
+                    "conditions": [
+                        "BEL(Olive_Garden_has_cozy_ambiance) = True",
+                        "BEL(Olive_Garden_has_lunch_specials) = True",
+                        "DES(Olive_Garden_increase_customer_satisfaction) = True",
+                        "DES(Olive_Garden_offer_delicious_menu_options) = True"
+                    ],
+                    "effects": [
+                        "DES(Olive_Garden_satisfy_customers_with_new_menu) = True",
+                        "BEL(Olive_Garden_has_chef_approval_on_new_menu) = True"
+                    ],
+                    "occ_emotion": [
+                        "Pride"
+                    ],
+                    "emotion_condition": [
+                        "Hope"
+                    ]
+                },
+                "Revise_Menu(Olive_Garden, null, New_Menu_Items)": {
+                    "conditions": [
+                        "BEL(Olive_Garden_has_cozy_ambiance) = True",
+                        "DES(Olive_Garden_increase_customer_satisfaction) = True"
+                    ],
+                    "effects": [
+                        "BEL(Olive_Garden_has_cozy_ambiance) = True",
+                        "BEL(Olive_Garden_offer_delicious_menu_options) = True",
+                        "DES(Olive_Garden_increase_customer_satisfaction) = True"
+                    ],
+                    "occ_emotion": [
+                        "Satisfaction"
+                    ],
+                    "emotion_condition": [
+                        "Satisfaction",
+                        "Satisfaction"
+                    ]
+                },
+                "Advertise_New_Menu(Olive_Garden, null)": {
+                    "conditions": [
+                        "BEL(Olive_Garden_offer_delicious_menu_options) = True"
+                    ],
+                    "effects": [
+                        "BEL(Olive_Garden_increase_customer_satisfaction) = True",
+                        "DES(Olive_Garden_attract_new_customers) = True"
+                    ],
+                    "occ_emotion": [
+                        "Satisfaction"
+                    ],
+                    "emotion_condition": [
+                        "Hope"
+                    ]
+                },
+                "Monitor_Customer_Reactions(Olive_Garden, null)": {
+                    "conditions": [
+                        "DES(Olive_Garden_increase_customer_satisfaction) = True",
+                        "BEL(Olive_Garden_offer_delicious_menu_options) = True"
+                    ],
+                    "effects": [
+                        "BEL(Olive_Garden_satisfied_customers) = True"
+                    ],
+                    "occ_emotion": [
+                        "Satisfaction"
+                    ],
+                    "emotion_condition": [
+                        "Satisfaction"
+                    ]
+                },
+                "GoTo(Me, Olive_Garden)": {
+                    "conditions": [
+                        "BEL(Olive_Garden_has_lunch_specials) = True"
+                    ],
+                    "effects": [
+                        "BEL(Me_at_Olive_Garden) = True"
+                    ],
+                    "occ_emotion": [
+                        "Hope"
+                    ],
+                    "emotion_condition": [
+                        "Hope"
+                    ]
+                },
+                "Offer(Me, Favorite_actor, Lunch)": {
+                    "conditions": [
+                        "BEL(Me_lives_in_Phoenix_Arizona) = True",
+                        "BEL(Favorite_actor) = True",
+                        "DES(Olive_Garden_increase_customer_satisfaction) = True"
+                    ],
+                    "effects": [
+                        "BEL(Olive_Garden, Increased_Reputation) = True",
+                        "DES(Olive_Garden, Satisfied_Customer_List) = [Me"
+                    ],
+                    "occ_emotion": [
+                        "Gratitude"
+                    ],
+                    "emotion_condition": [
+                        "Joy"
+                    ]
+                },
+                "Engage_In_Conversation(Me, Favorite_actor)": {
+                    "conditions": [
+                        "BEL(Me_met_Favorite_actor) = True"
+                    ],
+                    "effects": [
+                        "BEL(Me_talked_to_Favorite_actor) = True"
+                    ],
+                    "occ_emotion": [
+                        "Joy"
+                    ],
+                    "emotion_condition": [
+                        "Joy",
+                        "Joy"
+                    ]
+                },
+                "Order_Food(Me, Olive_Garden, Lunch_Menu)": {
+                    "conditions": [
+                        "BEL(Olive_Garden_has_lunch_specials) = True"
+                    ],
+                    "effects": [
+                        "BEL(Me_order_Lunch) = True",
+                        "BEL(Me_received_Delicious_Food) = True",
+                        "DES(Me_enjoyed_Lunch) = True"
+                    ],
+                    "occ_emotion": [
+                        "Satisfaction"
+                    ],
+                    "emotion_condition": [
+                        "Joy"
+                    ]
+                },
+                "Enjoy(Both(Me, Favorite_actor), Delicious_Food)": {
+                    "conditions": [
+                        "BEL(Olive_Garden_offer_delicious_menu_options) = True"
+                    ],
+                    "effects": [
+                        "DES(Me_enjoy_delicious_food, Arguments*) = True"
+                    ],
+                    "occ_emotion": [
+                        "Satisfaction"
+                    ],
+                    "emotion_condition": [
+                        "Joy"
+                    ]
+                },
+                "Thank(Favorite_actor, Olive_Garden, Increased_Customer_Satisfaction)": {
+                    "conditions": [
+                        "BEL(Olive_Garden_has_lunch_specials) = True",
+                        "BEL(Olive_Garden_offer_delicious_menu_options) = True"
+                    ],
+                    "effects": [
+                        "BEL(Favorite_actor_has_positive_experience) = True",
+                        "DES(Favorite_actor_feel_appreciated) = True"
+                    ],
+                    "occ_emotion": [
+                        "Gratitude"
+                    ],
+                    "emotion_condition": [
+                        "Gratitude"
+                    ]
+                }
+            },
+            "initial_occ_emotion": [
+                "Joy"
+            ],
+            "speak_actions": {
+                "Speak(Start, Invite, Polite, Friendly)": {
+                    "conditions": [
+                        "BEL(Olive_Garden_has_lunch_specials) = True",
+                        "BEL(Olive_Garden_has_cozy_ambiance) = True",
+                        "DES(Olive_Garden_increase_customer_satisfaction) = True",
+                        "DES(Olive_Garden_offer_delicious_menu_options) = True"
+                    ],
+                    "effects": [
+                        "BEL(Olive_Garden_updated_menu_options) = True",
+                        "DES(Olive_Garden_satisfied_customer) = True"
+                    ],
+                    "occ_emotion": [
+                        "Pride"
+                    ],
+                    "emotion_condition": [
+                        "Fear"
+                    ]
+                },
+                "Speak(Invite, Order, Assistance, Helpful)": {
+                    "conditions": [
+                        "BEL(Olive_Garden_has_lunch_specials) = True",
+                        "BEL(Olive_Garden_has_cozy_ambiance) = True"
+                    ],
+                    "effects": [
+                        "DES(Olive_Garden_increase_customer_satisfaction) = True",
+                        "DES(Olive_Garden_offer_delicious_menu_options) = True"
+                    ],
+                    "occ_emotion": [
+                        "Gratitude"
+                    ],
+                    "emotion_condition": [
+                        "Fear"
+                    ]
+                },
+                "Speak(Order, Enjoy, Polite, Friendly)": {
+                    "conditions": [
+                        "BEL(Olive_Garden_has_lunch_specials) = True",
+                        "BEL(Olive_Garden_has_cozy_ambiance) = True",
+                        "DES(Olive_Garden_increase_customer_satisfaction) = True",
+                        "DES(Olive_Garden_offer_delicious_menu_options) = True"
+                    ],
+                    "effects": [
+                        "DES_Old(Olive_Garden_increase_customer_satisfaction) = True",
+                        "DES_Old(Olive_Garden_offer_delicious_menu_options) = True",
+                        "BEL_Old(Olive_Garden_has_lunch_specials) = True",
+                        "BEL_Old(Olive_Garden_has_cozy_ambiance) = True"
+                    ],
+                    "occ_emotion": [
+                        "Joy"
+                    ],
+                    "emotion_condition": [
+                        "Fear"
+                    ]
+                },
+                "Speak(Enjoy, End, Polite, Courteous)": {
+                    "conditions": [
+                        "BEL(Olive_Garden_has_lunch_specials) = True",
+                        "BEL(Olive_Garden_has_cozy_ambiance) = True",
+                        "DES(Olive_Garden_increase_customer_satisfaction) = True",
+                        "DES(Olive_Garden_offer_delicious_menu_options) = True"
+                    ],
+                    "effects": [
+                        "BEL(Olive_Garden_has_lunch_specials) = True",
+                        "BEL(Olive_Garden_has_cozy_ambiance) = True",
+                        "DES(Olive_Garden_increase_customer_satisfaction) = True",
+                        "DES(Olive_Garden_offer_delicious_menu_options) = True",
+                        "BEL(Olive_Garden_customer_satisfaction_increased) = True",
+                        "DES(Olive_Garden_customers_enjoyed_delicious_menu) = True"
+                    ],
+                    "occ_emotion": [
+                        "Gratitude",
+                        "Gratitude"
+                    ],
+                    "emotion_condition": [
+                        "Resentment"
+                    ]
+                }
+            }
+        }
+    },
+    "dialogue_tree": [
+        "<Start, Greeting, Introduction, Friendly, \"Hello!\">",
+        "<Greeting, Introduction1, Curiosity, Polite, \"It's great to meet you!\">",
+        "<Introduction1, LunchInvite, Excitement, Eager, \"Would you like to have lunch at Olive Garden?\">",
+        "<LunchInvite, Acceptance, Gratitude, Relieved, \"That would be amazing, thank you!\">",
+        "<Acceptance, End, Gratitude, Happy, \"I can't believe I'm having lunch with you, this made my week!\">"
+    ]
+}

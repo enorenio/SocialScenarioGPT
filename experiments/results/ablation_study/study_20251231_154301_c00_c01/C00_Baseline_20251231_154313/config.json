@@ -1,0 +1,32 @@
+{
+  "condition": {
+    "condition_id": "C00",
+    "name": "Baseline",
+    "description": "Original system (all features off)",
+    "features": {
+      "use_upgraded_model": false,
+      "full_context": false,
+      "verification_loop": false,
+      "cot_enhancement": false,
+      "dialogue_improvement": false,
+      "llm_judge": false,
+      "symbolic_verification": false
+    },
+    "profile": "C00",
+    "notes": ""
+  },
+  "feature_flags": {
+    "use_upgraded_model": false,
+    "full_context": false,
+    "verification_loop": false,
+    "cot_enhancement": false,
+    "dialogue_improvement": false,
+    "llm_judge": false,
+    "symbolic_verification": false
+  },
+  "n_scenarios": 43,
+  "random_state": 42,
+  "max_retries": 3,
+  "timestamp": "20251231_154313",
+  "dry_run": false
+}

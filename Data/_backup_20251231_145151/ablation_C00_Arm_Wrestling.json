@@ -1,0 +1,840 @@
+{
+    "scenario_name": "ablation_C00_Arm Wrestling",
+    "scenario_description": "Tom thought he was really strong. He challenged all his friends to arm wrestle. Tom was able to beat them all. He would brag about it often. Tom's friends thought it was annoying.",
+    "feature_flags": {
+        "use_gpt4": false,
+        "full_context": false,
+        "verification_loop": false,
+        "cot_enhancement": false,
+        "dialogue_improvement": false,
+        "llm_judge": false,
+        "symbolic_verification": false
+    },
+    "model": "gpt-3.5-turbo",
+    "last_ended": "end",
+    "agents": {
+        "Tom": {
+            "knowledge_base": [
+                "BEL(Tom_thinks_he_is_strong) = True",
+                "DES(Tom_win_arm_wrestling_challenges) = True",
+                "BEL(Tom_brags_about_winning) = True",
+                "BEL(Tom_friends_find_it_annoying) = True",
+                "BEL(Tom_friends_think_he_is_annoying) = True"
+            ],
+            "intentions": {
+                "INTENT(Tom_Boasts_About_Winning) = True": {
+                    "action_plan": [
+                        "Check(Friends, Tom)",
+                        "ArmWrestle(Tom, Friends)",
+                        "Defeat(Tom, Friends)",
+                        "Boast(Tom, None)"
+                    ]
+                },
+                "INTENT(Tom_Feels_Proud) = True": {
+                    "action_plan": [
+                        "Tom(AGENT)",
+                        "Think(Tom, Tom_thinks_he_is_strong)",
+                        "Challenge(Tom, friends)",
+                        "ArmWrestle(Tom, friends)",
+                        "Brag(Tom, Tom_win_arm_wrestling_challenges)",
+                        "Think(Tom, Tom_friends_find_it_annoying)",
+                        "Feel(Tom, Tom_friends_think_he_is_annoying)",
+                        "Plan(Tom_Feels_Proud, Tom_win_arm_wrestling_challenges, Brag)",
+                        "Do(Tom, ArmWrestle)"
+                    ]
+                },
+                "INTENT(Tom_Recognizes_Annoyance) = True": {
+                    "action_plan": [
+                        "Recognize_Annoyance(Tom, friends)",
+                        "Apologize(Tom, friends)",
+                        "Invite_friends_to_do_something_fun(Tom, friends)"
+                    ]
+                },
+                "INTENT(Tom_Feels_Displeased) = True": {
+                    "action_plan": [
+                        "Tom_Feels_Displeased(Tom, friends)",
+                        "Apologize(Tom, friends)",
+                        "Stop Bragging(Tom)",
+                        "Ask for Feedback(Tom, friends)",
+                        "Reflect on Behavior(Tom)",
+                        "Try to Understand Friends' Perspectives(Tom, friends)"
+                    ]
+                },
+                "INTENT(Tom_Attempts_Friendly_Behavior) = True": {
+                    "action_plan": [
+                        "Tom(Initiate_Conversation, friends, topic=non-competitive subjects)",
+                        "friends(Engage_in_Conversation, Tom, topic=non-competitive subjects)",
+                        "friends(Provide_Feedback, Tom, feedback=your strength is impressive but humble bragging can be off-putting)",
+                        "Tom(Listen_and_Reflect, friends, feedback=your strength is impressive but I should tone down the bragging)",
+                        "Tom(Adjust_Behavior, self, behavior=reduce bragging and be more considerate of friends' feelings)",
+                        "friends(Show_Appreciation, Tom, appreciation=acknowledgment of Tom's strength without bragging)",
+                        "Tom(Express_Gratitude, friends, gratitude=appreciation for the feedback and understanding friends' feelings)"
+                    ]
+                }
+            },
+            "actions": {
+                "Tom(Initiate_Conversation, friends, topic=non-competitive subjects)": {
+                    "conditions": [
+                        "BEL(Tom_brags_about_winning) = True"
+                    ],
+                    "effects": [
+                        "DES(Tom_win_arm_wrestling_challenges) = True",
+                        "DES(Tom_Attempts_Friendly_Behavior) = True"
+                    ],
+                    "occ_emotion": [
+                        "Joy"
+                    ],
+                    "emotion_condition": [
+                        "Joy"
+                    ]
+                },
+                "friends(Engage_in_Conversation, Tom, topic=non-competitive subjects)": {
+                    "conditions": [
+                        "BEL(Tom_Listening_to_Friends) = True",
+                        "DES(Tom_Aiming_to_Improve_Relationships) = True"
+                    ],
+                    "effects": [
+                        "DES(friends_Appreciating_Tom) = True"
+                    ],
+                    "occ_emotion": [
+                        "Satisfaction"
+                    ],
+                    "emotion_condition": [
+                        "Pride"
+                    ]
+                },
+                "friends(Provide_Feedback, Tom, feedback=your strength is impressive but humble bragging can be off-putting)": {
+                    "conditions": [
+                        "BEL(Tom_friends_find_it_annoying) = True"
+                    ],
+                    "effects": [
+                        "BEL(Tom_friends_think_he_is_annoying) = True"
+                    ],
+                    "occ_emotion": [
+                        "Remorse"
+                    ],
+                    "emotion_condition": [
+                        "Resentment"
+                    ]
+                },
+                "Tom(Listen_and_Reflect, friends, feedback=your strength is impressive but I should tone down the bragging)": {
+                    "conditions": [
+                        "DES(Tom_win_arm_wrestling_challenges) = True",
+                        "BEL(Tom_friends_think_he_is_annoying) = True"
+                    ],
+                    "effects": [
+                        "BEL(Tom_friends_find_brags_annoying) = True"
+                    ],
+                    "occ_emotion": [
+                        "Satisfaction"
+                    ],
+                    "emotion_condition": [
+                        "Joy"
+                    ]
+                },
+                "Tom(Adjust_Behavior, self, behavior=reduce bragging and be more considerate of friends' feelings)": {
+                    "conditions": [
+                        "BEL(Tom_brags_about_winning) = True",
+                        "BEL(Tom_friends_think_he_is_annoying) = True"
+                    ],
+                    "effects": [
+                        "DES(Tom_adjust_behavior) = True",
+                        "BEL(Tom_brags_about_winning) = False",
+                        "BEL(Tom_friends_find_it_annoying) = False"
+                    ],
+                    "occ_emotion": [
+                        "Gratitude"
+                    ],
+                    "emotion_condition": [
+                        "Shame"
+                    ]
+                },
+                "friends(Show_Appreciation, Tom, appreciation=acknowledgment of Tom's strength without bragging)": {
+                    "conditions": [],
+                    "effects": [
+                        "BEL(Tom_friends_appreciate_acknowledgment) = True",
+                        "BEL(Tom_friends_find_it_annoying) = True",
+                        "BEL(Tom_friends_think_he_is_annoying) = True"
+                    ],
+                    "occ_emotion": [
+                        "Gratitude"
+                    ],
+                    "emotion_condition": [
+                        "Pride"
+                    ]
+                },
+                "Tom(Express_Gratitude, friends, gratitude=appreciation for the feedback and understanding friends' feelings)": {
+                    "conditions": [
+                        "BEL(Tom(Express_Gratitude)_is_performed) = True",
+                        "DES(Tom(Adjust_Behavior)_completed) = True"
+                    ],
+                    "effects": [
+                        "BEL(Tom(Grateful_for_Friends)_feedback) = True",
+                        "DES(Tom(Considerate_of_Friends)_feelings) = True"
+                    ],
+                    "occ_emotion": [
+                        "Gratitude"
+                    ],
+                    "emotion_condition": [
+                        "Pride"
+                    ]
+                },
+                "Check(Friends, Tom)": {
+                    "conditions": [
+                        "BEL(Tom_friends_think_he_is_annoying) = True"
+                    ],
+                    "effects": [
+                        "BEL(Tom_friends_find_it_annoying) = True"
+                    ],
+                    "occ_emotion": [
+                        "Gloatin"
+                    ],
+                    "emotion_condition": [
+                        "Pride"
+                    ]
+                },
+                "ArmWrestle(Tom, Friends)": {
+                    "conditions": [
+                        "BEL(Tom_thinks_he_is_strong) = True",
+                        "BEL(Friends) = True"
+                    ],
+                    "effects": [
+                        "DES(Tom_win_arm_wrestling_challenges) = True",
+                        "BEL(Tom_brags_about_winning) = True",
+                        "BEL(Tom_friends_find_it_annoying) = True",
+                        "BEL(Tom_friends_think_he_is_annoying) = True"
+                    ],
+                    "occ_emotion": [
+                        "Disappointment"
+                    ],
+                    "emotion_condition": [
+                        "Pride"
+                    ]
+                },
+                "Defeat(Tom, Friends)": {
+                    "conditions": [
+                        "BEL(Tom_thinks_he_is_strong) = True",
+                        "DES(Tom_win_arm_wrestling_challenges) = True",
+                        "BEL(Tom_friends_find_it_annoying) = True",
+                        "BEL(Tom_friends_think_he_is_annoying) = True"
+                    ],
+                    "effects": [
+                        "BEL(Tom_friends_dislike_him) = True"
+                    ],
+                    "occ_emotion": [
+                        "Pride"
+                    ],
+                    "emotion_condition": [
+                        "Pride"
+                    ]
+                },
+                "Boast(Tom, None)": {
+                    "conditions": [
+                        "BEL(Tom, Tom_brags_about_winning) = True"
+                    ],
+                    "effects": [
+                        "DES(Tom, Tom_friends_further_annoyed) = True"
+                    ],
+                    "occ_emotion": [
+                        "Pride"
+                    ],
+                    "emotion_condition": [
+                        "Pride",
+                        "Pride"
+                    ]
+                },
+                "Tom(AGENT)": {
+                    "conditions": [
+                        "BEL(Tom_thinks_he_is_strong) = True",
+                        "DES(Tom_win_arm_wrestling_challenges) = True",
+                        "BEL(Tom_brags_about_winning) = True"
+                    ],
+                    "effects": [
+                        "BEL(Tom_friends_find_it_annoying) = True",
+                        "BEL(Tom_friends_think_he_is_annoying) = True",
+                        "INTENT(Tom_Feels_Proud) = True"
+                    ],
+                    "occ_emotion": [
+                        "Pride"
+                    ],
+                    "emotion_condition": [
+                        "Pride"
+                    ]
+                },
+                "Think(Tom, Tom_thinks_he_is_strong)": {
+                    "conditions": [
+                        "BEL(Tom_thinks_he_is_strong) = True"
+                    ],
+                    "effects": [
+                        "BEL(Tom_thinks_he_is_strong) = True"
+                    ],
+                    "occ_emotion": [
+                        "Pride"
+                    ],
+                    "emotion_condition": [
+                        "Pride"
+                    ]
+                },
+                "Challenge(Tom, friends)": {
+                    "conditions": [
+                        "BEL(Tom_thinks_he_is_strong) = True",
+                        "DES(Tom_win_arm_wrestling_challenges) = True"
+                    ],
+                    "effects": [
+                        "BEL(Tom_friends_think_he_is_annoying) = True"
+                    ],
+                    "occ_emotion": [
+                        "Pride"
+                    ],
+                    "emotion_condition": [
+                        "Joy"
+                    ]
+                },
+                "ArmWrestle(Tom, friends)": {
+                    "conditions": [
+                        "BEL(Tom_friends_think_he_is_annoying) = True"
+                    ],
+                    "effects": [
+                        "BEL(Tom_win_arm_wrestling_challenges) = True",
+                        "DES(Tom_Feels_Proud) = True"
+                    ],
+                    "occ_emotion": [
+                        "Pride"
+                    ],
+                    "emotion_condition": [
+                        "Pride"
+                    ]
+                },
+                "Brag(Tom, Tom_win_arm_wrestling_challenges)": {
+                    "conditions": [
+                        "BEL(Tom, Tom_brags_about_winning) = True",
+                        "DES(Tom, Tom_win_arm_wrestling_challenges) = True"
+                    ],
+                    "effects": [
+                        "BEL(Tom, Tom_friends_find_it_annoying) = True",
+                        "DES(Tom, Tom_friends_think_he_is_annoying) = True"
+                    ],
+                    "occ_emotion": [
+                        "Pride"
+                    ],
+                    "emotion_condition": [
+                        "Pride"
+                    ]
+                },
+                "Think(Tom, Tom_friends_find_it_annoying)": {
+                    "conditions": [
+                        "BEL(Tom_friends_think_he_is_annoying) = True"
+                    ],
+                    "effects": [
+                        "DES(Tom_friends_find_it_annoying) = True"
+                    ],
+                    "occ_emotion": [
+                        "Shame"
+                    ],
+                    "emotion_condition": [
+                        "Fears-confirmed"
+                    ]
+                },
+                "Feel(Tom, Tom_friends_think_he_is_annoying)": {
+                    "conditions": [
+                        "BEL(Tom_friends_think_he_is_annoying) = True"
+                    ],
+                    "effects": [
+                        "DES(Tom_apologize_to_friends) = True"
+                    ],
+                    "occ_emotion": [
+                        "Shame"
+                    ],
+                    "emotion_condition": [
+                        "Disappointment"
+                    ]
+                },
+                "Plan(Tom_Feels_Proud, Tom_win_arm_wrestling_challenges, Brag)": {
+                    "conditions": [
+                        "BEL(Tom_win_arm_wrestling_challenges) = True",
+                        "DES(Tom_win_arm_wrestling_challenges) = True"
+                    ],
+                    "effects": [
+                        "BEL(Tom_brags_about_winning) = True",
+                        "BEL(Tom_friends_find_it_annoying) = True",
+                        "DES(Tom_Feels_Proud) = True"
+                    ],
+                    "occ_emotion": [
+                        "Pride"
+                    ],
+                    "emotion_condition": [
+                        "Pride"
+                    ]
+                },
+                "Do(Tom, ArmWrestle)": {
+                    "conditions": [
+                        "BEL(Tom, Tom_thinks_he_is_strong) = True",
+                        "DES(Tom, Tom_win_arm_wrestling_challenges) = True",
+                        "DES(Tom, Tom_friends_find_it_annoying) = True"
+                    ],
+                    "effects": [
+                        "DES(Tom, Tom_feels_proud) = True",
+                        "BEL(Tom, Tom_wins_arm_wrestling_challenges) = True"
+                    ],
+                    "occ_emotion": [
+                        "Pride"
+                    ],
+                    "emotion_condition": [
+                        "Pride"
+                    ]
+                },
+                "Recognize_Annoyance(Tom, friends)": {
+                    "conditions": [
+                        "BEL(Tom_friends_think_he_is_annoying) = True"
+                    ],
+                    "effects": [
+                        "DES(Tom_recognizes_he_annoyed_friends) = True"
+                    ],
+                    "occ_emotion": [
+                        "Remorse"
+                    ],
+                    "emotion_condition": [
+                        "Shame"
+                    ]
+                },
+                "Apologize(Tom, friends)": {
+                    "conditions": [
+                        "BEL(Tom_win_arm_wrestling_challenges) = True",
+                        "BEL(Tom_friends_find_it_annoying) = True"
+                    ],
+                    "effects": [
+                        "DES(Tom_stop_bragging) = True",
+                        "DES(Tom_apologize_to_friends) = True",
+                        "BEL(Tom_friends_find_Tom_apology_sincere) = True"
+                    ],
+                    "occ_emotion": [
+                        "Gratitude"
+                    ],
+                    "emotion_condition": [
+                        "Remorse"
+                    ]
+                },
+                "Invite_friends_to_do_something_fun(Tom, friends)": {
+                    "conditions": [
+                        "BEL(Tom_friends_find_it_annoying) = True"
+                    ],
+                    "effects": [
+                        "DES(Tom_have_fun_with_friends) = True",
+                        "BEL(Tom_friends_enjoy_time_together) = True"
+                    ],
+                    "occ_emotion": [
+                        "Joy"
+                    ],
+                    "emotion_condition": [
+                        "Hate"
+                    ]
+                },
+                "Tom_Feels_Displeased(Tom, friends)": {
+                    "conditions": [
+                        "BEL(Tom_friends_find_it_annoying) = True",
+                        "BEL(Tom_friends_think_he_is_annoying) = True"
+                    ],
+                    "effects": [
+                        "DES(Tom_stop_bragging) = True",
+                        "DES(Tom_reflect_on_behavior) = True"
+                    ],
+                    "occ_emotion": [
+                        "Relief"
+                    ],
+                    "emotion_condition": [
+                        "Joy"
+                    ]
+                },
+                "Stop Bragging(Tom)": {
+                    "conditions": [
+                        "BEL(Tom_brags_about_winning) = True"
+                    ],
+                    "effects": [
+                        "DES(Tom_stop_bragging) = True"
+                    ],
+                    "occ_emotion": [
+                        "Relief"
+                    ],
+                    "emotion_condition": [
+                        "Shame"
+                    ]
+                },
+                "Ask for Feedback(Tom, friends)": {
+                    "conditions": [
+                        "BEL(friends_think_Tom_bragging_is_annoying) = True"
+                    ],
+                    "effects": [
+                        "DES(Tom_receive_feedback_from_friends) = True"
+                    ],
+                    "occ_emotion": [
+                        "Gratitude"
+                    ],
+                    "emotion_condition": [
+                        "Joy",
+                        "Joy"
+                    ]
+                },
+                "Reflect on Behavior(Tom)": {
+                    "conditions": [
+                        "BEL(Tom_Feels_Displeased) = True"
+                    ],
+                    "effects": [
+                        "BEL(Tom, Reflect_on_Behavior) = True",
+                        "DES(Tom, Understand_Friends_Perspectives) = True"
+                    ],
+                    "occ_emotion": [
+                        "Pride"
+                    ],
+                    "emotion_condition": [
+                        "Pride"
+                    ]
+                },
+                "Try to Understand Friends' Perspectives(Tom, friends)": {
+                    "conditions": [
+                        "BEL(Tom_friends_find_it_annoying) = True",
+                        "BEL(Tom_friends_think_he_is_annoying) = True"
+                    ],
+                    "effects": [
+                        "DES(Tom_understands_friends_perspectives) = True"
+                    ],
+                    "occ_emotion": [
+                        "Understanding"
+                    ],
+                    "emotion_condition": [
+                        "Disappointment"
+                    ]
+                }
+            },
+            "initial_occ_emotion": [
+                "Pride"
+            ],
+            "speak_actions": {
+                "Speak(Start, Tom_1, Introduction, Neutral)": {
+                    "conditions": [
+                        "BEL(Tom_thinks_he_is_strong) = True",
+                        "DES(Tom_win_arm_wrestling_challenges) = True",
+                        "BEL(Tom_brags_about_winning) = True",
+                        "BEL(Tom_friends_find_it_annoying) = True",
+                        "INTENT(Tom_Boasts_About_Winning) = True",
+                        "INTENT(Tom_Feels_Proud) = True",
+                        "INTENT(Tom_Recognizes_Annoyance) = True"
+                    ],
+                    "effects": [
+                        "BEL(Tom_friends_think_he_is_annoying) = True",
+                        "INTENT(Tom_Feels_Displeased) = True",
+                        "INTENT(Tom_Attempts_Friendly_Behavior) = True"
+                    ],
+                    "occ_emotion": [
+                        "Fear"
+                    ],
+                    "emotion_condition": [
+                        "Pride"
+                    ]
+                },
+                "Speak(Tom_1, Friend_1, Bragging, Boastful)": {
+                    "conditions": [
+                        "BEL(Tom_thinks_he_is_strong) = True",
+                        "BEL(Tom_friends_find_it_annoying) = True"
+                    ],
+                    "effects": [
+                        "BEL(Tom_friends_think_he_is_annoying) = True",
+                        "INTENT(Tom_Attempts_Friendly_Behavior) = True"
+                    ],
+                    "occ_emotion": [
+                        "Pride"
+                    ],
+                    "emotion_condition": [
+                        "Tom(Feelings, Pity)"
+                    ]
+                },
+                "Speak(Friend_1, Tom_2, Displeased, Annoyed)": {
+                    "conditions": [
+                        "BEL(Tom_thinks_he_is_strong) = True",
+                        "DES(Tom_win_arm_wrestling_challenges) = True",
+                        "BEL(Tom_brags_about_winning) = True",
+                        "BEL(Tom_friends_find_it_annoying) = True",
+                        "BEL(Tom_friends_think_he_is_annoying) = True"
+                    ],
+                    "effects": [
+                        "INTENT(Tom_Boasts_About_Winning) = True",
+                        "INTENT(Tom_Feels_Proud) = True",
+                        "INTENT(Tom_Recognizes_Annoyance) = True",
+                        "INTENT(Tom_Feels_Displeased) = True",
+                        "INTENT(Tom_Attempts_Friendly_Behavior) = True"
+                    ],
+                    "occ_emotion": [
+                        "[Remorse"
+                    ],
+                    "emotion_condition": [
+                        "Disappointment"
+                    ]
+                },
+                "Speak(Tom_2, End, Apology, Regretful)": {
+                    "conditions": [
+                        "BEL(Tom_friends_think_he_is_annoying) = True",
+                        "INTENT(Tom_Attempts_Friendly_Behavior) = True"
+                    ],
+                    "effects": [
+                        "DES(Tom_make_amends_with_friends) = True",
+                        "BEL(Tom_apologizes_for_annoying_behavior) = True"
+                    ],
+                    "occ_emotion": [
+                        "Displeased"
+                    ],
+                    "emotion_condition": [
+                        "Pride"
+                    ]
+                }
+            }
+        },
+        "friends": {
+            "knowledge_base": [
+                "BEL(friends_annoied_by_Tom) = True",
+                "DES(friends_respect_Tom) = False",
+                "DES(friends_avoid_Tom) = True"
+            ],
+            "intentions": {
+                "INTENT(friends_avoid_Tom) = True": {
+                    "action_plan": [
+                        "Avoid(Tom, friends)",
+                        "Talk(AGENT, Tom, \"Tom, we love hanging out with you, but we find it a bit annoying when you constantly brag about winning in arm wrestling. Maybe we can find other activities to do together.\")",
+                        "Plan(AGENT, friends, \"Organize a group game night where the focus is on team-based activities rather than individual competitions.\")",
+                        "Engage(Tom, group_activities)",
+                        "Reward(friends, Tom)"
+                    ]
+                },
+                "INTENT(friends_confront_Tom) = True": {
+                    "action_plan": [
+                        "ExpressDispleasure(friends, Tom)",
+                        "AvoidingInteraction(friends, Tom)",
+                        "DiscussConcerns(friends, mutual_friends)",
+                        "Confrontation(friends, Tom)",
+                        "SetBoundaries(friends, Tom)",
+                        "ReevaluateFriendship(friends, Tom)"
+                    ]
+                }
+            },
+            "actions": {
+                "ExpressDispleasure(friends, Tom)": {
+                    "conditions": [
+                        "BEL(friends_annoied_by_Tom) = True"
+                    ],
+                    "effects": [
+                        "DES(friends_respect_Tom) = False",
+                        "DES(friends_avoid_Tom) = True"
+                    ],
+                    "occ_emotion": [
+                        "Resentment"
+                    ],
+                    "emotion_condition": [
+                        "Anger"
+                    ]
+                },
+                "AvoidingInteraction(friends, Tom)": {
+                    "conditions": [
+                        "BEL(friends_annoied_by_Tom) = True"
+                    ],
+                    "effects": [
+                        "DES(friends_respect_Tom) = False",
+                        "DES(friends_avoid_Tom) = True"
+                    ],
+                    "occ_emotion": [
+                        "Disappointment"
+                    ],
+                    "emotion_condition": [
+                        "Distress"
+                    ]
+                },
+                "DiscussConcerns(friends, mutual_friends)": {
+                    "conditions": [
+                        "DES(friends_respect_Tom) = False",
+                        "DES(friends_avoid_Tom) = True"
+                    ],
+                    "effects": [
+                        "DES(friends_express_concerns_about_Tom) = True",
+                        "BEL(friends_discussing_concerns_with_mutual_friends) = True"
+                    ],
+                    "occ_emotion": [
+                        "remorse"
+                    ],
+                    "emotion_condition": [
+                        "Resentment"
+                    ]
+                },
+                "Confrontation(friends, Tom)": {
+                    "conditions": [
+                        "DES(friends_avoid_Tom) = True",
+                        "BEL(friends_belief_Tom_strong) != True"
+                    ],
+                    "effects": [
+                        "DES(friends_respect_Tom) = True",
+                        "DES(friends_avoid_Tom) = False"
+                    ],
+                    "occ_emotion": [
+                        "Anger"
+                    ],
+                    "emotion_condition": [
+                        "Resentment"
+                    ]
+                },
+                "SetBoundaries(friends, Tom)": {
+                    "conditions": [
+                        "BEL(friends_avoid_Tom) = True"
+                    ],
+                    "effects": [
+                        "DES(friends_respect_Tom) = True",
+                        "DES(friends_avoid_Tom) = False"
+                    ],
+                    "occ_emotion": [
+                        "Disappointment"
+                    ],
+                    "emotion_condition": [
+                        "Anger"
+                    ]
+                },
+                "ReevaluateFriendship(friends, Tom)": {
+                    "conditions": [
+                        "DES(friends_respect_Tom) = False"
+                    ],
+                    "effects": [
+                        "DES(friends_respect_Tom) = True"
+                    ],
+                    "occ_emotion": [
+                        "Disappointment"
+                    ],
+                    "emotion_condition": [
+                        "Dislike"
+                    ]
+                },
+                "Avoid(Tom, friends)": {
+                    "conditions": [
+                        "BEL(friends_annoied_by_Tom) = True"
+                    ],
+                    "effects": [
+                        "DES(friends_respect_Tom) = False"
+                    ],
+                    "occ_emotion": [
+                        "Disappointment"
+                    ],
+                    "emotion_condition": [
+                        "Disappointment"
+                    ]
+                },
+                "Talk(AGENT, Tom, \"Tom, we love hanging out with you, but we find it a bit annoying when you constantly brag about winning in arm wrestling. Maybe we can find other activities to do together.\")": {
+                    "conditions": [
+                        "BEL(friends_annoied_by_Tom) = True",
+                        "DES(friends_respect_Tom) = False",
+                        "DES(friends_avoid_Tom) = True"
+                    ],
+                    "effects": [
+                        "DES(friends_respect_Tom) = True"
+                    ],
+                    "occ_emotion": [
+                        "disapproval"
+                    ],
+                    "emotion_condition": [
+                        "Remorse"
+                    ]
+                },
+                "Plan(AGENT, friends, \"Organize a group game night where the focus is on team-based activities rather than individual competitions.\")": {
+                    "conditions": [
+                        "BEL(friends, friends_annoied_by_Tom) = True",
+                        "DES(friends, friends_respect_Tom) = False"
+                    ],
+                    "effects": [
+                        "BEL(friends, friends_annoied_by_Tom) = False",
+                        "DES(friends, friends_avoid_Tom) = False",
+                        "DES(friends, friends_respect_Tom) = True",
+                        "DES(friends, friends_enjoy_group_activities) = True"
+                    ],
+                    "occ_emotion": [
+                        "Satisfaction"
+                    ],
+                    "emotion_condition": [
+                        "Disappointment"
+                    ]
+                },
+                "Engage(Tom, group_activities)": {
+                    "conditions": [
+                        "DES(friends_avoid_Tom) = True"
+                    ],
+                    "effects": [
+                        "DES(friends_respect_Tom) = True",
+                        "DES(friends_avoid_Tom) = False"
+                    ],
+                    "occ_emotion": [
+                        "Gratification"
+                    ],
+                    "emotion_condition": [
+                        "Annoyance"
+                    ]
+                },
+                "Reward(friends, Tom)": {
+                    "conditions": [
+                        "DES(friends_respect_Tom) = False"
+                    ],
+                    "effects": [
+                        "DES(friends_respect_Tom) = True"
+                    ],
+                    "occ_emotion": [
+                        "Gratitude"
+                    ],
+                    "emotion_condition": [
+                        "Resentment",
+                        "Resentment",
+                        "Tom"
+                    ]
+                }
+            },
+            "initial_occ_emotion": [
+                "Distress"
+            ],
+            "speak_actions": {
+                "Speak(Start, Answer_1, Listening, Neutral)": {
+                    "conditions": [
+                        "BEL(friends_annoied_by_Tom) = True",
+                        "DES(friends_respect_Tom) = False",
+                        "INTENT(friends_avoid_Tom) = True"
+                    ],
+                    "effects": [
+                        "DES(friends_avoid_Tom) = True",
+                        "INTENT(friends_confront_Tom) = True"
+                    ],
+                    "occ_emotion": [
+                        "Happy-for"
+                    ],
+                    "emotion_condition": [
+                        "Disappointment"
+                    ]
+                },
+                "Speak(Answer_1, End, Challenge, Assertive)": {
+                    "conditions": [
+                        "BEL(friends_annoyed_by_Tom) = True",
+                        "DES(friends_respect_Tom) = False",
+                        "DES(friends_avoid_Tom) = True",
+                        "INTENT(friends_avoid_Tom) = True",
+                        "INTENT(friends_confront_Tom) = True"
+                    ],
+                    "effects": [
+                        "BEL(friends_annoyed_by_Tom) = True",
+                        "DES(friends_respect_Tom) = False",
+                        "DES(friends_avoid_Tom) = True",
+                        "DES(friends_confront_Tom) = True"
+                    ],
+                    "occ_emotion": [
+                        "Displeasure"
+                    ],
+                    "emotion_condition": [
+                        "Disappointment"
+                    ]
+                }
+            }
+        }
+    },
+    "dialogue_tree": [
+        "<Start, Tom_1, Introduction, Neutral, \"Tom challenges his friends to arm wrestle.\">",
+        "<Tom_1, Friend_1, Bragging, Boastful, \"I bet none of you can beat me in arm wrestling!\">",
+        "<Friend_1, Tom_2, Displeased, Annoyed, \"Tom, can you please stop bragging all the time?\">",
+        "<Tom_2, End, Apology, Regretful, \"Sorry, guys. I didn't mean to annoy you.\">"
+    ]
+}

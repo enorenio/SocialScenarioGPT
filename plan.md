@@ -123,8 +123,8 @@ Enhancement of the Antunes et al. (2023) "Prompting for Socially Intelligent Age
 
 ## Phase 2: Core Improvements
 
-### TASK-005: GPT-4 Model Integration [FEATURE: use_gpt4] ✅ DONE
-**Description:** Integrate GPT-4-turbo (or GPT-4o) as an alternative model option. This requires handling the larger context window (128K tokens), adjusting prompts if necessary, and managing the different API parameters. Implement behind feature flag.
+### TASK-005: Upgraded Model Integration [FEATURE: use_upgraded_model] ✅ DONE
+**Description:** Integrate upgraded model (GPT-5 Nano) as an alternative model option. This requires handling the larger context window (1M tokens), adjusting prompts if necessary, and managing the different API parameters. Implement behind feature flag.
 
 **Deliverables:**
 - `models/model_factory.py` - Model abstraction layer with cost tracking ✅
@@ -140,6 +140,7 @@ Enhancement of the Antunes et al. (2023) "Prompting for Socially Intelligent Age
 | gpt-4-turbo | 128K | $0.01/1K | $0.03/1K |
 | gpt-4o | 128K | $0.0025/1K | $0.01/1K |
 | gpt-4o-mini | 128K | $0.00015/1K | $0.0006/1K |
+| gpt-5-nano | 1M | $0.00005/1K | $0.0004/1K |
 
 **Usage:**
 ```python
@@ -147,14 +148,14 @@ from models import get_model
 from config.feature_flags import FeatureFlags
 
 # Direct usage
-model = get_model(use_gpt4=True)  # Returns GPT-4o
+model = get_model(use_upgraded_model=True)  # Returns GPT-5 Nano
 
 # From feature flags
-flags = FeatureFlags(use_gpt4=True)
+flags = FeatureFlags(use_upgraded_model=True)
 model = ModelFactory.from_feature_flags(flags)
 ```
 
-**Feature Flag:** `use_gpt4`
+**Feature Flag:** `use_upgraded_model`
 **Dependencies:** None (standalone feature)
 
 **Estimated Hours:** 6-8 hours
@@ -436,7 +437,7 @@ print(f"Lines: {metrics.total_lines}, Paths: {metrics.approximate_paths}")
 ```
 
 **Feature Flag:** `dialogue_improvement`
-**Dependencies:** None (standalone, but benefits from `use_gpt4`)
+**Dependencies:** None (standalone, but benefits from `use_upgraded_model`)
 
 **Estimated Hours:** 10-14 hours
 **Difficulty:** ⭐⭐⭐ Medium
@@ -634,14 +635,14 @@ print(f"Improvement: {comparison.intention_completion_improvement:+.1f}%")
 
 **Study Design:**
 
-| Condition ID | use_gpt4 | full_context | verification_loop | cot_enhancement | dialogue_improvement | Notes |
+| Condition ID | use_upgraded_model | full_context | verification_loop | cot_enhancement | dialogue_improvement | Notes |
 |--------------|----------|--------------|-------------------|-----------------|---------------------|-------|
 | C00 | ❌ | ❌ | ❌ | ❌ | ❌ | Baseline (original) |
-| C01 | ✅ | ❌ | ❌ | ❌ | ❌ | GPT-4 only |
+| C01 | ✅ | ❌ | ❌ | ❌ | ❌ | Upgraded model only |
 | C02 | ❌ | ✅ | ❌ | ❌ | ❌ | Full context only |
 | C03 | ❌ | ❌ | ❌ | ✅ | ❌ | CoT enhancement only |
 | C04 | ❌ | ❌ | ❌ | ❌ | ✅ | Dialogue improvement only |
-| C05 | ✅ | ✅ | ❌ | ❌ | ❌ | GPT-4 + Full context |
+| C05 | ✅ | ✅ | ❌ | ❌ | ❌ | Upgraded + Full context |
 | C06 | ✅ | ✅ | ✅ | ❌ | ❌ | + Verification loop |
 | C07 | ✅ | ✅ | ✅ | ✅ | ❌ | + CoT enhancement |
 | C08 | ✅ | ✅ | ✅ | ✅ | ✅ | Full system |
@@ -662,7 +663,7 @@ print(f"Improvement: {comparison.intention_completion_improvement:+.1f}%")
   - Multiple comparison corrections (Bonferroni)
 - `SocialScenarioGPT.py` - Modified to use feature flags ✅
   - Uses `set_feature_flags()` / `get_feature_flags()` for controlling behavior
-  - Integrates ModelFactory for GPT-4 selection (TASK-005)
+  - Integrates ModelFactory for upgraded model selection (TASK-005)
   - Integrates PromptManager for CoT enhancement (TASK-009)
   - Integrates verification loop (TASK-007)
   - Records feature flags and usage stats in generated scenarios
@@ -762,7 +763,7 @@ TASK-000 (Feature Flags)
     │       ├── TASK-003 (Logging)
     │       ├── TASK-004 (Data Prep)
     │       │
-    │       ├── TASK-005 (GPT-4) [use_gpt4]
+    │       ├── TASK-005 (Upgraded Model) [use_upgraded_model]
     │       │
     │       ├── TASK-006 (Full Context) [full_context]
     │       │       │
@@ -790,7 +791,7 @@ TASK-000 (Feature Flags)
 **Feature Dependencies (for runtime validation):**
 ```yaml
 feature_dependencies:
-  use_gpt4: []
+  use_upgraded_model: []
   full_context: []
   verification_loop: [full_context]
   symbolic_verification: [full_context]
@@ -810,7 +811,7 @@ feature_dependencies:
 | TASK-002 | Baseline Reproduction | 10-15 | ⭐⭐ | ⭐⭐⭐⭐⭐ | 1 |
 | TASK-003 | Logging System | 8-10 | ⭐⭐ | ⭐⭐⭐⭐ | 1 |
 | TASK-004 | Data Preparation | 4-6 | ⭐ | ⭐⭐⭐⭐ | 1 |
-| TASK-005 | GPT-4 Integration | 6-8 | ⭐⭐ | ⭐⭐⭐⭐⭐ | 2 |
+| TASK-005 | Upgraded Model Integration | 6-8 | ⭐⭐ | ⭐⭐⭐⭐⭐ | 2 |
 | TASK-006 | Full Context State | 12-16 | ⭐⭐⭐ | ⭐⭐⭐⭐⭐ | 2 |
 | TASK-007 | Verification Loop | 15-20 | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | 2 |
 | TASK-008 | Symbolic Verification | 12-15 | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ | 2 |
@@ -833,7 +834,7 @@ If time-constrained, prioritize:
 1. **TASK-000** - Feature flags (required)
 2. **TASK-001** - Repo setup
 3. **TASK-002** - Baseline
-4. **TASK-005** - GPT-4 integration
+4. **TASK-005** - Upgraded model integration
 5. **TASK-006** - Full context state
 6. **TASK-014** - Ablation (simplified: just C00, C01, C02, C05)
 7. **TASK-015** - Analysis
@@ -848,8 +849,7 @@ If time-constrained, prioritize:
 1. **All features must be implemented behind feature flags** from TASK-000
 2. **Log active configuration** at the start of every experimental run
 3. **Use consistent random seeds** for reproducibility
-4. **Track API costs** - GPT-4 is significantly more expensive
+4. **Track API costs** - upgraded models may have different pricing
 5. **Save all intermediate states** for debugging and analysis
 6. **Version control all prompts** - changes should be tracked
 7. **Document any deviations** from original paper methodology
-```

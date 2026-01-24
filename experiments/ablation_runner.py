@@ -6,7 +6,7 @@ individual and combined contributions to performance improvements.
 
 This runner integrates with the feature flag system (TASK-000) and uses all
 the components built in TASK-005 through TASK-013:
-- TASK-005: GPT-4 Model Integration (use_gpt4 flag)
+- TASK-005: Upgraded Model Integration (use_upgraded_model flag)
 - TASK-006: Full Context State Management (full_context flag)
 - TASK-007: Verification Loop (verification_loop flag)
 - TASK-009: Enhanced CoT Prompting (cot_enhancement flag)
@@ -14,6 +14,7 @@ the components built in TASK-005 through TASK-013:
 """
 
 import json
+import re
 import os
 import sys
 import time
@@ -146,13 +147,13 @@ class AblationRunner:
     # Condition descriptions for reporting
     CONDITION_DESCRIPTIONS = {
         "C00": ("Baseline", "Original system (all features off)"),
-        "C01": ("GPT-4 Only", "Only GPT-4 model enabled"),
+        "C01": ("Upgraded Model Only", "Only upgraded model (GPT-5 Nano) enabled"),
         "C02": ("Full Context Only", "Only full context state management"),
         "C03": ("CoT Only", "Only enhanced Chain-of-Thought prompts"),
         "C04": ("Dialogue Only", "Only dialogue improvement"),
-        "C05": ("GPT-4 + Context", "GPT-4 with full context state"),
-        "C06": ("+ Verification", "GPT-4 + Context + Verification loop"),
-        "C07": ("+ CoT", "GPT-4 + Context + Verification + CoT"),
+        "C05": ("Upgraded + Context", "Upgraded model with full context state"),
+        "C06": ("+ Verification", "Upgraded model + Context + Verification loop"),
+        "C07": ("+ CoT", "Upgraded model + Context + Verification + CoT"),
         "C08": ("Full System", "All features enabled"),
         "C09": ("Full - Verification", "Full system minus verification loop"),
         "C10": ("Full - Context", "Full system minus full context"),
@@ -213,6 +214,8 @@ class AblationRunner:
         random_state: int = 42,
         max_retries: int = 3,
         dry_run: bool = False,
+        condition_dir: Optional[Path] = None,
+        scenarios: Optional[List[Dict[str, Any]]] = None,
     ) -> ConditionResult:
         """
         Run a single ablation condition.
@@ -236,10 +239,22 @@ class AblationRunner:
         print(f"Features: {flags.to_dict()}")
         print(f"{'='*70}\n")
 
-        # Create output directory for this condition
+        # Create or reuse output directory for this condition
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        condition_dir = self.output_dir / f"{condition_id}_{condition.name}_{timestamp}"
-        condition_dir.mkdir(parents=True, exist_ok=True)
+        if condition_dir:
+            condition_dir = Path(condition_dir)
+            condition_dir.mkdir(parents=True, exist_ok=True)
+            existing_config = condition_dir / "config.json"
+            if existing_config.exists():
+                try:
+                    with open(existing_config) as f:
+                        existing = json.load(f)
+                    timestamp = existing.get("timestamp", timestamp)
+                except (json.JSONDecodeError, IOError):
+                    pass
+        else:
+            condition_dir = self.output_dir / f"{condition_id}_{condition.name}_{timestamp}"
+            condition_dir.mkdir(parents=True, exist_ok=True)
 
         # Save condition config
         config_data = {
@@ -266,6 +281,7 @@ class AblationRunner:
             random_state=random_state,
             max_retries=max_retries,
             output_dir=condition_dir,
+            scenarios=scenarios,
         )
 
     def _run_experiment(
@@ -276,6 +292,7 @@ class AblationRunner:
         random_state: int,
         max_retries: int,
         output_dir: Path,
+        scenarios: Optional[List[Dict[str, Any]]] = None,
     ) -> ConditionResult:
         """
         Execute the actual experiment for a condition.
@@ -283,7 +300,29 @@ class AblationRunner:
         from SocialScenarioGPT import generate_scenario
 
         # Load scenarios
-        df = load_rocstories_scenarios(n_scenarios, random_state)
+        scenario_items = []
+        if scenarios:
+            for scenario in scenarios:
+                title = scenario.get("title") or scenario.get("scenario_name") or "scenario"
+                description = scenario.get("description") or scenario.get("scenario_description")
+                if not description and scenario.get("sentences"):
+                    description = " ".join(scenario["sentences"])
+                if not description:
+                    continue
+                scenario_items.append({
+                    "title": title,
+                    "description": description,
+                })
+        else:
+            df = load_rocstories_scenarios(n_scenarios, random_state)
+            for _, row in df.iterrows():
+                scenario_items.append({
+                    "title": row["storytitle"],
+                    "description": " ".join([
+                        row["sentence1"], row["sentence2"], row["sentence3"],
+                        row["sentence4"], row["sentence5"],
+                    ]),
+                })
 
         # Track timing and results
         scenario_times = []
@@ -293,14 +332,26 @@ class AblationRunner:
 
         start_time = time.time()
 
-        for idx, (_, row) in enumerate(df.iterrows()):
-            scenario_description = " ".join([
-                row['sentence1'], row['sentence2'], row['sentence3'],
-                row['sentence4'], row['sentence5']
-            ])
-            scenario_name = f"ablation_{condition.condition_id}_{row['storytitle']}"
+        for idx, item in enumerate(scenario_items):
+            scenario_description = item["description"]
+            scenario_name = f"ablation_{condition.condition_id}_{item['title']}"
 
             print(f"\n[{idx+1}/{n_scenarios}] Generating: {scenario_name}")
+
+            scenario_file = self._get_scenario_file_path(scenario_name)
+            if self._scenario_is_complete(scenario_file):
+                print("  Skipping (already complete)")
+                scenario_results.append({
+                    "name": scenario_name,
+                    "description": scenario_description,
+                    "time_seconds": 0.0,
+                    "success": True,
+                    "skipped": True,
+                })
+                generated_scenarios.append(scenario_name)
+                continue
+            elif scenario_file.exists():
+                print("  Resuming from existing artifact")
 
             scenario_start = time.time()
             success = False
@@ -327,6 +378,7 @@ class AblationRunner:
                     "description": scenario_description,
                     "time_seconds": scenario_time,
                     "success": True,
+                    "skipped": False,
                 })
                 generated_scenarios.append(scenario_name)
             else:
@@ -337,6 +389,7 @@ class AblationRunner:
                     "description": scenario_description,
                     "time_seconds": scenario_time,
                     "success": False,
+                    "skipped": False,
                 })
 
         total_time = time.time() - start_time
@@ -406,6 +459,26 @@ class AblationRunner:
         # Import and use the set_feature_flags function from SocialScenarioGPT
         from SocialScenarioGPT import set_feature_flags
         set_feature_flags(flags)
+
+    def _get_scenario_file_path(self, scenario_name: str) -> Path:
+        """Resolve the scenario JSON file path in Data/."""
+        data_dir = Path(__file__).parent.parent / "Data"
+        sanitized = re.sub(" ", "_", scenario_name)
+        return data_dir / f"{sanitized}.json"
+
+    def _scenario_is_complete(self, scenario_file: Path) -> bool:
+        """Check if a scenario file exists and appears complete."""
+        if not scenario_file.exists():
+            return False
+        try:
+            with open(scenario_file) as f:
+                scenario = json.load(f)
+        except (json.JSONDecodeError, IOError):
+            return False
+
+        last_ended = scenario.get("last_ended")
+        agents = scenario.get("agents", {})
+        return last_ended == "end" and isinstance(agents, dict) and len(agents) > 0
 
     def _load_condition_scenarios(
         self,
@@ -799,7 +872,7 @@ class AblationRunner:
 
         # Map single-feature conditions
         single_feature_conditions = {
-            "C01": "GPT-4 Model",
+            "C01": "Upgraded Model (GPT-5 Nano)",
             "C02": "Full Context",
             "C03": "CoT Enhancement",
             "C04": "Dialogue Improvement",

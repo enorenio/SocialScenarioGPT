@@ -82,25 +82,31 @@ class LLMJudge:
 
     def __init__(
         self,
-        model_name: str = "gpt-4o",
+        model_name: str = "gpt-5-nano-2025-08-07",
         dimensions: Optional[List[EvaluationDimension]] = None,
     ):
         """
         Initialize the LLM judge.
 
         Args:
-            model_name: Model to use for evaluation (default: gpt-4o)
+            model_name: Model to use for evaluation (default: gpt-5-nano-2025-08-07)
             dimensions: Which dimensions to evaluate (default: all)
         """
         self.model_name = model_name
         self.dimensions = dimensions or list(EvaluationDimension)
         self._model = None
 
+    @staticmethod
+    def _normalize_model_name(model_name: str) -> str:
+        if model_name == "gpt-5-nano":
+            return "gpt-5-nano-2025-08-07"
+        return model_name
+
     def _get_model(self):
         """Lazy load the model handler."""
         if self._model is None:
             from models import get_model
-            self._model = get_model(model_name=self.model_name)
+            self._model = get_model(model_override=self._normalize_model_name(self.model_name))
         return self._model
 
     def _format_scenario_for_evaluation(
@@ -374,7 +380,7 @@ Provide your evaluation now:"""
 
 def evaluate_scenario(
     scenario: Dict[str, Any],
-    model_name: str = "gpt-4o",
+    model_name: str = "gpt-5-nano-2025-08-07",
     dimensions: Optional[List[EvaluationDimension]] = None,
 ) -> EvaluationResult:
     """
@@ -394,7 +400,7 @@ def evaluate_scenario(
 
 def evaluate_scenarios_batch(
     scenarios: List[Dict[str, Any]],
-    model_name: str = "gpt-4o",
+    model_name: str = "gpt-5-nano-2025-08-07",
     dimensions: Optional[List[EvaluationDimension]] = None,
 ) -> List[EvaluationResult]:
     """Evaluate multiple scenarios."""

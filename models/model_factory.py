@@ -1,6 +1,6 @@
 """
 Model abstraction layer for SIA-LLM experiments.
-Supports GPT-3.5-turbo, GPT-4-turbo, and GPT-4o with cost tracking.
+Supports GPT-3.5-turbo, GPT-4 variants, and GPT-5 Nano with cost tracking.
 """
 
 import os
@@ -34,7 +34,7 @@ class ModelConfig:
         return self.cost_per_1k_output / 1000
 
 
-# Model configurations with pricing (as of Dec 2024)
+# Model configurations with pricing (as of Dec 2025)
 MODELS = {
     "gpt-3.5-turbo": ModelConfig(
         model_id="gpt-3.5-turbo",
@@ -68,11 +68,19 @@ MODELS = {
         cost_per_1k_input=0.00015,
         cost_per_1k_output=0.0006,
     ),
+    "gpt-5-nano-2025-08-07": ModelConfig(
+        model_id="gpt-5-nano-2025-08-07",
+        display_name="GPT-5 Nano",
+        max_context_tokens=1000000,  # 1M context
+        max_output_tokens=32768,
+        cost_per_1k_input=0.00005,   # $0.05/1M = $0.00005/1K
+        cost_per_1k_output=0.0004,   # $0.40/1M = $0.0004/1K
+    ),
 }
 
 # Default model selection based on feature flag
 DEFAULT_MODEL = "gpt-3.5-turbo"
-GPT4_MODEL = "gpt-4o"  # Use GPT-4o as default GPT-4 (best price/performance)
+UPGRADED_MODEL = "gpt-5-nano-2025-08-07"  # GPT-5 Nano: smarter & cheaper than GPT-4o
 
 
 @dataclass
@@ -127,7 +135,7 @@ class ModelHandler:
         if not self.api_key:
             raise ValueError("OPENAI_API_KEY not found in environment")
 
-        self.client = OpenAI(api_key=self.api_key)
+        self.client = OpenAI(api_key=self.api_key, timeout=120.0)  # 2 min timeout
         self.model_id = model_id
         self.temperature = temperature
         self.track_costs = track_costs
@@ -212,7 +220,7 @@ class ModelFactory:
 
     @staticmethod
     def create(
-        use_gpt4: bool = False,
+        use_upgraded_model: bool = False,
         model_override: Optional[str] = None,
         api_key: Optional[str] = None,
         temperature: float = 1.0,
@@ -222,8 +230,8 @@ class ModelFactory:
         Create a model handler based on configuration.
 
         Args:
-            use_gpt4: If True, use GPT-4 model (from feature flags)
-            model_override: Specific model ID to use (overrides use_gpt4)
+            use_upgraded_model: If True, use upgraded model (GPT-5 Nano)
+            model_override: Specific model ID to use (overrides use_upgraded_model)
             api_key: OpenAI API key (uses env var if not provided)
             temperature: Sampling temperature
             track_costs: Whether to track token usage and costs
@@ -233,8 +241,8 @@ class ModelFactory:
         """
         if model_override:
             model_id = model_override
-        elif use_gpt4:
-            model_id = GPT4_MODEL
+        elif use_upgraded_model:
+            model_id = UPGRADED_MODEL
         else:
             model_id = DEFAULT_MODEL
 
@@ -257,12 +265,12 @@ class ModelFactory:
         Returns:
             Configured ModelHandler instance
         """
-        return ModelFactory.create(use_gpt4=flags.use_gpt4, **kwargs)
+        return ModelFactory.create(use_upgraded_model=flags.use_upgraded_model, **kwargs)
 
 
-def get_model(use_gpt4: bool = False, **kwargs) -> ModelHandler:
+def get_model(use_upgraded_model: bool = False, **kwargs) -> ModelHandler:
     """Convenience function to get a model handler."""
-    return ModelFactory.create(use_gpt4=use_gpt4, **kwargs)
+    return ModelFactory.create(use_upgraded_model=use_upgraded_model, **kwargs)
 
 
 def get_model_config(model_id: str) -> ModelConfig:
@@ -286,8 +294,8 @@ if __name__ == "__main__":
         print(f"    Cost: ${config.cost_per_1k_input}/1K input, ${config.cost_per_1k_output}/1K output")
 
     print("\nTesting model creation...")
-    model = get_model(use_gpt4=False)
+    model = get_model(use_upgraded_model=False)
     print(f"Created: {model.config.display_name} ({model.model_id})")
 
-    model_gpt4 = get_model(use_gpt4=True)
-    print(f"Created: {model_gpt4.config.display_name} ({model_gpt4.model_id})")
+    model_upgraded = get_model(use_upgraded_model=True)
+    print(f"Created: {model_upgraded.config.display_name} ({model_upgraded.model_id})")
